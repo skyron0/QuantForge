@@ -22,6 +22,7 @@ from backend.database.base import Base
 
 import backend.models.system
 import backend.models.market_tick
+import backend.models.candle
 
 target_metadata = Base.metadata
 
