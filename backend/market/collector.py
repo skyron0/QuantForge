@@ -1,6 +1,7 @@
 import asyncio
 
 from configs.logging import app_logger
+from configs.settings import settings
 
 from backend.market.exchanges.bybit import BybitExchange
 from backend.market.queue.market_queue import market_queue
@@ -15,7 +16,9 @@ class MarketCollector:
 
         await self.exchange.connect()
 
-        await self.exchange.subscribe("BTCUSDT")
+        await self.exchange.subscribe(
+            settings.SYMBOLS.split(",")[0]
+        )
 
         while True:
 
@@ -27,4 +30,6 @@ class MarketCollector:
                 f"Tick queued -> {tick.symbol} | Price: {tick.price} | Exchange: {tick.exchange}"
             )
 
-            await asyncio.sleep(1)
+            await asyncio.sleep(
+                settings.COLLECTOR_INTERVAL
+            )

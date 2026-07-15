@@ -1,15 +1,19 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
 
     PROJECT_NAME: str
-
     VERSION: str
-
     ENVIRONMENT: str
 
-    OLLAMA_URL: str
+    PRIMARY_EXCHANGE: str
+
+    SYMBOLS: str
+
+    COLLECTOR_INTERVAL: int
+
+    QUEUE_MAX_SIZE: int
 
     DATABASE_URL: str
 
@@ -17,8 +21,12 @@ class Settings(BaseSettings):
 
     LOG_LEVEL: str
 
-    class Config:
-        env_file = ".env"
+    OLLAMA_URL: str
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        extra="ignore"
+    )
 
 
 settings = Settings()
