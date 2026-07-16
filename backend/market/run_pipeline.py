@@ -1,5 +1,7 @@
 import asyncio
 
+from backend.database.init_db import init_database
+
 from backend.market.collector import MarketCollector
 from backend.market.consumer import MarketConsumer
 
@@ -9,11 +11,16 @@ from backend.monitor.dashboard import Dashboard
 async def dashboard_loop(dashboard):
 
     while True:
+
         dashboard.refresh()
+
         await asyncio.sleep(0.25)
 
 
 async def main():
+
+    # Database tablolarını oluştur
+    init_database()
 
     dashboard = Dashboard()
 
@@ -25,9 +32,13 @@ async def main():
     try:
 
         await asyncio.gather(
+
             collector.run(),
+
             consumer.run(),
+
             dashboard_loop(dashboard)
+
         )
 
     finally:
@@ -36,4 +47,5 @@ async def main():
 
 
 if __name__ == "__main__":
+
     asyncio.run(main())

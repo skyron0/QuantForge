@@ -13,6 +13,8 @@ from backend.feature.feature_engine import FeatureEngine
 from backend.decision.decision_engine import DecisionEngine
 from backend.signal.signal_validator import SignalValidator
 
+from backend.execution.paper_executor import PaperExecutor
+
 from backend.monitor.state import dashboard_state
 
 
@@ -30,6 +32,8 @@ class MarketConsumer:
         feature_engine = FeatureEngine()
         decision_engine = DecisionEngine()
         signal_validator = SignalValidator()
+
+        paper_executor = PaperExecutor()
 
         try:
 
@@ -61,7 +65,6 @@ class MarketConsumer:
                             limit=200
                         )
 
-                        # Dashboard
                         dashboard_state.last_candle_time = candle.open_time
                         dashboard_state.candle_count = len(candles)
 
@@ -71,7 +74,6 @@ class MarketConsumer:
 
                         if indicators:
 
-                            # Dashboard
                             dashboard_state.indicators = indicators
 
                             features = feature_engine.build(
@@ -100,7 +102,6 @@ class MarketConsumer:
                                 f"{decision.reason}"
                             )
 
-                            # Dashboard
                             dashboard_state.decision = decision.action
                             dashboard_state.confidence = decision.confidence
 
@@ -126,6 +127,14 @@ class MarketConsumer:
                                 app_logger.info(
                                     "Signal -> NONE"
                                 )
+
+                            # HER MUMDA ÇALIŞIR
+                            # Pozisyonları günceller, TP/SL kontrol eder,
+                            # gerekiyorsa yeni BUY açar.
+                            paper_executor.execute(
+                                signal,
+                                candle
+                            )
 
                     except Exception as e:
 
