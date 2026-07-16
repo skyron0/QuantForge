@@ -1,65 +1,37 @@
-from backend.feature.models import FeatureSet
-
-from backend.indicator.rsi import RSIIndicator
-from backend.indicator.ema import EMAIndicator
-from backend.indicator.macd import MACDIndicator
-from backend.indicator.bollinger import BollingerIndicator
-from backend.indicator.atr import ATRIndicator
-from backend.indicator.adx import ADX
-from backend.indicator.vwap import VWAPIndicator
+from backend.feature.models import FeatureVector
 
 
 class FeatureEngine:
 
-    def __init__(self):
+    def build(
+        self,
+        candle,
+        indicators,
+    ):
 
-        self.rsi = RSIIndicator()
-        self.ema = EMAIndicator()
-        self.macd = MACDIndicator()
-        self.bb = BollingerIndicator()
-        self.atr = ATRIndicator()
-        self.adx = ADX()
-        self.vwap = VWAPIndicator()
+        return FeatureVector(
 
-    def build(self, candles):
+            symbol=candle.symbol,
 
-        if len(candles) < 30:
-            return None
+            rsi=indicators["rsi"],
 
-        closes = [c.close for c in candles]
-        highs = [c.high for c in candles]
-        lows = [c.low for c in candles]
-        volumes = [c.volume for c in candles]
+            ema20=indicators["ema20"],
 
-        macd = self.macd.calculate(closes)
-        bb = self.bb.calculate(closes)
+            macd=indicators["macd"],
 
-        return FeatureSet(
+            macd_signal=indicators["macd_signal"],
 
-            symbol=candles[-1].symbol,
-            
-            close=candles[-1].close,
+            adx=indicators["adx"],
 
-            rsi=self.rsi.calculate(closes),
+            atr=indicators["atr"],
 
-            ema20=self.ema.calculate(closes, 20),
+            bb_upper=indicators["bb_upper"],
 
-            macd=macd["macd"],
-            macd_signal=macd["signal"],
-            macd_histogram=macd["histogram"],
+            bb_middle=indicators["bb_middle"],
 
-            bollinger_upper=bb["upper"],
-            bollinger_middle=bb["middle"],
-            bollinger_lower=bb["lower"],
+            bb_lower=indicators["bb_lower"],
 
-            atr=self.atr.calculate(highs, lows, closes),
+            vwap=indicators["vwap"],
 
-            adx=self.adx.calculate(highs, lows, closes),
-
-            vwap=self.vwap.calculate(
-                highs,
-                lows,
-                closes,
-                volumes
-            )
+            close=candle.close,
         )

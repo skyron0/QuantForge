@@ -29,7 +29,3 @@ class MarketCollector:
             app_logger.info(
                 f"Tick queued -> {tick.symbol} | Price: {tick.price} | Exchange: {tick.exchange}"
             )
-
-            await asyncio.sleep(
-                settings.COLLECTOR_INTERVAL
-            )

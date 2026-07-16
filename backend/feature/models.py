@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class FeatureSet:
+class FeatureVector:
 
     symbol: str
 
@@ -11,17 +11,19 @@ class FeatureSet:
     ema20: float
 
     macd: float
+
     macd_signal: float
-    macd_histogram: float
-
-    bollinger_upper: float
-    bollinger_middle: float
-    bollinger_lower: float
-
-    atr: float
 
     adx: float
 
+    atr: float
+
+    bb_upper: float
+
+    bb_middle: float
+
+    bb_lower: float
+
     vwap: float
-    
+
     close: float

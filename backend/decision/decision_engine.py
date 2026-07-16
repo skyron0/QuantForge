@@ -3,6 +3,10 @@ from backend.decision.models import Decision
 
 class DecisionEngine:
 
+    BUY_CONFIDENCE = 0.80
+    SELL_CONFIDENCE = 0.80
+    HOLD_CONFIDENCE = 0.50
+
     def decide(self, features):
 
         if features is None:
@@ -17,7 +21,7 @@ class DecisionEngine:
 
             return Decision(
                 action="BUY",
-                confidence=0.80,
+                confidence=self.BUY_CONFIDENCE,
                 reason="RSI Oversold + EMA Trend + MACD Bullish"
             )
 
@@ -30,12 +34,12 @@ class DecisionEngine:
 
             return Decision(
                 action="SELL",
-                confidence=0.80,
+                confidence=self.SELL_CONFIDENCE,
                 reason="RSI Overbought + EMA Trend + MACD Bearish"
             )
 
         return Decision(
             action="HOLD",
-            confidence=0.50,
+            confidence=self.HOLD_CONFIDENCE,
             reason="No confirmation"
         )

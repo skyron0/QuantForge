@@ -7,7 +7,10 @@ from backend.repositories.market_repository import MarketRepository
 from backend.repositories.candle_repository import CandleRepository
 
 from backend.market.candle.aggregator import CandleAggregator
+
+from backend.indicator.indicator_engine import IndicatorEngine
 from backend.feature.feature_engine import FeatureEngine
+from backend.decision.decision_engine import DecisionEngine
 
 
 class MarketConsumer:
@@ -20,7 +23,9 @@ class MarketConsumer:
         candle_repository = CandleRepository(db)
 
         aggregator = CandleAggregator()
+        indicator_engine = IndicatorEngine()
         feature_engine = FeatureEngine()
+        decision_engine = DecisionEngine()
 
         try:
 
@@ -28,13 +33,10 @@ class MarketConsumer:
 
                 tick = await market_queue.get()
 
-                # Tick'i kaydet
                 repository.save_tick(tick)
 
-                # Candle oluştur
                 candle = aggregator.process_tick(tick)
 
-                # Candle tamamlandıysa
                 if candle:
 
                     candle_repository.save(candle)
@@ -53,17 +55,35 @@ class MarketConsumer:
                         limit=200
                     )
 
-                    features = feature_engine.build(candles)
+                    indicators = indicator_engine.calculate(candles)
 
-                    if features:
+                    if indicators:
+
+                        features = feature_engine.build(
+                            candle,
+                            indicators
+                        )
 
                         app_logger.info(
                             f"Features -> "
                             f"RSI:{features.rsi:.2f} | "
                             f"EMA20:{features.ema20:.2f} | "
                             f"MACD:{features.macd:.4f} | "
-                            f"ADX:{features.adx:.2f}"
+                            f"ADX:{features.adx:.2f} | "
+                            f"ATR:{features.atr:.2f} | "
+                            f"VWAP:{features.vwap:.2f}"
                         )
+
+                        decision = decision_engine.decide(features)
+
+                        if decision:
+
+                            app_logger.info(
+                                f"Decision -> "
+                                f"{decision.action} | "
+                                f"Confidence:{decision.confidence:.2f} | "
+                                f"{decision.reason}"
+                            )
 
                 app_logger.info(
                     f"Saved -> {tick.symbol} {tick.price}"
