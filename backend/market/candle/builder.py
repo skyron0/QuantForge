@@ -11,6 +11,12 @@ class CandleBuilder:
     def update(self, tick):
 
         minute = tick.timestamp.replace(second=0, microsecond=0)
+        
+        print(f"RAW TIMESTAMP: {tick.timestamp}")
+        
+        print(
+    f"[BUILDER] Tick minute={minute} | Current={self.current.open_time if self.current else None}"
+)
 
         # İlk candle
         if self.current is None:
@@ -30,6 +36,8 @@ class CandleBuilder:
 
         # Yeni dakika başladıysa
         if minute != self.current.open_time:
+            
+            print("[BUILDER] >>> CANDLE CLOSED <<<")
 
             finished = self.current
 

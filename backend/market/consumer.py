@@ -11,6 +11,9 @@ from backend.market.candle.aggregator import CandleAggregator
 from backend.indicator.indicator_engine import IndicatorEngine
 from backend.feature.feature_engine import FeatureEngine
 from backend.decision.decision_engine import DecisionEngine
+from backend.signal.signal_validator import SignalValidator
+
+from backend.monitor.state import dashboard_state
 
 
 class MarketConsumer:
@@ -26,6 +29,7 @@ class MarketConsumer:
         indicator_engine = IndicatorEngine()
         feature_engine = FeatureEngine()
         decision_engine = DecisionEngine()
+        signal_validator = SignalValidator()
 
         try:
 
@@ -39,44 +43,55 @@ class MarketConsumer:
 
                 if candle:
 
-                    candle_repository.save(candle)
+                    try:
 
-                    app_logger.info(
-                        f"Candle Closed -> "
-                        f"{candle.symbol} "
-                        f"O:{candle.open} "
-                        f"H:{candle.high} "
-                        f"L:{candle.low} "
-                        f"C:{candle.close}"
-                    )
-
-                    candles = candle_repository.get_last(
-                        candle.symbol,
-                        limit=200
-                    )
-
-                    indicators = indicator_engine.calculate(candles)
-
-                    if indicators:
-
-                        features = feature_engine.build(
-                            candle,
-                            indicators
-                        )
+                        candle_repository.save(candle)
 
                         app_logger.info(
-                            f"Features -> "
-                            f"RSI:{features.rsi:.2f} | "
-                            f"EMA20:{features.ema20:.2f} | "
-                            f"MACD:{features.macd:.4f} | "
-                            f"ADX:{features.adx:.2f} | "
-                            f"ATR:{features.atr:.2f} | "
-                            f"VWAP:{features.vwap:.2f}"
+                            f"Candle Closed -> "
+                            f"{candle.symbol} "
+                            f"O:{candle.open} "
+                            f"H:{candle.high} "
+                            f"L:{candle.low} "
+                            f"C:{candle.close}"
                         )
 
-                        decision = decision_engine.decide(features)
+                        candles = candle_repository.get_last(
+                            candle.symbol,
+                            limit=200
+                        )
 
-                        if decision:
+                        # Dashboard
+                        dashboard_state.last_candle_time = candle.open_time
+                        dashboard_state.candle_count = len(candles)
+
+                        indicators = indicator_engine.calculate(
+                            candles
+                        )
+
+                        if indicators:
+
+                            # Dashboard
+                            dashboard_state.indicators = indicators
+
+                            features = feature_engine.build(
+                                candle,
+                                indicators
+                            )
+
+                            app_logger.info(
+                                f"Features -> "
+                                f"RSI:{features.rsi:.2f} | "
+                                f"EMA20:{features.ema20:.2f} | "
+                                f"MACD:{features.macd:.4f} | "
+                                f"ADX:{features.adx:.2f} | "
+                                f"ATR:{features.atr:.2f} | "
+                                f"VWAP:{features.vwap:.2f}"
+                            )
+
+                            decision = decision_engine.decide(
+                                features
+                            )
 
                             app_logger.info(
                                 f"Decision -> "
@@ -84,6 +99,41 @@ class MarketConsumer:
                                 f"Confidence:{decision.confidence:.2f} | "
                                 f"{decision.reason}"
                             )
+
+                            # Dashboard
+                            dashboard_state.decision = decision.action
+                            dashboard_state.confidence = decision.confidence
+
+                            signal = signal_validator.validate(
+                                decision
+                            )
+
+                            if signal:
+
+                                dashboard_state.signal = signal.action
+
+                                app_logger.info(
+                                    f"Signal -> "
+                                    f"{signal.action} | "
+                                    f"Confidence:{signal.confidence:.2f} | "
+                                    f"{signal.reason}"
+                                )
+
+                            else:
+
+                                dashboard_state.signal = "-"
+
+                                app_logger.info(
+                                    "Signal -> NONE"
+                                )
+
+                    except Exception as e:
+
+                        dashboard_state.error = str(e)
+
+                        app_logger.exception(
+                            "Consumer pipeline failed"
+                        )
 
                 app_logger.info(
                     f"Saved -> {tick.symbol} {tick.price}"

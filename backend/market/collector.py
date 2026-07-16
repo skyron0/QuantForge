@@ -5,6 +5,7 @@ from configs.settings import settings
 
 from backend.market.exchanges.bybit import BybitExchange
 from backend.market.queue.market_queue import market_queue
+from backend.monitor.state import dashboard_state
 
 
 class MarketCollector:
@@ -16,6 +17,8 @@ class MarketCollector:
 
         await self.exchange.connect()
 
+        dashboard_state.exchange_connected = True
+
         await self.exchange.subscribe(
             settings.SYMBOLS.split(",")[0]
         )
@@ -23,6 +26,8 @@ class MarketCollector:
         while True:
 
             tick = await self.exchange.get_tick()
+
+            dashboard_state.last_tick = tick.price
 
             await market_queue.put(tick)
 
