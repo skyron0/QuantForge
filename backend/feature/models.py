@@ -14,6 +14,8 @@ class FeatureVector:
 
     macd_signal: float
 
+    macd_histogram: float
+
     adx: float
 
     atr: float

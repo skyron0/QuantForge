@@ -4,7 +4,7 @@ from configs.logging import app_logger
 
 from backend.database.models.trade import Trade as TradeModel
 from backend.database.session import SessionLocal
-
+from backend.risk.risk_manager import RiskManager
 from backend.repositories.trade_repository import TradeRepository
 
 from backend.portfolio.position import Position
@@ -17,7 +17,7 @@ class PaperExecutor:
     STOP_LOSS = 50.0
 
     def __init__(self):
-
+        self.risk_manager = RiskManager()
         self.db = SessionLocal()
 
         self.trade_repository = TradeRepository(
@@ -91,6 +91,10 @@ class PaperExecutor:
 
         if self.portfolio.has_open_position(candle.symbol):
             return
+        if not self.risk_manager.can_open_position(
+            len(self.portfolio.get_open_positions())
+        ):
+            return
 
         position = Position(
 
@@ -100,7 +104,10 @@ class PaperExecutor:
 
             entry_price=candle.close,
 
-            quantity=1.0,
+            quantity=self.risk_manager.calculate_position_size(
+            entry_price=candle.close,
+            stop_loss=candle.close - self.STOP_LOSS,
+        ),
 
             open_time=datetime.utcnow(),
 

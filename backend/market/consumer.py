@@ -1,10 +1,15 @@
 from configs.logging import app_logger
 
 from backend.database.session import SessionLocal
+from backend.database.models.feature_snapshot import FeatureSnapshot
+
 from backend.market.queue.market_queue import market_queue
 
 from backend.repositories.market_repository import MarketRepository
 from backend.repositories.candle_repository import CandleRepository
+from backend.repositories.feature_snapshot_repository import (
+    FeatureSnapshotRepository,
+)
 
 from backend.market.candle.aggregator import CandleAggregator
 
@@ -20,20 +25,24 @@ from backend.monitor.state import dashboard_state
 
 class MarketConsumer:
 
+    def __init__(self):
+
+        self.db = SessionLocal()
+
+        self.market_repository = MarketRepository(self.db)
+        self.candle_repository = CandleRepository(self.db)
+        self.snapshot_repository = FeatureSnapshotRepository(self.db)
+
+        self.aggregator = CandleAggregator()
+
+        self.indicator_engine = IndicatorEngine()
+        self.feature_engine = FeatureEngine()
+        self.decision_engine = DecisionEngine()
+        self.signal_validator = SignalValidator()
+
+        self.paper_executor = PaperExecutor()
+
     async def run(self):
-
-        db = SessionLocal()
-
-        repository = MarketRepository(db)
-        candle_repository = CandleRepository(db)
-
-        aggregator = CandleAggregator()
-        indicator_engine = IndicatorEngine()
-        feature_engine = FeatureEngine()
-        decision_engine = DecisionEngine()
-        signal_validator = SignalValidator()
-
-        paper_executor = PaperExecutor()
 
         try:
 
@@ -41,115 +50,170 @@ class MarketConsumer:
 
                 tick = await market_queue.get()
 
-                repository.save_tick(tick)
+                try:
 
-                candle = aggregator.process_tick(tick)
+                    self.process_tick(tick)
 
-                if candle:
+                except Exception as e:
 
-                    try:
+                    dashboard_state.error = str(e)
 
-                        candle_repository.save(candle)
+                    app_logger.exception(
+                        "Consumer pipeline failed"
+                    )
 
-                        app_logger.info(
-                            f"Candle Closed -> "
-                            f"{candle.symbol} "
-                            f"O:{candle.open} "
-                            f"H:{candle.high} "
-                            f"L:{candle.low} "
-                            f"C:{candle.close}"
-                        )
+                finally:
 
-                        candles = candle_repository.get_last(
-                            candle.symbol,
-                            limit=200
-                        )
-
-                        dashboard_state.last_candle_time = candle.open_time
-                        dashboard_state.candle_count = len(candles)
-
-                        indicators = indicator_engine.calculate(
-                            candles
-                        )
-
-                        if indicators:
-
-                            dashboard_state.indicators = indicators
-
-                            features = feature_engine.build(
-                                candle,
-                                indicators
-                            )
-
-                            app_logger.info(
-                                f"Features -> "
-                                f"RSI:{features.rsi:.2f} | "
-                                f"EMA20:{features.ema20:.2f} | "
-                                f"MACD:{features.macd:.4f} | "
-                                f"ADX:{features.adx:.2f} | "
-                                f"ATR:{features.atr:.2f} | "
-                                f"VWAP:{features.vwap:.2f}"
-                            )
-
-                            decision = decision_engine.decide(
-                                features
-                            )
-
-                            app_logger.info(
-                                f"Decision -> "
-                                f"{decision.action} | "
-                                f"Confidence:{decision.confidence:.2f} | "
-                                f"{decision.reason}"
-                            )
-
-                            dashboard_state.decision = decision.action
-                            dashboard_state.confidence = decision.confidence
-
-                            signal = signal_validator.validate(
-                                decision
-                            )
-
-                            if signal:
-
-                                dashboard_state.signal = signal.action
-
-                                app_logger.info(
-                                    f"Signal -> "
-                                    f"{signal.action} | "
-                                    f"Confidence:{signal.confidence:.2f} | "
-                                    f"{signal.reason}"
-                                )
-
-                            else:
-
-                                dashboard_state.signal = "-"
-
-                                app_logger.info(
-                                    "Signal -> NONE"
-                                )
-
-                            # HER MUMDA ÇALIŞIR
-                            # Pozisyonları günceller, TP/SL kontrol eder,
-                            # gerekiyorsa yeni BUY açar.
-                            paper_executor.execute(
-                                signal,
-                                candle
-                            )
-
-                    except Exception as e:
-
-                        dashboard_state.error = str(e)
-
-                        app_logger.exception(
-                            "Consumer pipeline failed"
-                        )
-
-                app_logger.info(
-                    f"Saved -> {tick.symbol} {tick.price}"
-                )
-
-                market_queue.task_done()
+                    market_queue.task_done()
 
         finally:
 
-            db.close()
+            self.close()
+
+    def process_tick(self, tick):
+
+        self.market_repository.save_tick(tick)
+
+        app_logger.info(
+            f"Saved -> {tick.symbol} {tick.price}"
+        )
+
+        candle = self.aggregator.process_tick(tick)
+
+        if candle:
+
+            self.process_candle(candle)
+
+    def process_candle(self, candle):
+
+        self.candle_repository.save(candle)
+
+        app_logger.info(
+            f"Candle Closed -> "
+            f"{candle.symbol} "
+            f"O:{candle.open} "
+            f"H:{candle.high} "
+            f"L:{candle.low} "
+            f"C:{candle.close}"
+        )
+
+        candles = self.candle_repository.get_last(
+            candle.symbol,
+            limit=200,
+        )
+
+        dashboard_state.last_candle_time = candle.open_time
+        dashboard_state.candle_count = len(candles)
+
+        indicators = self.indicator_engine.calculate(
+            candles
+        )
+
+        if not indicators:
+            return
+
+        dashboard_state.indicators = indicators
+
+        features = self.feature_engine.build(
+            candle,
+            indicators,
+        )
+
+        app_logger.info(
+            f"Features -> "
+            f"RSI:{features.rsi:.2f} | "
+            f"EMA20:{features.ema20:.2f} | "
+            f"MACD:{features.macd:.4f} | "
+            f"ADX:{features.adx:.2f} | "
+            f"ATR:{features.atr:.2f} | "
+            f"VWAP:{features.vwap:.2f}"
+        )
+
+        decision = self.decision_engine.decide(
+            features
+        )
+
+        dashboard_state.decision = decision.action
+        dashboard_state.confidence = decision.confidence
+
+        app_logger.info(
+            f"Decision -> "
+            f"{decision.action} | "
+            f"Confidence:{decision.confidence:.2f} | "
+            f"{decision.reason}"
+        )
+
+        signal = self.signal_validator.validate(
+            decision
+        )
+
+        if signal:
+
+            dashboard_state.signal = signal.action
+
+            app_logger.info(
+                f"Signal -> "
+                f"{signal.action} | "
+                f"Confidence:{signal.confidence:.2f} | "
+                f"{signal.reason}"
+            )
+
+        else:
+
+            dashboard_state.signal = "-"
+
+            app_logger.info(
+                "Signal -> NONE"
+            )
+        snapshot = FeatureSnapshot(
+
+            timestamp=candle.open_time,
+
+            symbol=candle.symbol,
+
+            open=candle.open,
+            high=candle.high,
+            low=candle.low,
+            close=candle.close,
+            volume=candle.volume,
+
+            rsi=features.rsi,
+            ema20=features.ema20,
+
+            macd=features.macd,
+            macd_signal=features.macd_signal,
+            macd_histogram=features.macd_histogram,
+
+            atr=features.atr,
+            adx=features.adx,
+            vwap=features.vwap,
+
+            bb_upper=features.bb_upper,
+            bb_middle=features.bb_middle,
+            bb_lower=features.bb_lower,
+
+            decision=decision.action,
+            confidence=decision.confidence,
+
+            signal=signal.action if signal else "NONE",
+        )
+
+        self.snapshot_repository.create(snapshot)
+
+        app_logger.info(
+            f"[SNAPSHOT] "
+            f"{snapshot.symbol} "
+            f"{snapshot.timestamp}"
+        )
+
+        self.paper_executor.execute(
+            signal,
+            candle,
+        )
+
+    def close(self):
+
+        try:
+            self.paper_executor.close()
+        finally:
+            self.db.close()

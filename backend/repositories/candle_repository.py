@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from sqlalchemy.orm import Session
 
 from backend.models.candle import Candle
@@ -39,3 +41,21 @@ class CandleRepository:
         rows.reverse()
 
         return rows
+
+    def get_between(
+        self,
+        symbol: str,
+        start: datetime,
+        end: datetime,
+    ):
+
+        return (
+            self.db.query(self.model)
+            .filter(
+                self.model.symbol == symbol,
+                self.model.open_time >= start,
+                self.model.open_time <= end,
+            )
+            .order_by(self.model.open_time.asc())
+            .all()
+        )

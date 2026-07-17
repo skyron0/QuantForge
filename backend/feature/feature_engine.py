@@ -21,6 +21,8 @@ class FeatureEngine:
 
             macd_signal=indicators["macd_signal"],
 
+            macd_histogram=indicators["macd_histogram"],
+
             adx=indicators["adx"],
 
             atr=indicators["atr"],

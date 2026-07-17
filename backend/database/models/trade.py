@@ -71,6 +71,16 @@ class Trade(Base):
         String,
         nullable=True,
     )
+    
+    reason = Column(
+    String,
+    nullable=True,
+    )
+
+    model_version = Column(
+    String,
+    nullable=True,
+    )
 
     status = Column(
         String,
