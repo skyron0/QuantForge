@@ -199,3 +199,13 @@ Stop.
 Split the work.
 
 Ask for approval.
+
+AI Philosophy
+
+QuantForge does not treat Large Language Models as trading engines.
+
+Instead, AI is a collection of specialized intelligence modules.
+
+Every AI module has a clear responsibility.
+
+Trading decisions are evidence-driven and evaluated through deterministic research pipelines before reaching live execution.

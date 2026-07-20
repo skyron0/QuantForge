@@ -4,11 +4,11 @@ from backend.backtest.metrics import MetricsEngine
 
 class BacktestEngine:
 
-    def __init__(self, db_session=None, clock=None):
+    def __init__(self, db_session=None, clock=None, strategy=None):
 
         self.db = db_session
         self.clock = clock
-        self.consumer = MarketConsumer(db_session=db_session, clock=clock)
+        self.consumer = MarketConsumer(db_session=db_session, clock=clock, strategy=strategy)
 
     def run(
         self,

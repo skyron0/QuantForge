@@ -16,6 +16,7 @@ from backend.market.candle.aggregator import CandleAggregator
 from backend.indicator.indicator_engine import IndicatorEngine
 from backend.feature.feature_engine import FeatureEngine
 from backend.decision.decision_engine import DecisionEngine
+from backend.decision.models import Decision
 from backend.signal.signal_validator import SignalValidator
 
 from backend.execution.paper_executor import PaperExecutor
@@ -25,7 +26,7 @@ from backend.monitor.state import dashboard_state
 
 class MarketConsumer:
 
-    def __init__(self, db_session=None, clock=None):
+    def __init__(self, db_session=None, clock=None, strategy=None):
 
         self.db = db_session if db_session is not None else SessionLocal()
         self.clock = clock
@@ -38,7 +39,7 @@ class MarketConsumer:
 
         self.indicator_engine = IndicatorEngine()
         self.feature_engine = FeatureEngine()
-        self.decision_engine = DecisionEngine()
+        self.decision_engine = DecisionEngine(strategy=strategy)
         self.signal_validator = SignalValidator()
 
         self.paper_executor = PaperExecutor(db_session=self.db, clock=self.clock)
@@ -136,6 +137,8 @@ class MarketConsumer:
         decision = self.decision_engine.decide(
             features
         )
+        if decision is None:
+            decision = Decision(action="HOLD", confidence=1.0, reason="No strategy decision")
 
         dashboard_state.decision = decision.action
         dashboard_state.confidence = decision.confidence
