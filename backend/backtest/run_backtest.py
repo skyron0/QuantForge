@@ -10,7 +10,36 @@ from backend.database.models.feature_snapshot import FeatureSnapshot
 from configs.logging import app_logger
 
 
+import argparse
+from datetime import datetime, timezone
+from backend.repositories.candle_repository import CandleRepository
+
+
 def main():
+    parser = argparse.ArgumentParser(description="QuantForge Backtest Runner")
+    parser.add_argument("--symbol", type=str, default="BTCUSDT", help="Symbol to backtest (default: BTCUSDT)")
+    parser.add_argument("--timeframe", type=str, default="1h", help="Timeframe (default: 1h)")
+    parser.add_argument("--start", type=str, default="2026-07-01", help="Start date (YYYY-MM-DD or YYYY-MM-DD HH:MM:SS)")
+    parser.add_argument("--end", type=str, default=None, help="End date (default: today)")
+
+    args = parser.parse_args()
+
+    # Parse dates
+    try:
+        start_dt = datetime.fromisoformat(args.start)
+    except ValueError:
+        print(f"Error: Invalid start date format '{args.start}'. Expected ISO format (YYYY-MM-DD or YYYY-MM-DD HH:MM:SS).", file=sys.stderr)
+        sys.exit(1)
+
+    if args.end:
+        try:
+            end_dt = datetime.fromisoformat(args.end)
+        except ValueError:
+            print(f"Error: Invalid end date format '{args.end}'. Expected ISO format.", file=sys.stderr)
+            sys.exit(1)
+    else:
+        end_dt = datetime.now()
+
     # Ensure all tables are created in the target database
     Base.metadata.create_all(bind=engine)
 
@@ -20,53 +49,32 @@ def main():
     db = Session(bind=connection)
 
     try:
-        # Load candles from DB
-        candles = (
-            db.query(Candle)
-            .filter(Candle.symbol == "BTCUSDT")
-            .order_by(Candle.open_time.asc())
-            .all()
+        # Load candles from DB using CandleRepository
+        candle_repo = CandleRepository(db)
+        candles = candle_repo.get_between(
+            symbol=args.symbol,
+            start=start_dt,
+            end=end_dt,
+            timeframe=args.timeframe,
         )
+
+        if not candles:
+            print(
+                f"Error: No historical candles found for symbol '{args.symbol}', "
+                f"timeframe '{args.timeframe}' between {args.start} and {args.end or 'now'}. "
+                "Please verify that data has been ingested.",
+                file=sys.stderr,
+            )
+            sys.exit(1)
 
         if len(candles) < 200:
             print(
-                "Database has insufficient candles for 'BTCUSDT'. "
-                "Generating 300 synthetic candles inside the rollbackable transaction..."
+                f"Error: Insufficient historical candles for symbol '{args.symbol}', "
+                f"timeframe '{args.timeframe}' between {args.start} and {args.end or 'now'}. "
+                f"Found {len(candles)} candles, but at least 200 are required for simulation.",
+                file=sys.stderr,
             )
-            from datetime import datetime, timedelta, timezone
-            import random
-            import math
-
-            start_time = datetime.now(timezone.utc).replace(tzinfo=None) - timedelta(days=15)
-            price = 45000.0
-
-            for i in range(300):
-                # Generate a cyclic price path to trigger both buy and sell decisions
-                price = (
-                    45000.0
-                    + 5000.0 * math.sin(i / 15.0)
-                    + random.uniform(-100, 100)
-                )
-                c = Candle(
-                    symbol="BTCUSDT",
-                    timeframe="1h",
-                    open=price - random.uniform(5, 50),
-                    high=price + random.uniform(20, 100),
-                    low=price - random.uniform(20, 100),
-                    close=price,
-                    volume=random.uniform(5, 25),
-                    open_time=start_time + timedelta(hours=i),
-                )
-                db.add(c)
-            # Flush changes to the connection.
-            db.commit()
-
-            candles = (
-                db.query(Candle)
-                .filter(Candle.symbol == "BTCUSDT")
-                .order_by(Candle.open_time.asc())
-                .all()
-            )
+            sys.exit(1)
 
         print(f"Loaded {len(candles)} candles for simulation.")
 
@@ -100,9 +108,13 @@ def main():
 
         backtest_engine.close()
 
+    except SystemExit:
+        # Exit propagates up cleanly
+        raise
     except Exception as e:
         app_logger.exception("Backtest run failed")
         print(f"Backtest error: {e}", file=sys.stderr)
+        sys.exit(1)
     finally:
         print(
             "Rolling back transaction. No persistent data has been written to the database."

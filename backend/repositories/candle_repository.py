@@ -50,15 +50,15 @@ class CandleRepository:
         symbol: str,
         start: datetime,
         end: datetime,
+        timeframe: str | None = None,
     ):
 
-        return (
-            self.db.query(self.model)
-            .filter(
-                self.model.symbol == symbol,
-                self.model.open_time >= start,
-                self.model.open_time <= end,
-            )
-            .order_by(self.model.open_time.asc())
-            .all()
+        query = self.db.query(self.model).filter(
+            self.model.symbol == symbol,
+            self.model.open_time >= start,
+            self.model.open_time <= end,
         )
+        if timeframe is not None:
+            query = query.filter(self.model.timeframe == timeframe)
+
+        return query.order_by(self.model.open_time.asc()).all()
