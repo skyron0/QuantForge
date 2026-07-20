@@ -1,4 +1,5 @@
 from configs.logging import app_logger
+from configs.settings import settings
 
 from backend.indicator.rsi import RSIIndicator
 from backend.indicator.ema import EMAIndicator
@@ -11,7 +12,7 @@ from backend.indicator.vwap import VWAPIndicator
 
 class IndicatorEngine:
 
-    MIN_CANDLES = 50
+    MIN_CANDLES = settings.MIN_CANDLES
 
     def __init__(self):
 

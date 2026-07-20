@@ -1,12 +1,13 @@
 from configs.logging import app_logger
+from configs.settings import settings
 
 from backend.decision.models import Decision
 
 
 class DecisionEngine:
 
-    BUY_THRESHOLD = 40
-    SELL_THRESHOLD = -40
+    BUY_THRESHOLD = settings.BUY_THRESHOLD
+    SELL_THRESHOLD = settings.SELL_THRESHOLD
 
     def decide(self, features):
 

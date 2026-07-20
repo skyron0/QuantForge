@@ -1,26 +1,8 @@
 \# Changelog
 
-
-
 All notable changes to this project are documented here.
 
-
-
 This project follows Semantic Versioning where practical.
-
-
-
-\---
-
-
-
-\## \[0.3.0] - 2026-07-17
-
-
-
-\### Added
-
-
 
 \- Docker infrastructure
 
@@ -56,19 +38,11 @@ This project follows Semantic Versioning where practical.
 
 \- AI development documentation
 
-
-
 \---
-
-
 
 \## Planned
 
-
-
 \### Backtesting Engine
-
-
 
 \- Historical replay
 
@@ -76,11 +50,7 @@ This project follows Semantic Versioning where practical.
 
 \- Performance metrics
 
-
-
 \### AI Integration
-
-
 
 \- Dataset generation
 
@@ -88,13 +58,8 @@ This project follows Semantic Versioning where practical.
 
 \- AI Decision Engine
 
-
-
 \### Live Trading
-
-
 
 \- Exchange execution
 
 \- Order synchronization
-

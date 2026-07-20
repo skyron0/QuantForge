@@ -25,12 +25,13 @@ from backend.monitor.state import dashboard_state
 
 class MarketConsumer:
 
-    def __init__(self):
+    def __init__(self, db_session=None, clock=None):
 
-        self.db = SessionLocal()
+        self.db = db_session if db_session is not None else SessionLocal()
+        self.clock = clock
 
         self.market_repository = MarketRepository(self.db)
-        self.candle_repository = CandleRepository(self.db)
+        self.candle_repository = CandleRepository(self.db, clock=self.clock)
         self.snapshot_repository = FeatureSnapshotRepository(self.db)
 
         self.aggregator = CandleAggregator()
@@ -40,7 +41,7 @@ class MarketConsumer:
         self.decision_engine = DecisionEngine()
         self.signal_validator = SignalValidator()
 
-        self.paper_executor = PaperExecutor()
+        self.paper_executor = PaperExecutor(db_session=self.db, clock=self.clock)
 
     async def run(self):
 
@@ -87,6 +88,9 @@ class MarketConsumer:
     def process_candle(self, candle):
 
         self.candle_repository.save(candle)
+        self.feed_candle(candle)
+
+    def feed_candle(self, candle):
 
         app_logger.info(
             f"Candle Closed -> "

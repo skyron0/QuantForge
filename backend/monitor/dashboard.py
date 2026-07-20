@@ -93,6 +93,28 @@ class Dashboard:
             )
         )
 
+    def run(self):
+
+        import time
+
+        self.start()
+
+        try:
+
+            while True:
+
+                time.sleep(0.25)
+
+                self.refresh()
+
+        except KeyboardInterrupt:
+
+            pass
+
+        finally:
+
+            self.stop()
+
     def start(self):
 
         self.live = Live(

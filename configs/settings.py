@@ -25,6 +25,12 @@ class Settings(BaseSettings):
 
     BYBIT_WS: str
 
+    TAKE_PROFIT: float = 100.0
+    STOP_LOSS: float = 50.0
+    BUY_THRESHOLD: int = 40
+    SELL_THRESHOLD: int = -40
+    MIN_CANDLES: int = 50
+
     model_config = SettingsConfigDict(
         env_file=".env",
         extra="ignore"

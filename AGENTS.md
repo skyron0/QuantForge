@@ -1,30 +1,16 @@
 \# QuantForge - AI Agent Instructions
 
-
-
 \## Mission
-
-
 
 QuantForge is a production-oriented algorithmic trading platform.
 
-
-
 Your responsibility is to improve the project without breaking the existing architecture.
-
-
 
 Always preserve stability over speed.
 
-
-
 \---
 
-
-
 \# Development Principles
-
-
 
 \- Never rewrite working code without a reason.
 
@@ -40,19 +26,11 @@ Always preserve stability over speed.
 
 \- Every implementation must leave the repository in a working state.
 
-
-
 \---
-
-
 
 \# Working Rules
 
-
-
 For every task:
-
-
 
 1\. Understand the current architecture.
 
@@ -64,27 +42,15 @@ For every task:
 
 5\. Explain every modification.
 
-
-
 \---
-
-
 
 \# File Modification Rules
 
-
-
 Maximum modified files per task:
-
-
 
 2
 
-
-
 Exceptions:
-
-
 
 \- Dependency injection
 
@@ -92,15 +58,9 @@ Exceptions:
 
 \- Configuration updates
 
-
-
 \---
 
-
-
 \# Code Style
-
-
 
 \- Clean Architecture
 
@@ -118,23 +78,13 @@ Exceptions:
 
 \- Type hints whenever practical
 
-
-
 \---
-
-
 
 \# Testing Rules
 
-
-
 Never finish after generating code.
 
-
-
 Always verify:
-
-
 
 \- imports
 
@@ -142,195 +92,110 @@ Always verify:
 
 \- runtime consistency
 
-
-
 If tests exist, run them.
 
-
-
 \---
-
-
 
 \# Architecture Rules
 
-
-
 Trading pipeline is the single source of truth.
-
-
 
 Collector
 
-
-
 ↓
-
-
 
 Aggregator
 
-
-
 ↓
-
-
 
 Consumer
 
-
-
 ↓
-
-
 
 Indicators
 
-
-
 ↓
-
-
 
 Feature Engine
 
-
-
 ↓
-
-
 
 Decision Engine
 
-
-
 ↓
-
-
 
 Signal Validator
 
-
-
 ↓
-
-
 
 Risk Manager
 
-
-
 ↓
-
-
 
 Executor
 
-
-
 ↓
-
-
 
 Repositories
 
-
-
 ↓
-
-
 
 Database
 
-
-
 Never create an alternative execution pipeline.
-
-
 
 Backtesting must reuse the same execution path.
 
-
-
 \---
-
-
 
 \# Documentation
 
-
-
 Whenever architecture changes:
-
-
 
 Update:
 
-
-
-\- PROJECT\_STATE.md
+\- PROJECT_STATE.md
 
 \- ARCHITECTURE.md
 
 \- CHANGELOG.md
 
-
-
 \---
-
-
 
 \# Git Workflow
 
-
-
 One feature
 
-
-
 ↓
-
-
 
 Test
 
-
-
 ↓
-
-
 
 Commit
 
-
-
 ↓
-
-
 
 Push
 
-
-
 Never combine multiple independent features into one commit.
-
-
 
 \---
 
-
-
 \# If uncertain
-
-
 
 Stop.
 
-
-
 Explain the uncertainty.
-
-
 
 Do not guess.
 
+No feature may exceed one sprint.
+
+If implementation becomes larger than expected:
+
+Stop.
+
+Split the work.
+
+Ask for approval.

@@ -1,42 +1,22 @@
 \# QuantForge Roadmap
 
-
-
 Project Version: v0.3
-
-
 
 Status: Active Development
 
-
-
 \---
-
-
 
 \# Vision
 
-
-
 Build a professional AI-powered algorithmic trading platform with a reusable architecture, deterministic backtesting, and an AI decision engine trained on proprietary trading data.
-
-
 
 \---
 
-
-
 \# Development Strategy
-
-
 
 Development follows milestone-based sprints.
 
-
-
 Each sprint must end with:
-
-
 
 \- Working code
 
@@ -48,27 +28,15 @@ Each sprint must end with:
 
 \- GitHub push
 
-
-
 No sprint may leave the project in a broken state.
-
-
 
 \---
 
-
-
 \# Sprint 1 ✅
-
-
 
 \## Infrastructure
 
-
-
 Completed
-
-
 
 \- Docker
 
@@ -80,19 +48,11 @@ Completed
 
 \- Logging
 
-
-
 \---
-
-
 
 \## Market Data
 
-
-
 Completed
-
-
 
 \- WebSocket Collector
 
@@ -102,19 +62,11 @@ Completed
 
 \- Consumer
 
-
-
 \---
-
-
 
 \## Trading Pipeline
 
-
-
 Completed
-
-
 
 \- Indicator Engine
 
@@ -130,87 +82,46 @@ Completed
 
 \- Portfolio
 
-
-
 \---
-
-
 
 \## Monitoring
 
-
-
 Completed
-
-
 
 \- Dashboard
 
 \- Database Logging
 
+---
 
+# Sprint 2 (Current)
 
-\---
+## Backtesting
 
+### Sprint 2.0 (Core Engine) ✅
 
+- [x] Backtest Engine
+- [x] Historical Candle Replay
+- [x] Trade Simulation
+- [x] Basic Performance Metrics
 
-\# Sprint 2 (Current)
+### Sprint 2.1 (Metrics & Analysis)
 
-
-
-\## Backtesting
-
-
-
-Objectives
-
-
-
-\- Backtest Engine
-
-\- Historical Candle Replay
-
-\- Trade Simulation
-
-\- Performance Metrics
-
-\- Equity Curve
-
-\- Drawdown Analysis
-
-
+- [ ] Advanced Performance Metrics (Sharpe, Sortino, Profit Factor)
+- [ ] Equity Curve
+- [ ] Drawdown Analysis
 
 Deliverable
 
-
-
 A production-grade backtesting framework that reuses the live trading pipeline.
-
-
 
 Status
 
-
-
 In Progress
-
-
-
-\---
-
-
-
-\# Sprint 3
-
-
 
 \## Strategy Evaluation
 
-
-
 Objectives
-
-
 
 \- Performance Reports
 
@@ -226,31 +137,17 @@ Objectives
 
 \- Max Drawdown
 
-
-
 Deliverable
-
-
 
 Professional strategy analytics.
 
-
-
 \---
-
-
 
 \# Sprint 4
 
-
-
 \## Dataset Generation
 
-
-
 Objectives
-
-
 
 \- Export Features
 
@@ -260,31 +157,17 @@ Objectives
 
 \- Versioned Datasets
 
-
-
 Deliverable
-
-
 
 AI-ready datasets generated from backtesting.
 
-
-
 \---
-
-
 
 \# Sprint 5
 
-
-
 \## AI Training
 
-
-
 Objectives
-
-
 
 \- Ollama Integration
 
@@ -294,31 +177,17 @@ Objectives
 
 \- Experiment Tracking
 
-
-
 Deliverable
-
-
 
 Locally trained trading model.
 
-
-
 \---
-
-
 
 \# Sprint 6
 
-
-
 \## AI Decision Engine
 
-
-
 Objectives
-
-
 
 \- Replace Rule-Based Decision Engine
 
@@ -328,31 +197,17 @@ Objectives
 
 \- Shadow Mode
 
-
-
 Deliverable
-
-
 
 AI-generated trading decisions.
 
-
-
 \---
-
-
 
 \# Sprint 7
 
-
-
 \## Live Trading
 
-
-
 Objectives
-
-
 
 \- Exchange Execution
 
@@ -362,31 +217,17 @@ Objectives
 
 \- Safety Controls
 
-
-
 Deliverable
-
-
 
 Production-ready live trading.
 
-
-
 \---
-
-
 
 \# Sprint 8
 
-
-
 \## Web Platform
 
-
-
 Objectives
-
-
 
 \- Modern Dashboard
 
@@ -398,23 +239,13 @@ Objectives
 
 \- Trade History
 
-
-
 Deliverable
-
-
 
 Complete trading platform UI.
 
-
-
 \---
 
-
-
 \# Long-Term Goals
-
-
 
 \- Multi-Exchange Support
 
@@ -428,19 +259,11 @@ Complete trading platform UI.
 
 \- Automatic Strategy Optimization
 
-
-
 \---
-
-
 
 \# Success Criteria
 
-
-
 QuantForge is considered complete when:
-
-
 
 \- Live trading is stable.
 
@@ -451,4 +274,3 @@ QuantForge is considered complete when:
 \- AI outperforms the rule-based strategy.
 
 \- The platform is fully documented.
-

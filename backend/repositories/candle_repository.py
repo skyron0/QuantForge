@@ -7,10 +7,11 @@ from backend.models.candle import Candle
 
 class CandleRepository:
 
-    def __init__(self, db: Session):
+    def __init__(self, db: Session, clock=None):
 
         self.db = db
         self.model = Candle
+        self.clock = clock
 
     def save(self, candle):
 
@@ -30,10 +31,12 @@ class CandleRepository:
 
     def get_last(self, symbol: str, limit: int = 200):
 
+        query = self.db.query(self.model).filter(self.model.symbol == symbol)
+        if self.clock is not None:
+            query = query.filter(self.model.open_time <= self.clock.now())
+
         rows = (
-            self.db.query(self.model)
-            .filter(self.model.symbol == symbol)
-            .order_by(self.model.open_time.desc())
+            query.order_by(self.model.open_time.desc())
             .limit(limit)
             .all()
         )

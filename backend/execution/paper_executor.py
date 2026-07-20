@@ -1,11 +1,11 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from configs.logging import app_logger
-
 from backend.database.models.trade import Trade as TradeModel
 from backend.database.session import SessionLocal
 from backend.risk.risk_manager import RiskManager
 from backend.repositories.trade_repository import TradeRepository
+from configs.settings import settings
 
 from backend.portfolio.position import Position
 from backend.portfolio.portfolio import Portfolio
@@ -13,12 +13,13 @@ from backend.portfolio.portfolio import Portfolio
 
 class PaperExecutor:
 
-    TAKE_PROFIT = 100.0
-    STOP_LOSS = 50.0
+    TAKE_PROFIT = settings.TAKE_PROFIT
+    STOP_LOSS = settings.STOP_LOSS
 
-    def __init__(self):
+    def __init__(self, db_session=None, clock=None):
         self.risk_manager = RiskManager()
-        self.db = SessionLocal()
+        self.db = db_session if db_session is not None else SessionLocal()
+        self.clock = clock
 
         self.trade_repository = TradeRepository(
             self.db
@@ -51,7 +52,7 @@ class PaperExecutor:
             if close_reason:
 
                 position.close_price = candle.close
-                position.close_time = datetime.utcnow()
+                position.close_time = self.clock.now() if self.clock is not None else datetime.now(timezone.utc).replace(tzinfo=None)
 
                 trade = self.trade_repository.get_open_trade(
                     position.symbol
@@ -109,7 +110,7 @@ class PaperExecutor:
             stop_loss=candle.close - self.STOP_LOSS,
         ),
 
-            open_time=datetime.utcnow(),
+            open_time=self.clock.now() if self.clock is not None else datetime.now(timezone.utc).replace(tzinfo=None),
 
             stop_loss=candle.close - self.STOP_LOSS,
 

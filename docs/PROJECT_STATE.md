@@ -1,230 +1,119 @@
-\# QuantForge - Project State
+# QuantForge - Project State
 
+Last Updated: 2026-07-20
 
+---
 
-Last Updated: 2026-07-17
-
-
-
-\---
-
-
-
-\# Project Status
-
-
+# Project Status
 
 Status: Active Development
 
-
-
 Current Phase:
 
-
-
-Production Trading Engine Complete
-
-
+Backtesting Core Infrastructure Complete
 
 Next Phase:
 
+Backtesting Metrics, Strategy Optimization, and Analytics
 
+---
 
-Backtesting Infrastructure
+# Completed Modules
 
+## Infrastructure
 
+- Python Environment
+- Docker
+- PostgreSQL
+- Redis
+- Configuration System
+- Logging
+- Clock Abstraction (DI-ready)
 
-\---
+## Market
 
+- WebSocket Collector
+- Tick Queue
+- Candle Aggregator
+- Market Consumer
 
+## Analytics
 
-\# Completed Modules
+- Indicator Engine
+- Feature Engine
 
+## Trading
 
+- Decision Engine
+- Signal Validator
+- Risk Manager
+- Paper Executor
+- Portfolio
+- Backtest Engine & Simulator
+- CLI Backtest Runner
 
-\## Infrastructure
+## Database
 
+- Tick Repository
+- Candle Repository
+- Trade Repository
 
+## Monitoring
 
-\- Python Environment
+- Dashboard
+- Logging
 
-\- Docker
+---
 
-\- PostgreSQL
-
-\- Redis
-
-\- Configuration System
-
-\- Logging
-
-
-
-\## Market
-
-
-
-\- WebSocket Collector
-
-\- Tick Queue
-
-\- Candle Aggregator
-
-\- Market Consumer
-
-
-
-\## Analytics
-
-
-
-\- Indicator Engine
-
-\- Feature Engine
-
-
-
-\## Trading
-
-
-
-\- Decision Engine
-
-\- Signal Validator
-
-\- Risk Manager
-
-\- Paper Executor
-
-\- Portfolio
-
-
-
-\## Database
-
-
-
-\- Tick Repository
-
-\- Candle Repository
-
-\- Trade Repository
-
-
-
-\## Monitoring
-
-
-
-\- Dashboard
-
-\- Logging
-
-
-
-\---
-
-
-
-\# Current Architecture
-
-
+# Current Architecture
 
 Market Data
 
-
-
 ↓
-
-
 
 Collector
 
-
-
 ↓
-
-
 
 Aggregator
 
-
-
 ↓
-
-
 
 Consumer
 
-
-
 ↓
-
-
 
 Indicators
 
-
-
 ↓
-
-
 
 Features
 
-
-
 ↓
-
-
 
 Decision
 
-
-
 ↓
-
-
 
 Signal Validation
 
-
-
 ↓
-
-
 
 Risk Management
 
-
-
 ↓
-
-
 
 Paper Trading
 
-
-
 ↓
-
-
 
 Database
 
-
-
 \---
-
-
 
 \# Stable Components
 
-
-
 The following modules are considered stable and should only be modified when required.
-
-
 
 \- Collector
 
@@ -246,31 +135,15 @@ The following modules are considered stable and should only be modified when req
 
 \- Dashboard
 
-
-
 \---
-
-
 
 \# Current Objective
 
-
-
-Implement the Backtesting Engine by reusing the existing execution pipeline.
-
-
-
-No duplicated trading logic is allowed.
-
-
+Implement performance metrics analytics (Sharpe ratio, Sortino ratio, Profit factor) and drawdown charts.
 
 \---
 
-
-
 \# Future Milestones
-
-
 
 1\. Backtesting Engine
 
@@ -288,19 +161,11 @@ No duplicated trading logic is allowed.
 
 8\. Web Dashboard
 
-
-
 \---
-
-
 
 \# Development Rules
 
-
-
 Every implementation must:
-
-
 
 \- preserve architecture
 
@@ -312,15 +177,8 @@ Every implementation must:
 
 \- avoid duplicated logic
 
-
-
 \---
-
-
 
 \# Repository Status
 
-
-
 Ready for AI-assisted development.
-
