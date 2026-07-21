@@ -1,4 +1,5 @@
 import time
+import re
 from typing import Dict, Any, Optional
 import requests
 import json
@@ -150,16 +151,29 @@ class OllamaProvider(BaseAIProvider):
                 )
 
             data = resp.json()
-            content = data.get("response", "")
+            response_text = data.get("response", "")
+            thinking_text = data.get("thinking", "")
+
+            # Thinking models (e.g. qwen3.5) may place output in `thinking`
+            # field while `response` is empty. Use both fields for content.
+            content = response_text if response_text else thinking_text
 
             # If JSON output is requested, attempt to parse the content string
             structured_output = None
             if format_type == "json":
-                try:
-                    structured_output = json.loads(content)
-                except json.JSONDecodeError as e:
-                    # Let validation pipeline in ReasoningEngine retry, or fallback
-                    pass
+                # Try all available content sources for JSON extraction
+                candidates = [response_text, thinking_text]
+                for candidate in candidates:
+                    if not candidate:
+                        continue
+                    cleaned = self._extract_json_content(candidate)
+                    if cleaned:
+                        try:
+                            structured_output = json.loads(cleaned)
+                            content = cleaned  # Use the successfully parsed content
+                            break
+                        except json.JSONDecodeError:
+                            continue
 
             return AIResponse(
                 request_id=request.request_id,
@@ -181,6 +195,33 @@ class OllamaProvider(BaseAIProvider):
             if isinstance(e, (ProviderTimeoutError, ProviderUnavailableError, ProviderResponseError)):
                 raise e
             raise ProviderResponseError(f"Unexpected error: {str(e)}") from e
+
+    @staticmethod
+    def _extract_json_content(raw: str) -> str:
+        """
+        Strip common model wrapper artifacts from raw response content before JSON parsing.
+        Handles: <think>...</think> blocks, markdown code fences, leading/trailing whitespace.
+        """
+        cleaned = raw
+
+        # 1. Remove <think>...</think> blocks (qwen3.5 thinking mode)
+        cleaned = re.sub(r"<think>.*?</think>", "", cleaned, flags=re.DOTALL)
+
+        # 2. Remove markdown code fences (```json ... ``` or ``` ... ```)
+        fence_match = re.search(r"```(?:json)?\s*\n?(.*?)```", cleaned, flags=re.DOTALL)
+        if fence_match:
+            cleaned = fence_match.group(1)
+
+        # 3. Strip leading/trailing whitespace
+        cleaned = cleaned.strip()
+
+        # 4. If the cleaned content does not start with '{', try to extract the first JSON object
+        if cleaned and not cleaned.startswith("{"):
+            brace_start = cleaned.find("{")
+            if brace_start != -1:
+                cleaned = cleaned[brace_start:]
+
+        return cleaned
 
     @property
     def provider_name(self) -> str:

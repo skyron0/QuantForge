@@ -151,7 +151,18 @@ class ReasoningEngine:
                 parsed = response.structured_output
             else:
                 import json
-                parsed = json.loads(response.content)
+                import re
+                # Strip common model wrapper artifacts (thinking tags, markdown fences)
+                cleaned = re.sub(r"<think>.*?</think>", "", response.content, flags=re.DOTALL)
+                fence_match = re.search(r"```(?:json)?\s*\n?(.*?)```", cleaned, flags=re.DOTALL)
+                if fence_match:
+                    cleaned = fence_match.group(1)
+                cleaned = cleaned.strip()
+                if cleaned and not cleaned.startswith("{"):
+                    brace_start = cleaned.find("{")
+                    if brace_start != -1:
+                        cleaned = cleaned[brace_start:]
+                parsed = json.loads(cleaned)
         except Exception as e:
             raise StructuredOutputError(f"Response is not valid JSON: {str(e)}") from e
 
