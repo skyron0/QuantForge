@@ -789,5 +789,1469 @@
         ],
         "approval_notes": null,
         "walk_forward_metrics": {}
+    },
+    "1fbb84c5-5b37-4904-b967-5dfba8f62dfc": {
+        "model_version": "1fbb84c5-5b37-4904-b967-5dfba8f62dfc",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T08:03:49.853002+00:00",
+        "model_path": "data/models\\1fbb84c5-5b37-4904-b967-5dfba8f62dfc\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T08:03:49.867312+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {}
+    },
+    "a5deffc5-56f0-4f0e-b33a-79f5c103a319": {
+        "model_version": "a5deffc5-56f0-4f0e-b33a-79f5c103a319",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T08:03:49.955370+00:00",
+        "model_path": "data/models\\a5deffc5-56f0-4f0e-b33a-79f5c103a319\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T08:03:49.969430+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {}
+    },
+    "b98c9a8d-ef5b-4879-9c21-2215a42b53c0": {
+        "model_version": "b98c9a8d-ef5b-4879-9c21-2215a42b53c0",
+        "dataset_version": "ds-999",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "xgboost",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 2
+        },
+        "metrics": {
+            "accuracy": 0.8,
+            "precision": 0.8242424242424242,
+            "recall": 0.8,
+            "f1": 0.8041666666666668,
+            "roc_auc": 0.8901098901098901
+        },
+        "feature_importance": {
+            "f1": 0.45796263217926025,
+            "f2": 0.5420374274253845
+        },
+        "creation_timestamp": "2026-07-21T08:03:51.559374+00:00",
+        "model_path": "C:\\Users\\safad\\AppData\\Local\\Temp\\tmp4qcxer8f\\b98c9a8d-ef5b-4879-9c21-2215a42b53c0\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T08:03:51.573806+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {}
+    },
+    "e1fbc2c8-8a24-44b1-beb6-f1ace4afe489": {
+        "model_version": "e1fbc2c8-8a24-44b1-beb6-f1ace4afe489",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T08:09:23.396677+00:00",
+        "model_path": "data/models\\e1fbc2c8-8a24-44b1-beb6-f1ace4afe489\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T08:09:23.398702+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {}
+    },
+    "6bfab4d8-ae4c-4ecb-8c66-18114cbcffd4": {
+        "model_version": "6bfab4d8-ae4c-4ecb-8c66-18114cbcffd4",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T08:09:23.479404+00:00",
+        "model_path": "data/models\\6bfab4d8-ae4c-4ecb-8c66-18114cbcffd4\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T08:09:23.492957+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {}
+    },
+    "a62814fa-a795-471f-ad06-15afe4e818db": {
+        "model_version": "a62814fa-a795-471f-ad06-15afe4e818db",
+        "dataset_version": "ds-999",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "xgboost",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 2
+        },
+        "metrics": {
+            "accuracy": 0.8,
+            "precision": 0.8242424242424242,
+            "recall": 0.8,
+            "f1": 0.8041666666666668,
+            "roc_auc": 0.8901098901098901
+        },
+        "feature_importance": {
+            "f1": 0.45796263217926025,
+            "f2": 0.5420374274253845
+        },
+        "creation_timestamp": "2026-07-21T08:09:25.680587+00:00",
+        "model_path": "C:\\Users\\safad\\AppData\\Local\\Temp\\tmp3p4gsqm_\\a62814fa-a795-471f-ad06-15afe4e818db\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T08:09:25.693088+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {}
+    },
+    "852f8b45-1dcf-4812-bb4e-5da9b9b69772": {
+        "model_version": "852f8b45-1dcf-4812-bb4e-5da9b9b69772",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T08:28:36.898106+00:00",
+        "model_path": "data/models\\852f8b45-1dcf-4812-bb4e-5da9b9b69772\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T08:28:36.912073+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {}
+    },
+    "bb233178-587a-4011-845c-ec3f186b4e70": {
+        "model_version": "bb233178-587a-4011-845c-ec3f186b4e70",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T08:28:37.007191+00:00",
+        "model_path": "data/models\\bb233178-587a-4011-845c-ec3f186b4e70\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T08:28:37.020862+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {}
+    },
+    "bb2796aa-7335-4829-809f-d1465c83f4a0": {
+        "model_version": "bb2796aa-7335-4829-809f-d1465c83f4a0",
+        "dataset_version": "ds-999",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "xgboost",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 2
+        },
+        "metrics": {
+            "accuracy": 0.8,
+            "precision": 0.8242424242424242,
+            "recall": 0.8,
+            "f1": 0.8041666666666668,
+            "roc_auc": 0.8901098901098901
+        },
+        "feature_importance": {
+            "f1": 0.45796263217926025,
+            "f2": 0.5420374274253845
+        },
+        "creation_timestamp": "2026-07-21T08:28:38.713377+00:00",
+        "model_path": "C:\\Users\\safad\\AppData\\Local\\Temp\\tmp2wg13aw0\\bb2796aa-7335-4829-809f-d1465c83f4a0\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T08:28:38.727792+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {}
+    },
+    "5e5f82da-7192-415f-999f-482ed71577c1": {
+        "model_version": "5e5f82da-7192-415f-999f-482ed71577c1",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T08:52:49.078269+00:00",
+        "model_path": "data/models\\5e5f82da-7192-415f-999f-482ed71577c1\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T08:52:49.081628+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "9fe1ee9ea7cc5fa5106b6040aefd638f678473cbd073f15fa598aeed39d99e8d",
+        "artifact_size_bytes": 6756,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "4b2f73e4-0b39-48c1-9be4-60f432ee7aad": {
+        "model_version": "4b2f73e4-0b39-48c1-9be4-60f432ee7aad",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T08:52:49.172597+00:00",
+        "model_path": "data/models\\4b2f73e4-0b39-48c1-9be4-60f432ee7aad\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T08:52:49.185158+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "9fe1ee9ea7cc5fa5106b6040aefd638f678473cbd073f15fa598aeed39d99e8d",
+        "artifact_size_bytes": 6756,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "462c9131-5463-4a17-886a-f168cd512472": {
+        "model_version": "462c9131-5463-4a17-886a-f168cd512472",
+        "dataset_version": "ds-999",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "xgboost",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 2
+        },
+        "metrics": {
+            "accuracy": 0.8,
+            "precision": 0.8242424242424242,
+            "recall": 0.8,
+            "f1": 0.8041666666666668,
+            "roc_auc": 0.8901098901098901
+        },
+        "feature_importance": {
+            "f1": 0.45796263217926025,
+            "f2": 0.5420374274253845
+        },
+        "creation_timestamp": "2026-07-21T08:52:49.544186+00:00",
+        "model_path": "C:\\Users\\safad\\AppData\\Local\\Temp\\tmp898bkdy6\\462c9131-5463-4a17-886a-f168cd512472\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T08:52:49.557054+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "daa2ce7a78d714a661250a99ad2f8a49132afea0c56f178421d0f8392d796c6b",
+        "artifact_size_bytes": 14223,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "6410935c-24b3-4df1-adc5-637f8a83bfa0": {
+        "model_version": "6410935c-24b3-4df1-adc5-637f8a83bfa0",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T09:03:07.749602+00:00",
+        "model_path": "data/models\\6410935c-24b3-4df1-adc5-637f8a83bfa0\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T09:03:07.762995+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "9fe1ee9ea7cc5fa5106b6040aefd638f678473cbd073f15fa598aeed39d99e8d",
+        "artifact_size_bytes": 6756,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "11fafd9c-238f-4176-91e7-5df68a956b04": {
+        "model_version": "11fafd9c-238f-4176-91e7-5df68a956b04",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T09:03:07.867243+00:00",
+        "model_path": "data/models\\11fafd9c-238f-4176-91e7-5df68a956b04\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T09:03:07.885235+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "9fe1ee9ea7cc5fa5106b6040aefd638f678473cbd073f15fa598aeed39d99e8d",
+        "artifact_size_bytes": 6756,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "26a2ddf9-3ba1-4153-84e8-80250163d3b0": {
+        "model_version": "26a2ddf9-3ba1-4153-84e8-80250163d3b0",
+        "dataset_version": "ds-999",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "xgboost",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 2
+        },
+        "metrics": {
+            "accuracy": 0.8,
+            "precision": 0.8242424242424242,
+            "recall": 0.8,
+            "f1": 0.8041666666666668,
+            "roc_auc": 0.8901098901098901
+        },
+        "feature_importance": {
+            "f1": 0.45796263217926025,
+            "f2": 0.5420374274253845
+        },
+        "creation_timestamp": "2026-07-21T09:03:08.230689+00:00",
+        "model_path": "C:\\Users\\safad\\AppData\\Local\\Temp\\tmpxu4w70g5\\26a2ddf9-3ba1-4153-84e8-80250163d3b0\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T09:03:08.242898+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "daa2ce7a78d714a661250a99ad2f8a49132afea0c56f178421d0f8392d796c6b",
+        "artifact_size_bytes": 14223,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "5d0192b4-b52d-4d8f-bba1-bae07c833439": {
+        "model_version": "5d0192b4-b52d-4d8f-bba1-bae07c833439",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T09:03:48.952615+00:00",
+        "model_path": "data/models\\5d0192b4-b52d-4d8f-bba1-bae07c833439\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T09:03:48.966308+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "9fe1ee9ea7cc5fa5106b6040aefd638f678473cbd073f15fa598aeed39d99e8d",
+        "artifact_size_bytes": 6756,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "3ed25921-7fb1-49b3-b737-b2dc75503d1c": {
+        "model_version": "3ed25921-7fb1-49b3-b737-b2dc75503d1c",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T09:03:49.055379+00:00",
+        "model_path": "data/models\\3ed25921-7fb1-49b3-b737-b2dc75503d1c\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T09:03:49.067815+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "9fe1ee9ea7cc5fa5106b6040aefd638f678473cbd073f15fa598aeed39d99e8d",
+        "artifact_size_bytes": 6756,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "b85e6523-86fb-46ba-867f-5fb7ff59dd3a": {
+        "model_version": "b85e6523-86fb-46ba-867f-5fb7ff59dd3a",
+        "dataset_version": "ds-999",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "xgboost",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 2
+        },
+        "metrics": {
+            "accuracy": 0.8,
+            "precision": 0.8242424242424242,
+            "recall": 0.8,
+            "f1": 0.8041666666666668,
+            "roc_auc": 0.8901098901098901
+        },
+        "feature_importance": {
+            "f1": 0.45796263217926025,
+            "f2": 0.5420374274253845
+        },
+        "creation_timestamp": "2026-07-21T09:03:49.324621+00:00",
+        "model_path": "C:\\Users\\safad\\AppData\\Local\\Temp\\tmp38xk8mc7\\b85e6523-86fb-46ba-867f-5fb7ff59dd3a\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T09:03:49.337420+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "daa2ce7a78d714a661250a99ad2f8a49132afea0c56f178421d0f8392d796c6b",
+        "artifact_size_bytes": 14223,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "85cbb568-2eae-4bfa-900d-16a66e9e5b46": {
+        "model_version": "85cbb568-2eae-4bfa-900d-16a66e9e5b46",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T09:06:16.677489+00:00",
+        "model_path": "data/models\\85cbb568-2eae-4bfa-900d-16a66e9e5b46\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T09:06:16.691486+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "9fe1ee9ea7cc5fa5106b6040aefd638f678473cbd073f15fa598aeed39d99e8d",
+        "artifact_size_bytes": 6756,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "7ce53dcd-c1b6-4d48-95f9-cc6a60dab360": {
+        "model_version": "7ce53dcd-c1b6-4d48-95f9-cc6a60dab360",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T09:06:16.789586+00:00",
+        "model_path": "data/models\\7ce53dcd-c1b6-4d48-95f9-cc6a60dab360\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T09:06:16.803978+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "9fe1ee9ea7cc5fa5106b6040aefd638f678473cbd073f15fa598aeed39d99e8d",
+        "artifact_size_bytes": 6756,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "4aff8b50-6260-437c-9ee5-e7542c2a52c8": {
+        "model_version": "4aff8b50-6260-437c-9ee5-e7542c2a52c8",
+        "dataset_version": "ds-999",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "xgboost",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 2
+        },
+        "metrics": {
+            "accuracy": 0.8,
+            "precision": 0.8242424242424242,
+            "recall": 0.8,
+            "f1": 0.8041666666666668,
+            "roc_auc": 0.8901098901098901
+        },
+        "feature_importance": {
+            "f1": 0.45796263217926025,
+            "f2": 0.5420374274253845
+        },
+        "creation_timestamp": "2026-07-21T09:06:17.052511+00:00",
+        "model_path": "C:\\Users\\safad\\AppData\\Local\\Temp\\tmpbgzqpfxb\\4aff8b50-6260-437c-9ee5-e7542c2a52c8\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T09:06:17.066142+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "daa2ce7a78d714a661250a99ad2f8a49132afea0c56f178421d0f8392d796c6b",
+        "artifact_size_bytes": 14223,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "938ed82a-385e-487c-b3da-4ba912dfc6ed": {
+        "model_version": "938ed82a-385e-487c-b3da-4ba912dfc6ed",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T09:07:02.963211+00:00",
+        "model_path": "data/models\\938ed82a-385e-487c-b3da-4ba912dfc6ed\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T09:07:02.981892+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "9fe1ee9ea7cc5fa5106b6040aefd638f678473cbd073f15fa598aeed39d99e8d",
+        "artifact_size_bytes": 6756,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "672d9615-912f-410c-8439-73f42dabbf1a": {
+        "model_version": "672d9615-912f-410c-8439-73f42dabbf1a",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T09:07:03.082526+00:00",
+        "model_path": "data/models\\672d9615-912f-410c-8439-73f42dabbf1a\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T09:07:03.096076+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "9fe1ee9ea7cc5fa5106b6040aefd638f678473cbd073f15fa598aeed39d99e8d",
+        "artifact_size_bytes": 6756,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "ee21371f-a344-4802-99ec-587dbef34f55": {
+        "model_version": "ee21371f-a344-4802-99ec-587dbef34f55",
+        "dataset_version": "ds-999",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "xgboost",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 2
+        },
+        "metrics": {
+            "accuracy": 0.8,
+            "precision": 0.8242424242424242,
+            "recall": 0.8,
+            "f1": 0.8041666666666668,
+            "roc_auc": 0.8901098901098901
+        },
+        "feature_importance": {
+            "f1": 0.45796263217926025,
+            "f2": 0.5420374274253845
+        },
+        "creation_timestamp": "2026-07-21T09:07:03.311806+00:00",
+        "model_path": "C:\\Users\\safad\\AppData\\Local\\Temp\\tmppfd7nnxt\\ee21371f-a344-4802-99ec-587dbef34f55\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T09:07:03.323832+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "daa2ce7a78d714a661250a99ad2f8a49132afea0c56f178421d0f8392d796c6b",
+        "artifact_size_bytes": 14223,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "ac0d7874-16ee-44fc-9d4b-23fa51b5c596": {
+        "model_version": "ac0d7874-16ee-44fc-9d4b-23fa51b5c596",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T09:08:28.378508+00:00",
+        "model_path": "data/models\\ac0d7874-16ee-44fc-9d4b-23fa51b5c596\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T09:08:28.390796+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "9fe1ee9ea7cc5fa5106b6040aefd638f678473cbd073f15fa598aeed39d99e8d",
+        "artifact_size_bytes": 6756,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "d164997d-106b-45b6-8599-7a00fb894e12": {
+        "model_version": "d164997d-106b-45b6-8599-7a00fb894e12",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T09:08:28.490945+00:00",
+        "model_path": "data/models\\d164997d-106b-45b6-8599-7a00fb894e12\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T09:08:28.515080+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "9fe1ee9ea7cc5fa5106b6040aefd638f678473cbd073f15fa598aeed39d99e8d",
+        "artifact_size_bytes": 6756,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "5f3495b1-4e27-4294-9158-53bbe42c086d": {
+        "model_version": "5f3495b1-4e27-4294-9158-53bbe42c086d",
+        "dataset_version": "ds-999",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "xgboost",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 2
+        },
+        "metrics": {
+            "accuracy": 0.8,
+            "precision": 0.8242424242424242,
+            "recall": 0.8,
+            "f1": 0.8041666666666668,
+            "roc_auc": 0.8901098901098901
+        },
+        "feature_importance": {
+            "f1": 0.45796263217926025,
+            "f2": 0.5420374274253845
+        },
+        "creation_timestamp": "2026-07-21T09:08:28.736088+00:00",
+        "model_path": "C:\\Users\\safad\\AppData\\Local\\Temp\\tmp0gljehkt\\5f3495b1-4e27-4294-9158-53bbe42c086d\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T09:08:28.748685+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "daa2ce7a78d714a661250a99ad2f8a49132afea0c56f178421d0f8392d796c6b",
+        "artifact_size_bytes": 14223,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "880937b9-9a22-4083-8e80-6db6cadd8389": {
+        "model_version": "880937b9-9a22-4083-8e80-6db6cadd8389",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T09:09:07.525680+00:00",
+        "model_path": "data/models\\880937b9-9a22-4083-8e80-6db6cadd8389\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T09:09:07.538800+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "9fe1ee9ea7cc5fa5106b6040aefd638f678473cbd073f15fa598aeed39d99e8d",
+        "artifact_size_bytes": 6756,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "627c7f7f-30cf-4bf2-9d52-14e397d45298": {
+        "model_version": "627c7f7f-30cf-4bf2-9d52-14e397d45298",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T09:09:07.626845+00:00",
+        "model_path": "data/models\\627c7f7f-30cf-4bf2-9d52-14e397d45298\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T09:09:07.641853+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "9fe1ee9ea7cc5fa5106b6040aefd638f678473cbd073f15fa598aeed39d99e8d",
+        "artifact_size_bytes": 6756,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "80bcecce-61ae-4f2c-b923-26290386fc0d": {
+        "model_version": "80bcecce-61ae-4f2c-b923-26290386fc0d",
+        "dataset_version": "ds-999",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "xgboost",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 2
+        },
+        "metrics": {
+            "accuracy": 0.8,
+            "precision": 0.8242424242424242,
+            "recall": 0.8,
+            "f1": 0.8041666666666668,
+            "roc_auc": 0.8901098901098901
+        },
+        "feature_importance": {
+            "f1": 0.45796263217926025,
+            "f2": 0.5420374274253845
+        },
+        "creation_timestamp": "2026-07-21T09:09:07.849952+00:00",
+        "model_path": "C:\\Users\\safad\\AppData\\Local\\Temp\\tmpvtp_1h4n\\80bcecce-61ae-4f2c-b923-26290386fc0d\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T09:09:07.862058+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "daa2ce7a78d714a661250a99ad2f8a49132afea0c56f178421d0f8392d796c6b",
+        "artifact_size_bytes": 14223,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "ae8e97b8-3bdc-4728-b18f-772d910b98ea": {
+        "model_version": "ae8e97b8-3bdc-4728-b18f-772d910b98ea",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T09:10:41.418655+00:00",
+        "model_path": "data/models\\ae8e97b8-3bdc-4728-b18f-772d910b98ea\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T09:10:41.437501+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "9fe1ee9ea7cc5fa5106b6040aefd638f678473cbd073f15fa598aeed39d99e8d",
+        "artifact_size_bytes": 6756,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "4ac3e800-9743-404e-891b-403fa18480b4": {
+        "model_version": "4ac3e800-9743-404e-891b-403fa18480b4",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T09:10:41.523061+00:00",
+        "model_path": "data/models\\4ac3e800-9743-404e-891b-403fa18480b4\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T09:10:41.534687+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "9fe1ee9ea7cc5fa5106b6040aefd638f678473cbd073f15fa598aeed39d99e8d",
+        "artifact_size_bytes": 6756,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "d0c47cf0-02f3-4ceb-bf22-e25ee874a399": {
+        "model_version": "d0c47cf0-02f3-4ceb-bf22-e25ee874a399",
+        "dataset_version": "ds-999",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "xgboost",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 2
+        },
+        "metrics": {
+            "accuracy": 0.8,
+            "precision": 0.8242424242424242,
+            "recall": 0.8,
+            "f1": 0.8041666666666668,
+            "roc_auc": 0.8901098901098901
+        },
+        "feature_importance": {
+            "f1": 0.45796263217926025,
+            "f2": 0.5420374274253845
+        },
+        "creation_timestamp": "2026-07-21T09:10:41.761902+00:00",
+        "model_path": "C:\\Users\\safad\\AppData\\Local\\Temp\\tmpm8tspg4g\\d0c47cf0-02f3-4ceb-bf22-e25ee874a399\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T09:10:41.774176+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "daa2ce7a78d714a661250a99ad2f8a49132afea0c56f178421d0f8392d796c6b",
+        "artifact_size_bytes": 14223,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "52a1e25b-6111-484a-977a-3f16e6919bfb": {
+        "model_version": "52a1e25b-6111-484a-977a-3f16e6919bfb",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T10:27:27.400999+00:00",
+        "model_path": "data/models\\52a1e25b-6111-484a-977a-3f16e6919bfb\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T10:27:27.404640+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "9fe1ee9ea7cc5fa5106b6040aefd638f678473cbd073f15fa598aeed39d99e8d",
+        "artifact_size_bytes": 6756,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "c7b69549-7225-4acf-8fd7-15bc16bf0312": {
+        "model_version": "c7b69549-7225-4acf-8fd7-15bc16bf0312",
+        "dataset_version": "",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "lightgbm",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 3,
+            "learning_rate": 0.1
+        },
+        "metrics": {
+            "accuracy": 0.65,
+            "precision": 0.825,
+            "recall": 0.65,
+            "f1": 0.6438596491228069,
+            "roc_auc": 0.8296703296703298
+        },
+        "feature_importance": {
+            "f1": 2.0,
+            "f2": 3.0
+        },
+        "creation_timestamp": "2026-07-21T10:27:27.501141+00:00",
+        "model_path": "data/models\\c7b69549-7225-4acf-8fd7-15bc16bf0312\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T10:27:27.515440+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "9fe1ee9ea7cc5fa5106b6040aefd638f678473cbd073f15fa598aeed39d99e8d",
+        "artifact_size_bytes": 6756,
+        "drift_baseline": {},
+        "calibration_metadata": {}
+    },
+    "4cd40f27-545d-4e06-b0d4-6af792d75062": {
+        "model_version": "4cd40f27-545d-4e06-b0d4-6af792d75062",
+        "dataset_version": "ds-999",
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "",
+        "git_commit": "8308d51f03289f0612d18a1e168cb13ee19cfeef",
+        "trainer": "xgboost",
+        "hyperparameters": {
+            "n_estimators": 5,
+            "max_depth": 2
+        },
+        "metrics": {
+            "accuracy": 0.8,
+            "precision": 0.8242424242424242,
+            "recall": 0.8,
+            "f1": 0.8041666666666668,
+            "roc_auc": 0.8901098901098901
+        },
+        "feature_importance": {
+            "f1": 0.45796263217926025,
+            "f2": 0.5420374274253845
+        },
+        "creation_timestamp": "2026-07-21T10:27:27.840729+00:00",
+        "model_path": "C:\\Users\\safad\\AppData\\Local\\Temp\\tmpsj3k_d6w\\4cd40f27-545d-4e06-b0d4-6af792d75062\\model.joblib",
+        "status": "TRAINING",
+        "transition_history": [
+            {
+                "from_status": "NONE",
+                "to_status": "TRAINING",
+                "timestamp": "2026-07-21T10:27:27.853291+00:00",
+                "notes": "Initial training registration."
+            }
+        ],
+        "approval_notes": null,
+        "walk_forward_metrics": {},
+        "artifact_sha256": "daa2ce7a78d714a661250a99ad2f8a49132afea0c56f178421d0f8392d796c6b",
+        "artifact_size_bytes": 14223,
+        "drift_baseline": {},
+        "calibration_metadata": {}
     }
 }

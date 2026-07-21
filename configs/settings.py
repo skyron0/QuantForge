@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -30,6 +31,14 @@ class Settings(BaseSettings):
     BUY_THRESHOLD: int = 40
     SELL_THRESHOLD: int = -40
     MIN_CANDLES: int = 50
+
+    # AI Runtime Configuration
+    AI_PROVIDER: str = "ollama"
+    AI_MODEL: Optional[str] = None
+    AI_BASE_URL: str = "http://localhost:11434"
+    AI_CONNECTION_TIMEOUT_SECONDS: float = 5.0
+    AI_INFERENCE_TIMEOUT_SECONDS: float = 30.0
+    AI_STRUCTURED_MAX_RETRIES: int = 3
 
     model_config = SettingsConfigDict(
         env_file=".env",

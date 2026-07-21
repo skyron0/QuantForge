@@ -1,0 +1,76 @@
+def test_validation_pipeline_fully_concludes(clean_registry):
+    """Verify that ValidationPipeline executes all stages and updates status."""
+    registry, repo = clean_registry
+
+    # Persist mock model object inside version path
+    imported_models_dir = tempfile.mkdtemp()
+    model_version = "ver-validation-test"
+    model_dir = os.path.join(imported_models_dir, model_version)
+    os.makedirs(model_dir, exist_ok=True)
+    
+    import joblib
+    fake_model = FakePredictionModel()
+    joblib.dump(fake_model, os.path.join(model_dir, "model.joblib"))
+
+    # Register model in Candidate status
+    manifest = {
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "exp-val",
+        "git_commit": "abcdef",
+        "trainer": "lightgbm",
+        "val_metrics": {"f1": 0.65},
+        "feature_importance": {"rsi": 5.0, "ema20": 2.0, "close": 1.0},
+        "creation_timestamp": "2026-07-20T12:00:00Z",
+    }
+    registry.register(
+        model_version=model_version,
+        dataset_version="ds-val",
+        model_path=os.path.join(model_dir, "model.joblib"),
+        manifest=manifest,
+    )
+    registry.promote(model_version, ModelStatus.CANDIDATE)
+
+    pipeline = ValidationPipeline(model_registry=registry)
+    
+    candles = _generate_mock_candles(30)
+    df_features = _generate_mock_df()
+
+    # Run validation under high stability threshold to see if it rejects or accepts
+    config = ValidationConfig(
+        min_sharpe=-10.0,  # Ensure WF passes
+        min_f1=0.50,
+        max_drawdown=0.90,
+        min_return=-10000.0,
+        stability_threshold=0.0  # Force stability approval
+    )
+
+    result = pipeline.validate(
+        model_version=model_version,
+        dataset_df=df_features,
+        candles=candles,
+        config=config
+    )
+
+    # Check validation results
+    assert isinstance(result, ValidationResult)
+    assert result.validation_decision in ["APPROVED", "REJECTED"]
+    assert result.calibration_status == "READY_INTERFACE_PLATT_ISOTONIC"
+    assert "rsi" in result.drift_baseline
+    assert "mean" in result.drift_baseline["rsi"]
+    assert "quantiles" in result.drift_baseline["rsi"]
+
+    # Verify report is built
+    report = generate_validation_report(
+        model_version=model_version,
+        dataset_version="ds-val",
+        experiment_id="exp-val",
+        result=result,
+        reviewer_notes="Automatic validation"
+    )
+    assert "Institutional Model Validation Report" in report
+    assert model_version in report
+    assert "Purged Time-Series Cross Validation Summary" in report
+
+    # Clean up temp model folder
+    shutil.rmtree(imported_models_dir)

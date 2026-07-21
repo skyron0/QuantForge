@@ -56,6 +56,10 @@ class ModelRegistry:
             status=ModelStatus.TRAINING,
             transition_history=[initial_event],
             approval_notes=manifest.get("notes"),
+            artifact_sha256=manifest.get("artifact_sha256"),
+            artifact_size_bytes=manifest.get("artifact_size_bytes"),
+            drift_baseline=manifest.get("drift_baseline", {}),
+            calibration_metadata=manifest.get("calibration_metadata", {}),
         )
         self.repo.save(model)
         self._log_experiment_transition(model, "NONE", "TRAINING")

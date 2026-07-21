@@ -1,0 +1,106 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.13.13, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\Users\safad\QuantForge
+plugins: anyio-4.14.1, langsmith-0.10.2
+collected 85 items
+
+tests\unit\test_dataset.py ............                                  [ 14%]
+tests\unit\test_experiment.py ....                                       [ 18%]
+tests\unit\test_inference.py .............                               [ 34%]
+tests\unit\test_inference_trust.py .......                               [ 42%]
+tests\unit\test_metrics_engine.py ..........                             [ 54%]
+tests\unit\test_optimization.py ........                                 [ 63%]
+tests\unit\test_registry.py .....                                        [ 69%]
+tests\unit\test_strategy_framework.py ......                             [ 76%]
+tests\unit\test_training.py .......                                      [ 84%]
+tests\unit\test_validation.py ..F.......                                 [ 96%]
+tests\unit\test_walk_forward.py ...                                      [100%]
+
+================================== FAILURES ===================================
+__________________ test_validation_pipeline_fully_concludes ___________________
+
+clean_registry = (<backend.training.registry.ModelRegistry object at 0x000001E6C2DD0410>, <backend.training.registry_repo.LocalModelRegistryRepository object at 0x000001E6C2DD00F0>)
+
+    def test_validation_pipeline_fully_concludes(clean_registry):
+        """Verify that ValidationPipeline executes all stages and updates status."""
+        registry, repo = clean_registry
+    
+        # Persist mock model object inside version path
+        imported_models_dir = tempfile.mkdtemp()
+        model_version = "ver-validation-test"
+        model_dir = os.path.join(imported_models_dir, model_version)
+        os.makedirs(model_dir, exist_ok=True)
+    
+        import joblib
+        fake_model = FakePredictionModel()
+        joblib.dump(fake_model, os.path.join(model_dir, "model.joblib"))
+    
+        # Register model in Candidate status
+        manifest = {
+            "feature_version": "v1",
+            "label_version": "v1",
+            "experiment_id": "exp-val",
+            "git_commit": "abcdef",
+            "trainer": "lightgbm",
+            "val_metrics": {"f1": 0.65},
+            "feature_importance": {"rsi": 5.0, "ema20": 2.0, "close": 1.0},
+            "creation_timestamp": "2026-07-20T12:00:00Z",
+        }
+        registry.register(
+            model_version=model_version,
+            dataset_version="ds-val",
+            model_path=os.path.join(model_dir, "model.joblib"),
+            manifest=manifest,
+        )
+        registry.promote(model_version, ModelStatus.CANDIDATE)
+    
+        pipeline = ValidationPipeline(model_registry=registry)
+    
+        candles = _generate_mock_candles(30)
+        df_features = _generate_mock_df()
+    
+        # Run validation under high stability threshold to see if it rejects or accepts
+        config = ValidationConfig(
+            min_sharpe=-10.0,  # Ensure WF passes
+            min_f1=0.50,
+            max_drawdown=0.90,
+            min_return=-10000.0,
+            stability_threshold=0.0  # Force stability approval
+        )
+    
+        result = pipeline.validate(
+            model_version=model_version,
+            dataset_df=df_features,
+            candles=candles,
+            config=config
+        )
+    
+        # Check validation results
+        assert isinstance(result, ValidationResult)
+        assert result.validation_decision in ["APPROVED", "REJECTED"]
+>       assert result.calibration_status == "READY_INTERFACE_PLATT_ISOTONIC"
+E       AssertionError: assert 'FAILED' == 'READY_INTERF...LATT_ISOTONIC'
+E         
+E         - READY_INTERFACE_PLATT_ISOTONIC
+E         + FAILED
+
+tests\unit\test_validation.py:217: AssertionError
+------------------------------ Captured log call ------------------------------
+WARNING  backend.training.validation:validation.py:544 Failed to fit probability calibrator: 'numpy.ndarray' object has no attribute 'get'
+============================== warnings summary ===============================
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_training.py::test_model_persistence
+tests/unit/test_training.py::test_model_persistence
+tests/unit/test_training.py::test_model_persistence
+tests/unit/test_training.py::test_model_persistence
+  C:\Users\safad\QuantForge\.venv\Lib\site-packages\joblib\numpy_pickle.py:207: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+  As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+    array.shape = self.shape
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/unit/test_validation.py::test_validation_pipeline_fully_concludes
+================== 1 failed, 84 passed, 8 warnings in 29.25s ==================

@@ -1,0 +1,52 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.13.13, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\safad\QuantForge\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\safad\QuantForge
+plugins: anyio-4.14.1, langsmith-0.10.2
+collecting ... collected 7 items
+
+tests/unit/test_inference_trust.py::test_calculate_sha256 PASSED         [ 14%]
+tests/unit/test_inference_trust.py::test_integrity_verifier_policies PASSED [ 28%]
+tests/unit/test_inference_trust.py::test_platt_calibration PASSED        [ 42%]
+tests/unit/test_inference_trust.py::test_isotonic_calibration PASSED     [ 57%]
+tests/unit/test_inference_trust.py::test_evaluation_metrics PASSED       [ 71%]
+tests/unit/test_inference_trust.py::test_feature_drift_calculations FAILED [ 85%]
+tests/unit/test_inference_trust.py::test_active_drift_observer PASSED    [100%]
+
+================================== FAILURES ===================================
+_______________________ test_feature_drift_calculations _______________________
+
+    def test_feature_drift_calculations():
+        detector = FeatureDriftDetector(thresholds=DriftThresholds(psi_warning=0.10, psi_critical=0.25))
+    
+        # Define baseline details for a feature representing normal distribution
+        baseline_stats = {
+            "binning_method": "quantile",
+            "bin_edges": ["-inf", -0.5, 0.0, 0.5, "inf"],
+            "expected_proportions": [0.25, 0.25, 0.25, 0.25],
+            "raw_reference": [float(x) for x in np.random.normal(0, 0.3, 200)]
+        }
+    
+        # 1. No drift runtime observation (similar distribution)
+        obs_stable = np.random.normal(0, 0.3, 150)
+        res_psi = detector.calculate_psi("feat1", baseline_stats, obs_stable)
+>       assert res_psi.status == DriftStatus.STABLE
+E       AssertionError: assert <DriftStatus....'UNAVAILABLE'> == <DriftStatus.STABLE: 'STABLE'>
+E         
+E         - STABLE
+E         + UNAVAILABLE
+
+tests\unit\test_inference_trust.py:153: AssertionError
+============================== warnings summary ===============================
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_inference_trust.py::test_platt_calibration
+  C:\Users\safad\QuantForge\.venv\Lib\site-packages\joblib\numpy_pickle.py:207: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+  As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+    array.shape = self.shape
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/unit/test_inference_trust.py::test_feature_drift_calculations - ...
+=================== 1 failed, 6 passed, 4 warnings in 1.66s ===================

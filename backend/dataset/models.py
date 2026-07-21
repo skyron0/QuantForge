@@ -18,6 +18,7 @@ class DatasetMetadata:
     train_count: int = 0
     val_count: int = 0
     test_count: int = 0
+    label_horizon: int = 1
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -34,6 +35,7 @@ class DatasetMetadata:
             "train_count": self.train_count,
             "val_count": self.val_count,
             "test_count": self.test_count,
+            "label_horizon": self.label_horizon,
         }
 
     @classmethod
@@ -52,4 +54,5 @@ class DatasetMetadata:
             train_count=d.get("train_count", 0),
             val_count=d.get("val_count", 0),
             test_count=d.get("test_count", 0),
+            label_horizon=int(d.get("label_horizon") or d.get("generation_parameters", {}).get("horizon") or 1),
         )

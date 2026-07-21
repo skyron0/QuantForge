@@ -137,12 +137,18 @@ class TrainingPipeline:
         model_path = os.path.join(version_dir, "model.joblib")
         save_model(model, model_path)
 
+        from backend.inference.integrity import calculate_sha256
+        sha256_hash = calculate_sha256(model_path)
+        size_bytes = os.path.getsize(model_path)
+
         manifest = generate_manifest(
             config=config,
             result=result,
             model_version=model_version,
             model_path=model_path,
             dataset_version=dataset_version,
+            artifact_sha256=sha256_hash,
+            artifact_size_bytes=size_bytes,
         )
         manifest_path = os.path.join(version_dir, "manifest.json")
         save_manifest(manifest, manifest_path)

@@ -111,6 +111,7 @@ class DatasetBuilder:
             train_count=train_end,
             val_count=val_end - train_end,
             test_count=n - val_end,
+            label_horizon=self.label_params.get("horizon", 1),
         )
 
         # Persist

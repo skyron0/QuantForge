@@ -26,6 +26,8 @@ def generate_manifest(
     feature_version: str = "v1",
     label_version: str = "v1",
     experiment_id: str = "",
+    artifact_sha256: Optional[str] = None,
+    artifact_size_bytes: Optional[int] = None,
 ) -> Dict[str, Any]:
     return {
         "model_version": model_version,
@@ -45,6 +47,8 @@ def generate_manifest(
         "candidate_status": result.candidate_status,
         "training_duration_seconds": result.training_duration_seconds,
         "model_path": model_path,
+        "artifact_sha256": artifact_sha256,
+        "artifact_size_bytes": artifact_size_bytes,
         "creation_timestamp": datetime.datetime.now(
             datetime.timezone.utc
         ).isoformat(),

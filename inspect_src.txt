@@ -1,0 +1,79 @@
+def test_validation_pipeline_cv_rejections_and_data(clean_registry):
+    # Verify that ValidationPipeline runs CV and records splitter info
+    registry, repo = clean_registry
+    
+    imported_models_dir = tempfile.mkdtemp()
+    model_version = "ver-cv-test"
+    model_dir = os.path.join(imported_models_dir, model_version)
+    os.makedirs(model_dir, exist_ok=True)
+    
+    import joblib
+    fake_model = FakePredictionModel()
+    joblib.dump(fake_model, os.path.join(model_dir, "model.joblib"))
+    
+    # Save a fake metadata file to test metadata detection
+    dataset_version = "ds-cv-test"
+    dataset_dir = os.path.join("data/datasets", dataset_version)
+    os.makedirs(dataset_dir, exist_ok=True)
+    meta_data = {
+        "label_horizon": 5,
+        "generation_parameters": {"horizon": 5}
+    }
+    import json
+    with open(os.path.join(dataset_dir, "metadata.json"), "w") as f:
+        json.dump(meta_data, f)
+        
+    manifest = {
+        "feature_version": "v1",
+        "label_version": "v1",
+        "experiment_id": "exp-cv",
+        "git_commit": "abcdef",
+        "trainer": "lightgbm",
+        "val_metrics": {"f1": 0.35},
+        "feature_importance": {"rsi": 5.0, "ema20": 2.0, "close": 1.0},
+        "creation_timestamp": "2026-07-20T12:00:00Z",
+    }
+    registry.register(
+        model_version=model_version,
+        dataset_version=dataset_version,
+        model_path=os.path.join(model_dir, "model.joblib"),
+        manifest=manifest,
+    )
+    registry.promote(model_version, ModelStatus.CANDIDATE)
+    
+    pipeline = ValidationPipeline(model_registry=registry)
+    candles = _generate_mock_candles(30)
+    df_features = _generate_mock_df()
+    
+    # Run with min_f1=0.90 to force CV failure
+    config = ValidationConfig(
+        min_sharpe=-10.0,
+        min_f1=0.90,
+        max_drawdown=0.90,
+        min_return=-10000.0,
+        stability_threshold=0.0,
+        n_splits=3,
+        embargo_size=5
+    )
+    
+    result = pipeline.validate(
+        model_version=model_version,
+        dataset_df=df_features,
+        candles=candles,
+        config=config
+    )
+    
+    assert isinstance(result, ValidationResult)
+    # Decision must be REJECTED because average CV score will not beat 0.90
+    assert result.validation_decision == "REJECTED"
+    assert result.splitter_info["splitter_type"] == "PurgedTimeSeriesSplit"
+    assert result.splitter_info["n_splits"] == 3
+    assert result.splitter_info["purge_size"] == 5  # Derived from DatasetMetadata!
+    assert result.splitter_info["embargo_size"] == 5
+    assert result.splitter_info["total_samples_purged"] > 0
+    assert result.splitter_info["total_samples_embargoed"] > 0
+    assert "average_cv_score" in result.cv_metrics
+    
+    # Clean up
+    shutil.rmtree(imported_models_dir)
+    shutil.rmtree(dataset_dir)

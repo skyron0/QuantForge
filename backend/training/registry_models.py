@@ -48,6 +48,10 @@ class RegisteredModel:
     transition_history: List[TransitionEvent] = field(default_factory=list)
     approval_notes: Optional[str] = None
     walk_forward_metrics: Dict[str, Any] = field(default_factory=dict)
+    artifact_sha256: Optional[str] = None
+    artifact_size_bytes: Optional[int] = None
+    drift_baseline: Dict[str, Any] = field(default_factory=dict)
+    calibration_metadata: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -67,6 +71,10 @@ class RegisteredModel:
             "transition_history": [e.to_dict() for e in self.transition_history],
             "approval_notes": self.approval_notes,
             "walk_forward_metrics": self.walk_forward_metrics,
+            "artifact_sha256": self.artifact_sha256,
+            "artifact_size_bytes": self.artifact_size_bytes,
+            "drift_baseline": self.drift_baseline,
+            "calibration_metadata": self.calibration_metadata,
         }
 
     @classmethod
@@ -89,4 +97,8 @@ class RegisteredModel:
             transition_history=history,
             approval_notes=d.get("approval_notes"),
             walk_forward_metrics=d.get("walk_forward_metrics", {}),
+            artifact_sha256=d.get("artifact_sha256"),
+            artifact_size_bytes=d.get("artifact_size_bytes"),
+            drift_baseline=d.get("drift_baseline", {}),
+            calibration_metadata=d.get("calibration_metadata", {}),
         )

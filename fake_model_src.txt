@@ -1,0 +1,7 @@
+class FakePredictionModel(PredictionModel):
+    def __init__(self):
+        super().__init__(model=self, model_type="fake", task_type="classification", feature_columns=["rsi", "ema20", "close"])
+
+    def predict(self, features):
+        # Buy if RSI oversold, Sell otherwise
+        return 1 if features.get("rsi", 50.0) <= 30.0 else 0

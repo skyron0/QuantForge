@@ -43,6 +43,13 @@ class StrategyLoader:
         """
         Load a strategy instance dynamically, importing its module if necessary.
         """
+        # Ensure our validation benchmarks and prediction frameworks are registered
+        for mod in ["backend.strategy.benchmarks", "backend.strategy.prediction_strategy"]:
+            try:
+                importlib.import_module(mod)
+            except ImportError:
+                pass
+
         try:
             strategy_cls = StrategyRegistry.get_strategy_class(name)
         except ValueError:
