@@ -66,7 +66,7 @@ def main():
     # 1. Resolve and create provider via central Registry
     # Use a generous inference timeout for smoke testing (thinking models need more time)
     smoke_inference_timeout = max(
-        float(settings.AI_INFERENCE_TIMEOUT_SECONDS or 30.0),
+        settings.AI_INFERENCE_TIMEOUT_SECONDS if settings.AI_INFERENCE_TIMEOUT_SECONDS is not None else 30.0,
         120.0
     )
     try:
@@ -75,7 +75,7 @@ def main():
             {
                 "model_name": settings.AI_MODEL,
                 "base_url": settings.AI_BASE_URL,
-                "connection_timeout": float(settings.AI_CONNECTION_TIMEOUT_SECONDS or 5.0),
+                "connection_timeout": settings.AI_CONNECTION_TIMEOUT_SECONDS if settings.AI_CONNECTION_TIMEOUT_SECONDS is not None else 5.0,
                 "inference_timeout": smoke_inference_timeout,
             }
         )
@@ -131,7 +131,7 @@ def main():
     # 4. Instantiate ReasoningEngine (real engine, real OllamaProvider)
     engine = ReasoningEngine(
         provider=provider,
-        max_retries=int(settings.AI_STRUCTURED_MAX_RETRIES or 3)
+        max_retries=settings.AI_STRUCTURED_MAX_RETRIES if settings.AI_STRUCTURED_MAX_RETRIES is not None else 3
     )
 
     # 5. Execute request through the real ReasoningEngine

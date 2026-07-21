@@ -21,12 +21,12 @@ class OllamaProvider(BaseAIProvider):
 
     def __init__(self, config: Dict[str, Any]):
         self._provider_name = "ollama"
-        self._model_name = config.get("model_name")
-        if not self._model_name:
+        model_val = config.get("model_name")
+        if not model_val:
             raise ProviderConfigurationError(
                 "model_name is not configured. AI_MODEL must be explicitly set."
             )
-
+        self._model_name: str = str(model_val)
         self._base_url = config.get("base_url", "http://localhost:11434").rstrip("/")
         self._conn_timeout = float(config.get("connection_timeout", 5.0))
         self._inf_timeout = float(config.get("inference_timeout", 30.0))

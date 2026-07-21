@@ -39,6 +39,7 @@ class Settings(BaseSettings):
     AI_CONNECTION_TIMEOUT_SECONDS: float = 5.0
     AI_INFERENCE_TIMEOUT_SECONDS: float = 30.0
     AI_STRUCTURED_MAX_RETRIES: int = 3
+    AI_CONTEXT_TTL_SECONDS: float = 300.0
 
     model_config = SettingsConfigDict(
         env_file=".env",
