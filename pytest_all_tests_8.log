@@ -1,0 +1,1920 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.13, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\Users\safad\QuantForge
+plugins: anyio-4.14.1, langsmith-0.10.2
+collected 151 items
+
+tests\unit\test_dataset.py ............                                  [  7%]
+tests\unit\test_decision.py .................                            [ 19%]
+tests\unit\test_experiment.py ....                                       [ 21%]
+tests\unit\test_inference.py .............                               [ 30%]
+tests\unit\test_inference_trust.py .......                               [ 35%]
+tests\unit\test_intelligence.py ......                                   [ 39%]
+tests\unit\test_metrics_engine.py ..........                             [ 45%]
+tests\unit\test_optimization.py ........                                 [ 50%]
+tests\unit\test_positioning.py FFF.F..F...FF...FF..                      [ 64%]
+tests\unit\test_registry.py .....                                        [ 67%]
+tests\unit\test_risk.py .......................                          [ 82%]
+tests\unit\test_strategy_framework.py ......                             [ 86%]
+tests\unit\test_training.py .......                                      [ 91%]
+tests\unit\test_validation.py ..........                                 [ 98%]
+tests\unit\test_walk_forward.py ...                                      [100%]
+
+================================== FAILURES ===================================
+__________________________ test_valid_bullish_sizing __________________________
+
+base_policy = PositionSizingPolicy(policy_version='1.0.0', minimum_position_notional=10.0, maximum_position_notional=50000.0, minimu...e, reject_if_market_data_stale=True, market_data_max_age_seconds=10.0, authorization_max_age_seconds=10.0, metadata={})
+base_proposal = TradeProposal(proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction='BULLISH', confidence=0.8, fusion_score=0.8...eated_at='2026-07-21T13:23:06.551353+00:00', expires_at='2026-07-21T13:23:16.551361+00:00', risk_flags=[], metadata={})
+base_authorization = RiskAuthorizationResult(authorization_id='auth-xyz-123', proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction=...', latency_ms=1.5, requested_risk_fraction=0.01, authorized_risk_fraction=0.01, reasoning_request_id=None, metadata={})
+base_context = PositionSizingContext(symbol='BTC/USDT', instrument_type='spot', equity=10000.0, available_balance=5000.0, entry_price...re=0.0, market_timestamp='2026-07-21T13:23:06.551422+00:00', timestamp='2026-07-21T13:23:06.551422+00:00', metadata={})
+
+    def test_valid_bullish_sizing(base_policy, base_proposal, base_authorization, base_context):
+        engine = PositionSizingEngine(policy=base_policy)
+>       result = engine.evaluate(base_proposal, base_authorization, base_context)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\test_positioning.py:133: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <backend.positioning.sizing.PositionSizingEngine object at 0x00000258A7F9F380>
+proposal = TradeProposal(proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction='BULLISH', confidence=0.8, fusion_score=0.8...eated_at='2026-07-21T13:23:06.551353+00:00', expires_at='2026-07-21T13:23:16.551361+00:00', risk_flags=[], metadata={})
+authorization = RiskAuthorizationResult(authorization_id='auth-xyz-123', proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction=...', latency_ms=1.5, requested_risk_fraction=0.01, authorized_risk_fraction=0.01, reasoning_request_id=None, metadata={})
+context = PositionSizingContext(symbol='BTC/USDT', instrument_type='spot', equity=10000.0, available_balance=5000.0, entry_price...re=0.0, market_timestamp='2026-07-21T13:23:06.551422+00:00', timestamp='2026-07-21T13:23:06.551422+00:00', metadata={})
+
+    def evaluate(
+        self,
+        proposal: TradeProposal,
+        authorization: RiskAuthorizationResult,
+        context: PositionSizingContext,
+    ) -> PositionSizeResult:
+        start_time = time.perf_counter()
+        rejection_reason = ""
+        success = False
+        result: Optional[PositionSizeResult] = None
+    
+        try:
+            # 1. Authorization Verification
+            if not authorization or not proposal or not context:
+                raise AuthorizationError("Missing required input parameters")
+    
+            # Check status
+            if authorization.status not in (RiskAuthorizationStatus.APPROVED, RiskAuthorizationStatus.ADJUSTED):
+                raise AuthorizationError(f"Proposal authorization status is invalid: {authorization.status}")
+    
+            # Match proposal
+            if authorization.proposal_id != proposal.proposal_id:
+                raise AuthorizationError(
+                    f"Mismatched proposal_id: auth={authorization.proposal_id}, proposal={proposal.proposal_id}"
+                )
+    
+            # Match symbol
+            if authorization.symbol != proposal.symbol or authorization.symbol != context.symbol:
+                raise AuthorizationError(
+                    f"Mismatched symbols: auth={authorization.symbol}, proposal={proposal.symbol}, context={context.symbol}"
+                )
+    
+            # Validate risk fraction
+            auth_risk = authorization.authorized_risk_fraction
+            if math.isnan(auth_risk) or math.isinf(auth_risk) or auth_risk <= 0.0 or auth_risk > 1.0:
+                raise AuthorizationError(f"Invalid authorized risk fraction: {auth_risk}")
+    
+            # Verify audit lineage presence
+            if not getattr(authorization, "authorization_id", None) or \
+               not getattr(authorization, "source_model_version", None) or \
+               not getattr(authorization, "policy_version", None):
+                raise AuthorizationError("Missing required audit lineage fields in authorization result")
+    
+            # Check expiration/stale authorization if configured
+            if self.policy.authorization_max_age_seconds > 0.0:
+                try:
+                    context_dt = datetime.fromisoformat(context.timestamp.replace("Z", "+00:00"))
+                    auth_dt = datetime.fromisoformat(authorization.evaluated_at.replace("Z", "+00:00"))
+                    age = (context_dt - auth_dt).total_seconds()
+                    if age > self.policy.authorization_max_age_seconds:
+                        raise AuthorizationError(f"Authorization is stale: {age}s age")
+                except (ValueError, TypeError) as e:
+                    raise AuthorizationError(f"Audit timestamp check failed: {str(e)}")
+    
+            # 2. Market Data Freshness
+            try:
+                context_dt = datetime.fromisoformat(context.timestamp.replace("Z", "+00:00"))
+                market_dt = datetime.fromisoformat(context.market_timestamp.replace("Z", "+00:00"))
+            except (ValueError, TypeError) as e:
+                raise PositionSizingValidationError(f"Invalid timestamp formatting: {str(e)}")
+    
+            age_seconds = (context_dt - market_dt).total_seconds()
+    
+            # Future timestamp check
+            if age_seconds < -1.0:  # Allow 1s clock draft toleration
+                raise PositionSizingValidationError(
+                    f"Future-invalid market timestamp: market={context.market_timestamp} vs context={context.timestamp}"
+                )
+    
+            # Wall clock future check
+            now_utc = datetime.now(timezone.utc)
+            if (context_dt - now_utc).total_seconds() > 60.0:
+                raise PositionSizingValidationError(f"Execution timestamp is in the future: {context.timestamp}")
+    
+            if self.policy.reject_if_market_data_stale:
+                if age_seconds > self.policy.market_data_max_age_seconds:
+                    raise PositionSizingValidationError(
+                        f"Stale market data: age is {age_seconds:.2f}s, max allowed {self.policy.market_data_max_age_seconds}s"
+                    )
+    
+            # 3. Direction and Stop-Loss Validation
+            direction = proposal.direction.upper()
+            if direction not in ("BULLISH", "BEARISH", "NEUTRAL"):
+                raise PositionSizingValidationError(f"Unknown proposal direction: {proposal.direction}")
+    
+            if direction == "NEUTRAL":
+                raise PositionSizingValidationError("NEUTRAL direction cannot trade")
+    
+            if context.stop_loss_price <= 0.0:
+                raise PositionSizingValidationError("Stop-loss price must be strictly positive")
+    
+            stop_dist_abs = abs(context.entry_price - context.stop_loss_price)
+            if stop_dist_abs == 0.0:
+                raise InvalidStopDistanceError("Stop-loss distance cannot be zero")
+    
+            # Check stop-loss orientation
+            if direction == "BULLISH":
+                if context.stop_loss_price >= context.entry_price:
+                    raise InvalidStopDistanceError(
+                        f"BULLISH stop-loss price ({context.stop_loss_price}) must be less than entry price ({context.entry_price})"
+                    )
+            elif direction == "BEARISH":
+                if context.stop_loss_price <= context.entry_price:
+                    raise InvalidStopDistanceError(
+                        f"BEARISH stop-loss price ({context.stop_loss_price}) must be greater than entry price ({context.entry_price})"
+                    )
+    
+            # 4. Unsupported Instrument type check
+            if context.instrument_type.lower() not in ("spot", "linear_perpetual"):
+                raise PositionSizingValidationError(f"Unsupported instrument type: {context.instrument_type}")
+    
+            # 5. Core Sizing Formula
+            # risk_amount = equity * authorized_risk_fraction (Leverage does not expand this!)
+            risk_amount = context.equity * auth_risk
+            stop_dist_frac = stop_dist_abs / context.entry_price
+    
+            # Sizing assumes: position_notional = risk_amount / stop_distance_fraction
+            # quantity_raw = position_notional / (entry_price * contract_size)
+            raw_qty = risk_amount / (stop_dist_frac * context.entry_price * context.contract_size)
+    
+            # 6. Apply Sizing Rounding & Step Normalization (Using Decimal to avoid precision bugs)
+            dec_qty = Decimal(str(raw_qty))
+            dec_step = Decimal(str(context.quantity_step))
+    
+            if self.policy.rounding_mode == "DOWN":
+                rounded_qty = (dec_qty // dec_step) * dec_step
+            elif self.policy.rounding_mode == "UP":
+                rounded_qty = Decimal(math.ceil(float(dec_qty / dec_step))) * dec_step
+            else:  # ROUND
+                rounded_qty = Decimal(round(float(dec_qty / dec_step))) * dec_step
+    
+            quantity_normalized = float(rounded_qty)
+    
+            # 7. Recalculate economic parameters after normalisation
+            actual_notional = quantity_normalized * context.entry_price * context.contract_size
+            actual_risk_amount = actual_notional * stop_dist_frac
+            actual_risk_fraction = actual_risk_amount / context.equity
+            estimated_margin = actual_notional / context.leverage
+    
+            # Hard Check: Normalized risk must never exceed authorized risk budget!
+            # Since ROUND_UP or float representation might cause it, we check fraction
+            if actual_risk_fraction > (auth_risk + 1e-9):
+                raise PositionLimitError(
+                    f"Normalized risk fraction ({actual_risk_fraction:.6f}) exceeds authorized limit ({auth_risk:.6f})"
+                )
+    
+            # 8. Exposure & Capital safety gates
+            # context level checks
+            if quantity_normalized < context.min_quantity or quantity_normalized > context.max_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is outside instrument context bounds: min={context.min_quantity}, max={context.max_quantity}"
+                )
+    
+            # policy level checks
+            if self.policy.reject_if_below_min_quantity and quantity_normalized < self.policy.minimum_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is below policy minimum_quantity: {self.policy.minimum_quantity}"
+                )
+            if self.policy.reject_if_above_max_quantity and quantity_normalized > self.policy.maximum_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is above policy maximum_quantity: {self.policy.maximum_quantity}"
+                )
+    
+            if actual_notional < self.policy.minimum_position_notional:
+                raise PositionLimitError(
+                    f"Position notional {actual_notional:.2f} is below policy minimum: {self.policy.minimum_position_notional}"
+                )
+            if actual_notional > self.policy.maximum_position_notional:
+                raise PositionLimitError(
+                    f"Position notional {actual_notional:.2f} is above policy maximum: {self.policy.maximum_position_notional}"
+                )
+    
+            # Leverage constraint
+            if context.leverage > self.policy.maximum_leverage:
+                raise PositionLimitError(
+                    f"Requested leverage {context.leverage} exceeds maximum allowed: {self.policy.maximum_leverage}"
+                )
+    
+            # Margin fraction check
+            max_margin_allowed = context.available_balance * self.policy.maximum_margin_fraction
+            if estimated_margin > max_margin_allowed:
+>               raise InsufficientCapitalError(
+                    f"Estimated margin required {estimated_margin:.2f} exceeds policy maximum margin fraction allocation {max_margin_allowed:.2f}"
+                )
+E               backend.positioning.exceptions.InsufficientCapitalError: Estimated margin required 5000.00 exceeds policy maximum margin fraction allocation 2500.00
+
+backend\positioning\sizing.py:215: InsufficientCapitalError
+__________________________ test_valid_bearish_sizing __________________________
+
+base_policy = PositionSizingPolicy(policy_version='1.0.0', minimum_position_notional=10.0, maximum_position_notional=50000.0, minimu...e, reject_if_market_data_stale=True, market_data_max_age_seconds=10.0, authorization_max_age_seconds=10.0, metadata={})
+base_proposal = TradeProposal(proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction='BULLISH', confidence=0.8, fusion_score=0.8...eated_at='2026-07-21T13:23:06.725450+00:00', expires_at='2026-07-21T13:23:16.725458+00:00', risk_flags=[], metadata={})
+base_authorization = RiskAuthorizationResult(authorization_id='auth-xyz-123', proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction=...', latency_ms=1.5, requested_risk_fraction=0.01, authorized_risk_fraction=0.01, reasoning_request_id=None, metadata={})
+base_context = PositionSizingContext(symbol='BTC/USDT', instrument_type='spot', equity=10000.0, available_balance=5000.0, entry_price...re=0.0, market_timestamp='2026-07-21T13:23:06.725659+00:00', timestamp='2026-07-21T13:23:06.725659+00:00', metadata={})
+
+    def test_valid_bearish_sizing(base_policy, base_proposal, base_authorization, base_context):
+        # Set direction BEARISH
+        proposal_bearish = TradeProposal(
+            proposal_id=base_proposal.proposal_id,
+            symbol=base_proposal.symbol,
+            direction="BEARISH",
+            confidence=base_proposal.confidence,
+            fusion_score=base_proposal.fusion_score,
+            source_model_version=base_proposal.source_model_version,
+            fusion_policy_version=base_proposal.fusion_policy_version,
+            reasoning_request_id=base_proposal.reasoning_request_id,
+            created_at=base_proposal.created_at,
+            expires_at=base_proposal.expires_at,
+            risk_flags=base_proposal.risk_flags,
+            metadata=base_proposal.metadata,
+        )
+        auth_bearish = RiskAuthorizationResult(
+            authorization_id=base_authorization.authorization_id,
+            proposal_id=base_authorization.proposal_id,
+            symbol=base_authorization.symbol,
+            direction="BEARISH",
+            status=base_authorization.status,
+            original_confidence=base_authorization.original_confidence,
+            effective_confidence=base_authorization.effective_confidence,
+            rejection_reasons=base_authorization.rejection_reasons,
+            adjustment_reasons=base_authorization.adjustment_reasons,
+            triggered_rules=base_authorization.triggered_rules,
+            policy_version=base_authorization.policy_version,
+            source_model_version=base_authorization.source_model_version,
+            fusion_policy_version=base_authorization.fusion_policy_version,
+            proposal_created_at=base_authorization.proposal_created_at,
+            evaluated_at=base_authorization.evaluated_at,
+            latency_ms=base_authorization.latency_ms,
+            requested_risk_fraction=base_authorization.requested_risk_fraction,
+            authorized_risk_fraction=base_authorization.authorized_risk_fraction,
+        )
+        context_bearish = PositionSizingContext(
+            symbol=base_context.symbol,
+            instrument_type=base_context.instrument_type,
+            equity=base_context.equity,
+            available_balance=base_context.available_balance,
+            entry_price=50000.0,
+            stop_loss_price=51000.0,  # 1000 USDT stop distance above entry
+            market_price=50000.0,
+            leverage=5.0,  # leverage 5x
+            contract_size=1.0,
+            lot_size=0.001,
+            min_quantity=0.001,
+            max_quantity=10.0,
+            quantity_step=0.001,
+            price_tick=0.01,
+            current_symbol_exposure=0.0,
+            current_portfolio_exposure=0.0,
+            market_timestamp=base_context.market_timestamp,
+            timestamp=base_context.timestamp,
+        )
+    
+        engine = PositionSizingEngine(policy=base_policy)
+>       result = engine.evaluate(proposal_bearish, auth_bearish, context_bearish)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\test_positioning.py:222: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <backend.positioning.sizing.PositionSizingEngine object at 0x00000258A7E96D50>
+proposal = TradeProposal(proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction='BEARISH', confidence=0.8, fusion_score=0.8...eated_at='2026-07-21T13:23:06.725450+00:00', expires_at='2026-07-21T13:23:16.725458+00:00', risk_flags=[], metadata={})
+authorization = RiskAuthorizationResult(authorization_id='auth-xyz-123', proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction=...', latency_ms=1.5, requested_risk_fraction=0.01, authorized_risk_fraction=0.01, reasoning_request_id=None, metadata={})
+context = PositionSizingContext(symbol='BTC/USDT', instrument_type='spot', equity=10000.0, available_balance=5000.0, entry_price...re=0.0, market_timestamp='2026-07-21T13:23:06.725659+00:00', timestamp='2026-07-21T13:23:06.725659+00:00', metadata={})
+
+    def evaluate(
+        self,
+        proposal: TradeProposal,
+        authorization: RiskAuthorizationResult,
+        context: PositionSizingContext,
+    ) -> PositionSizeResult:
+        start_time = time.perf_counter()
+        rejection_reason = ""
+        success = False
+        result: Optional[PositionSizeResult] = None
+    
+        try:
+            # 1. Authorization Verification
+            if not authorization or not proposal or not context:
+                raise AuthorizationError("Missing required input parameters")
+    
+            # Check status
+            if authorization.status not in (RiskAuthorizationStatus.APPROVED, RiskAuthorizationStatus.ADJUSTED):
+                raise AuthorizationError(f"Proposal authorization status is invalid: {authorization.status}")
+    
+            # Match proposal
+            if authorization.proposal_id != proposal.proposal_id:
+                raise AuthorizationError(
+                    f"Mismatched proposal_id: auth={authorization.proposal_id}, proposal={proposal.proposal_id}"
+                )
+    
+            # Match symbol
+            if authorization.symbol != proposal.symbol or authorization.symbol != context.symbol:
+                raise AuthorizationError(
+                    f"Mismatched symbols: auth={authorization.symbol}, proposal={proposal.symbol}, context={context.symbol}"
+                )
+    
+            # Validate risk fraction
+            auth_risk = authorization.authorized_risk_fraction
+            if math.isnan(auth_risk) or math.isinf(auth_risk) or auth_risk <= 0.0 or auth_risk > 1.0:
+                raise AuthorizationError(f"Invalid authorized risk fraction: {auth_risk}")
+    
+            # Verify audit lineage presence
+            if not getattr(authorization, "authorization_id", None) or \
+               not getattr(authorization, "source_model_version", None) or \
+               not getattr(authorization, "policy_version", None):
+                raise AuthorizationError("Missing required audit lineage fields in authorization result")
+    
+            # Check expiration/stale authorization if configured
+            if self.policy.authorization_max_age_seconds > 0.0:
+                try:
+                    context_dt = datetime.fromisoformat(context.timestamp.replace("Z", "+00:00"))
+                    auth_dt = datetime.fromisoformat(authorization.evaluated_at.replace("Z", "+00:00"))
+                    age = (context_dt - auth_dt).total_seconds()
+                    if age > self.policy.authorization_max_age_seconds:
+                        raise AuthorizationError(f"Authorization is stale: {age}s age")
+                except (ValueError, TypeError) as e:
+                    raise AuthorizationError(f"Audit timestamp check failed: {str(e)}")
+    
+            # 2. Market Data Freshness
+            try:
+                context_dt = datetime.fromisoformat(context.timestamp.replace("Z", "+00:00"))
+                market_dt = datetime.fromisoformat(context.market_timestamp.replace("Z", "+00:00"))
+            except (ValueError, TypeError) as e:
+                raise PositionSizingValidationError(f"Invalid timestamp formatting: {str(e)}")
+    
+            age_seconds = (context_dt - market_dt).total_seconds()
+    
+            # Future timestamp check
+            if age_seconds < -1.0:  # Allow 1s clock draft toleration
+                raise PositionSizingValidationError(
+                    f"Future-invalid market timestamp: market={context.market_timestamp} vs context={context.timestamp}"
+                )
+    
+            # Wall clock future check
+            now_utc = datetime.now(timezone.utc)
+            if (context_dt - now_utc).total_seconds() > 60.0:
+                raise PositionSizingValidationError(f"Execution timestamp is in the future: {context.timestamp}")
+    
+            if self.policy.reject_if_market_data_stale:
+                if age_seconds > self.policy.market_data_max_age_seconds:
+                    raise PositionSizingValidationError(
+                        f"Stale market data: age is {age_seconds:.2f}s, max allowed {self.policy.market_data_max_age_seconds}s"
+                    )
+    
+            # 3. Direction and Stop-Loss Validation
+            direction = proposal.direction.upper()
+            if direction not in ("BULLISH", "BEARISH", "NEUTRAL"):
+                raise PositionSizingValidationError(f"Unknown proposal direction: {proposal.direction}")
+    
+            if direction == "NEUTRAL":
+                raise PositionSizingValidationError("NEUTRAL direction cannot trade")
+    
+            if context.stop_loss_price <= 0.0:
+                raise PositionSizingValidationError("Stop-loss price must be strictly positive")
+    
+            stop_dist_abs = abs(context.entry_price - context.stop_loss_price)
+            if stop_dist_abs == 0.0:
+                raise InvalidStopDistanceError("Stop-loss distance cannot be zero")
+    
+            # Check stop-loss orientation
+            if direction == "BULLISH":
+                if context.stop_loss_price >= context.entry_price:
+                    raise InvalidStopDistanceError(
+                        f"BULLISH stop-loss price ({context.stop_loss_price}) must be less than entry price ({context.entry_price})"
+                    )
+            elif direction == "BEARISH":
+                if context.stop_loss_price <= context.entry_price:
+                    raise InvalidStopDistanceError(
+                        f"BEARISH stop-loss price ({context.stop_loss_price}) must be greater than entry price ({context.entry_price})"
+                    )
+    
+            # 4. Unsupported Instrument type check
+            if context.instrument_type.lower() not in ("spot", "linear_perpetual"):
+                raise PositionSizingValidationError(f"Unsupported instrument type: {context.instrument_type}")
+    
+            # 5. Core Sizing Formula
+            # risk_amount = equity * authorized_risk_fraction (Leverage does not expand this!)
+            risk_amount = context.equity * auth_risk
+            stop_dist_frac = stop_dist_abs / context.entry_price
+    
+            # Sizing assumes: position_notional = risk_amount / stop_distance_fraction
+            # quantity_raw = position_notional / (entry_price * contract_size)
+            raw_qty = risk_amount / (stop_dist_frac * context.entry_price * context.contract_size)
+    
+            # 6. Apply Sizing Rounding & Step Normalization (Using Decimal to avoid precision bugs)
+            dec_qty = Decimal(str(raw_qty))
+            dec_step = Decimal(str(context.quantity_step))
+    
+            if self.policy.rounding_mode == "DOWN":
+                rounded_qty = (dec_qty // dec_step) * dec_step
+            elif self.policy.rounding_mode == "UP":
+                rounded_qty = Decimal(math.ceil(float(dec_qty / dec_step))) * dec_step
+            else:  # ROUND
+                rounded_qty = Decimal(round(float(dec_qty / dec_step))) * dec_step
+    
+            quantity_normalized = float(rounded_qty)
+    
+            # 7. Recalculate economic parameters after normalisation
+            actual_notional = quantity_normalized * context.entry_price * context.contract_size
+            actual_risk_amount = actual_notional * stop_dist_frac
+            actual_risk_fraction = actual_risk_amount / context.equity
+            estimated_margin = actual_notional / context.leverage
+    
+            # Hard Check: Normalized risk must never exceed authorized risk budget!
+            # Since ROUND_UP or float representation might cause it, we check fraction
+            if actual_risk_fraction > (auth_risk + 1e-9):
+                raise PositionLimitError(
+                    f"Normalized risk fraction ({actual_risk_fraction:.6f}) exceeds authorized limit ({auth_risk:.6f})"
+                )
+    
+            # 8. Exposure & Capital safety gates
+            # context level checks
+            if quantity_normalized < context.min_quantity or quantity_normalized > context.max_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is outside instrument context bounds: min={context.min_quantity}, max={context.max_quantity}"
+                )
+    
+            # policy level checks
+            if self.policy.reject_if_below_min_quantity and quantity_normalized < self.policy.minimum_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is below policy minimum_quantity: {self.policy.minimum_quantity}"
+                )
+            if self.policy.reject_if_above_max_quantity and quantity_normalized > self.policy.maximum_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is above policy maximum_quantity: {self.policy.maximum_quantity}"
+                )
+    
+            if actual_notional < self.policy.minimum_position_notional:
+                raise PositionLimitError(
+                    f"Position notional {actual_notional:.2f} is below policy minimum: {self.policy.minimum_position_notional}"
+                )
+            if actual_notional > self.policy.maximum_position_notional:
+                raise PositionLimitError(
+                    f"Position notional {actual_notional:.2f} is above policy maximum: {self.policy.maximum_position_notional}"
+                )
+    
+            # Leverage constraint
+            if context.leverage > self.policy.maximum_leverage:
+                raise PositionLimitError(
+                    f"Requested leverage {context.leverage} exceeds maximum allowed: {self.policy.maximum_leverage}"
+                )
+    
+            # Margin fraction check
+            max_margin_allowed = context.available_balance * self.policy.maximum_margin_fraction
+            if estimated_margin > max_margin_allowed:
+                raise InsufficientCapitalError(
+                    f"Estimated margin required {estimated_margin:.2f} exceeds policy maximum margin fraction allocation {max_margin_allowed:.2f}"
+                )
+    
+            # Absolute balance check
+            if estimated_margin > context.available_balance:
+                raise InsufficientCapitalError(
+                    f"Estimated margin required {estimated_margin:.2f} exceeds absolute available balance {context.available_balance:.2f}"
+                )
+    
+            # Symbol Exposure check
+            new_sym_exposure = context.current_symbol_exposure + actual_notional
+            max_sym_exp = context.equity * self.policy.maximum_symbol_exposure_fraction
+            if Spec_Symbol_Exceeded := new_sym_exposure > max_sym_exp:
+>               raise PositionLimitError(
+                    f"Symbol exposure ({new_sym_exposure:.2f}) exceeds policy maximum exposure fraction allocation ({max_sym_exp:.2f})"
+                )
+E               backend.positioning.exceptions.PositionLimitError: Symbol exposure (5000.00) exceeds policy maximum exposure fraction allocation (2000.00)
+
+backend\positioning\sizing.py:229: PositionLimitError
+_________________________ test_quantity_rounding_down _________________________
+
+base_policy = PositionSizingPolicy(policy_version='1.0.0', minimum_position_notional=10.0, maximum_position_notional=50000.0, minimu...e, reject_if_market_data_stale=True, market_data_max_age_seconds=10.0, authorization_max_age_seconds=10.0, metadata={})
+base_proposal = TradeProposal(proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction='BULLISH', confidence=0.8, fusion_score=0.8...eated_at='2026-07-21T13:23:06.735806+00:00', expires_at='2026-07-21T13:23:16.735811+00:00', risk_flags=[], metadata={})
+base_authorization = RiskAuthorizationResult(authorization_id='auth-xyz-123', proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction=...', latency_ms=1.5, requested_risk_fraction=0.01, authorized_risk_fraction=0.01, reasoning_request_id=None, metadata={})
+base_context = PositionSizingContext(symbol='BTC/USDT', instrument_type='spot', equity=10000.0, available_balance=5000.0, entry_price...re=0.0, market_timestamp='2026-07-21T13:23:06.735861+00:00', timestamp='2026-07-21T13:23:06.735861+00:00', metadata={})
+
+    def test_quantity_rounding_down(base_policy, base_proposal, base_authorization, base_context):
+        # Set step to 0.01
+        context_step = PositionSizingContext(
+            symbol=base_context.symbol,
+            instrument_type=base_context.instrument_type,
+            equity=base_context.equity,
+            available_balance=base_context.available_balance,
+            entry_price=50000.0,
+            stop_loss_price=49000.0,
+            market_price=50000.0,
+            leverage=1.0,
+            contract_size=1.0,
+            lot_size=0.01,
+            min_quantity=0.01,
+            max_quantity=10.0,
+            quantity_step=0.01,  # 0.01 step
+            price_tick=0.01,
+            current_symbol_exposure=0.0,
+            current_portfolio_exposure=0.0,
+            market_timestamp=base_context.market_timestamp,
+            timestamp=base_context.timestamp,
+        )
+        # Risk fraction 0.01053 -> risk_amount = 105.3 USDT
+        # Stop distance fraction = 0.02
+        # Notional raw = 105.3 / 0.02 = 5265.0 USDT
+        # Qty raw = 5265.0 / 50000.0 = 0.1053 BTC
+        # Rounded down to 0.01 step should be exactly 0.10 BTC (not 0.11, not 0.1053)
+        auth = RiskAuthorizationResult(
+            authorization_id="auth",
+            proposal_id=base_proposal.proposal_id,
+            symbol=base_proposal.symbol,
+            direction=base_proposal.direction,
+            status=base_authorization.status,
+            original_confidence=0.8,
+            effective_confidence=0.8,
+            rejection_reasons=[],
+            adjustment_reasons=[],
+            triggered_rules=[],
+            policy_version="risk-1.0.0",
+            source_model_version="gbdt-v1",
+            fusion_policy_version="fusion-1.0",
+            proposal_created_at=base_authorization.proposal_created_at,
+            evaluated_at=base_authorization.evaluated_at,
+            latency_ms=1.0,
+            requested_risk_fraction=0.01053,
+            authorized_risk_fraction=0.01053,
+        )
+    
+        engine = PositionSizingEngine(policy=base_policy)
+>       result = engine.evaluate(base_proposal, auth, context_step)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\test_positioning.py:287: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <backend.positioning.sizing.PositionSizingEngine object at 0x00000258A7E96E90>
+proposal = TradeProposal(proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction='BULLISH', confidence=0.8, fusion_score=0.8...eated_at='2026-07-21T13:23:06.735806+00:00', expires_at='2026-07-21T13:23:16.735811+00:00', risk_flags=[], metadata={})
+authorization = RiskAuthorizationResult(authorization_id='auth', proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction='BULLISH...ency_ms=1.0, requested_risk_fraction=0.01053, authorized_risk_fraction=0.01053, reasoning_request_id=None, metadata={})
+context = PositionSizingContext(symbol='BTC/USDT', instrument_type='spot', equity=10000.0, available_balance=5000.0, entry_price...re=0.0, market_timestamp='2026-07-21T13:23:06.735861+00:00', timestamp='2026-07-21T13:23:06.735861+00:00', metadata={})
+
+    def evaluate(
+        self,
+        proposal: TradeProposal,
+        authorization: RiskAuthorizationResult,
+        context: PositionSizingContext,
+    ) -> PositionSizeResult:
+        start_time = time.perf_counter()
+        rejection_reason = ""
+        success = False
+        result: Optional[PositionSizeResult] = None
+    
+        try:
+            # 1. Authorization Verification
+            if not authorization or not proposal or not context:
+                raise AuthorizationError("Missing required input parameters")
+    
+            # Check status
+            if authorization.status not in (RiskAuthorizationStatus.APPROVED, RiskAuthorizationStatus.ADJUSTED):
+                raise AuthorizationError(f"Proposal authorization status is invalid: {authorization.status}")
+    
+            # Match proposal
+            if authorization.proposal_id != proposal.proposal_id:
+                raise AuthorizationError(
+                    f"Mismatched proposal_id: auth={authorization.proposal_id}, proposal={proposal.proposal_id}"
+                )
+    
+            # Match symbol
+            if authorization.symbol != proposal.symbol or authorization.symbol != context.symbol:
+                raise AuthorizationError(
+                    f"Mismatched symbols: auth={authorization.symbol}, proposal={proposal.symbol}, context={context.symbol}"
+                )
+    
+            # Validate risk fraction
+            auth_risk = authorization.authorized_risk_fraction
+            if math.isnan(auth_risk) or math.isinf(auth_risk) or auth_risk <= 0.0 or auth_risk > 1.0:
+                raise AuthorizationError(f"Invalid authorized risk fraction: {auth_risk}")
+    
+            # Verify audit lineage presence
+            if not getattr(authorization, "authorization_id", None) or \
+               not getattr(authorization, "source_model_version", None) or \
+               not getattr(authorization, "policy_version", None):
+                raise AuthorizationError("Missing required audit lineage fields in authorization result")
+    
+            # Check expiration/stale authorization if configured
+            if self.policy.authorization_max_age_seconds > 0.0:
+                try:
+                    context_dt = datetime.fromisoformat(context.timestamp.replace("Z", "+00:00"))
+                    auth_dt = datetime.fromisoformat(authorization.evaluated_at.replace("Z", "+00:00"))
+                    age = (context_dt - auth_dt).total_seconds()
+                    if age > self.policy.authorization_max_age_seconds:
+                        raise AuthorizationError(f"Authorization is stale: {age}s age")
+                except (ValueError, TypeError) as e:
+                    raise AuthorizationError(f"Audit timestamp check failed: {str(e)}")
+    
+            # 2. Market Data Freshness
+            try:
+                context_dt = datetime.fromisoformat(context.timestamp.replace("Z", "+00:00"))
+                market_dt = datetime.fromisoformat(context.market_timestamp.replace("Z", "+00:00"))
+            except (ValueError, TypeError) as e:
+                raise PositionSizingValidationError(f"Invalid timestamp formatting: {str(e)}")
+    
+            age_seconds = (context_dt - market_dt).total_seconds()
+    
+            # Future timestamp check
+            if age_seconds < -1.0:  # Allow 1s clock draft toleration
+                raise PositionSizingValidationError(
+                    f"Future-invalid market timestamp: market={context.market_timestamp} vs context={context.timestamp}"
+                )
+    
+            # Wall clock future check
+            now_utc = datetime.now(timezone.utc)
+            if (context_dt - now_utc).total_seconds() > 60.0:
+                raise PositionSizingValidationError(f"Execution timestamp is in the future: {context.timestamp}")
+    
+            if self.policy.reject_if_market_data_stale:
+                if age_seconds > self.policy.market_data_max_age_seconds:
+                    raise PositionSizingValidationError(
+                        f"Stale market data: age is {age_seconds:.2f}s, max allowed {self.policy.market_data_max_age_seconds}s"
+                    )
+    
+            # 3. Direction and Stop-Loss Validation
+            direction = proposal.direction.upper()
+            if direction not in ("BULLISH", "BEARISH", "NEUTRAL"):
+                raise PositionSizingValidationError(f"Unknown proposal direction: {proposal.direction}")
+    
+            if direction == "NEUTRAL":
+                raise PositionSizingValidationError("NEUTRAL direction cannot trade")
+    
+            if context.stop_loss_price <= 0.0:
+                raise PositionSizingValidationError("Stop-loss price must be strictly positive")
+    
+            stop_dist_abs = abs(context.entry_price - context.stop_loss_price)
+            if stop_dist_abs == 0.0:
+                raise InvalidStopDistanceError("Stop-loss distance cannot be zero")
+    
+            # Check stop-loss orientation
+            if direction == "BULLISH":
+                if context.stop_loss_price >= context.entry_price:
+                    raise InvalidStopDistanceError(
+                        f"BULLISH stop-loss price ({context.stop_loss_price}) must be less than entry price ({context.entry_price})"
+                    )
+            elif direction == "BEARISH":
+                if context.stop_loss_price <= context.entry_price:
+                    raise InvalidStopDistanceError(
+                        f"BEARISH stop-loss price ({context.stop_loss_price}) must be greater than entry price ({context.entry_price})"
+                    )
+    
+            # 4. Unsupported Instrument type check
+            if context.instrument_type.lower() not in ("spot", "linear_perpetual"):
+                raise PositionSizingValidationError(f"Unsupported instrument type: {context.instrument_type}")
+    
+            # 5. Core Sizing Formula
+            # risk_amount = equity * authorized_risk_fraction (Leverage does not expand this!)
+            risk_amount = context.equity * auth_risk
+            stop_dist_frac = stop_dist_abs / context.entry_price
+    
+            # Sizing assumes: position_notional = risk_amount / stop_distance_fraction
+            # quantity_raw = position_notional / (entry_price * contract_size)
+            raw_qty = risk_amount / (stop_dist_frac * context.entry_price * context.contract_size)
+    
+            # 6. Apply Sizing Rounding & Step Normalization (Using Decimal to avoid precision bugs)
+            dec_qty = Decimal(str(raw_qty))
+            dec_step = Decimal(str(context.quantity_step))
+    
+            if self.policy.rounding_mode == "DOWN":
+                rounded_qty = (dec_qty // dec_step) * dec_step
+            elif self.policy.rounding_mode == "UP":
+                rounded_qty = Decimal(math.ceil(float(dec_qty / dec_step))) * dec_step
+            else:  # ROUND
+                rounded_qty = Decimal(round(float(dec_qty / dec_step))) * dec_step
+    
+            quantity_normalized = float(rounded_qty)
+    
+            # 7. Recalculate economic parameters after normalisation
+            actual_notional = quantity_normalized * context.entry_price * context.contract_size
+            actual_risk_amount = actual_notional * stop_dist_frac
+            actual_risk_fraction = actual_risk_amount / context.equity
+            estimated_margin = actual_notional / context.leverage
+    
+            # Hard Check: Normalized risk must never exceed authorized risk budget!
+            # Since ROUND_UP or float representation might cause it, we check fraction
+            if actual_risk_fraction > (auth_risk + 1e-9):
+                raise PositionLimitError(
+                    f"Normalized risk fraction ({actual_risk_fraction:.6f}) exceeds authorized limit ({auth_risk:.6f})"
+                )
+    
+            # 8. Exposure & Capital safety gates
+            # context level checks
+            if quantity_normalized < context.min_quantity or quantity_normalized > context.max_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is outside instrument context bounds: min={context.min_quantity}, max={context.max_quantity}"
+                )
+    
+            # policy level checks
+            if self.policy.reject_if_below_min_quantity and quantity_normalized < self.policy.minimum_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is below policy minimum_quantity: {self.policy.minimum_quantity}"
+                )
+            if self.policy.reject_if_above_max_quantity and quantity_normalized > self.policy.maximum_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is above policy maximum_quantity: {self.policy.maximum_quantity}"
+                )
+    
+            if actual_notional < self.policy.minimum_position_notional:
+                raise PositionLimitError(
+                    f"Position notional {actual_notional:.2f} is below policy minimum: {self.policy.minimum_position_notional}"
+                )
+            if actual_notional > self.policy.maximum_position_notional:
+                raise PositionLimitError(
+                    f"Position notional {actual_notional:.2f} is above policy maximum: {self.policy.maximum_position_notional}"
+                )
+    
+            # Leverage constraint
+            if context.leverage > self.policy.maximum_leverage:
+                raise PositionLimitError(
+                    f"Requested leverage {context.leverage} exceeds maximum allowed: {self.policy.maximum_leverage}"
+                )
+    
+            # Margin fraction check
+            max_margin_allowed = context.available_balance * self.policy.maximum_margin_fraction
+            if estimated_margin > max_margin_allowed:
+>               raise InsufficientCapitalError(
+                    f"Estimated margin required {estimated_margin:.2f} exceeds policy maximum margin fraction allocation {max_margin_allowed:.2f}"
+                )
+E               backend.positioning.exceptions.InsufficientCapitalError: Estimated margin required 5000.00 exceeds policy maximum margin fraction allocation 2500.00
+
+backend\positioning\sizing.py:215: InsufficientCapitalError
+_________________ test_leverage_does_not_increase_risk_budget _________________
+
+base_policy = PositionSizingPolicy(policy_version='1.0.0', minimum_position_notional=10.0, maximum_position_notional=50000.0, minimu...e, reject_if_market_data_stale=True, market_data_max_age_seconds=10.0, authorization_max_age_seconds=10.0, metadata={})
+base_proposal = TradeProposal(proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction='BULLISH', confidence=0.8, fusion_score=0.8...eated_at='2026-07-21T13:23:06.746764+00:00', expires_at='2026-07-21T13:23:16.746768+00:00', risk_flags=[], metadata={})
+base_authorization = RiskAuthorizationResult(authorization_id='auth-xyz-123', proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction=...', latency_ms=1.5, requested_risk_fraction=0.01, authorized_risk_fraction=0.01, reasoning_request_id=None, metadata={})
+base_context = PositionSizingContext(symbol='BTC/USDT', instrument_type='spot', equity=10000.0, available_balance=5000.0, entry_price...re=0.0, market_timestamp='2026-07-21T13:23:06.746817+00:00', timestamp='2026-07-21T13:23:06.746817+00:00', metadata={})
+
+    def test_leverage_does_not_increase_risk_budget(base_policy, base_proposal, base_authorization, base_context):
+        engine = PositionSizingEngine(policy=base_policy)
+    
+        # 1x leverage context
+        context_1x = base_context
+>       result_1x = engine.evaluate(base_proposal, base_authorization, context_1x)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\test_positioning.py:374: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <backend.positioning.sizing.PositionSizingEngine object at 0x00000259400A8640>
+proposal = TradeProposal(proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction='BULLISH', confidence=0.8, fusion_score=0.8...eated_at='2026-07-21T13:23:06.746764+00:00', expires_at='2026-07-21T13:23:16.746768+00:00', risk_flags=[], metadata={})
+authorization = RiskAuthorizationResult(authorization_id='auth-xyz-123', proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction=...', latency_ms=1.5, requested_risk_fraction=0.01, authorized_risk_fraction=0.01, reasoning_request_id=None, metadata={})
+context = PositionSizingContext(symbol='BTC/USDT', instrument_type='spot', equity=10000.0, available_balance=5000.0, entry_price...re=0.0, market_timestamp='2026-07-21T13:23:06.746817+00:00', timestamp='2026-07-21T13:23:06.746817+00:00', metadata={})
+
+    def evaluate(
+        self,
+        proposal: TradeProposal,
+        authorization: RiskAuthorizationResult,
+        context: PositionSizingContext,
+    ) -> PositionSizeResult:
+        start_time = time.perf_counter()
+        rejection_reason = ""
+        success = False
+        result: Optional[PositionSizeResult] = None
+    
+        try:
+            # 1. Authorization Verification
+            if not authorization or not proposal or not context:
+                raise AuthorizationError("Missing required input parameters")
+    
+            # Check status
+            if authorization.status not in (RiskAuthorizationStatus.APPROVED, RiskAuthorizationStatus.ADJUSTED):
+                raise AuthorizationError(f"Proposal authorization status is invalid: {authorization.status}")
+    
+            # Match proposal
+            if authorization.proposal_id != proposal.proposal_id:
+                raise AuthorizationError(
+                    f"Mismatched proposal_id: auth={authorization.proposal_id}, proposal={proposal.proposal_id}"
+                )
+    
+            # Match symbol
+            if authorization.symbol != proposal.symbol or authorization.symbol != context.symbol:
+                raise AuthorizationError(
+                    f"Mismatched symbols: auth={authorization.symbol}, proposal={proposal.symbol}, context={context.symbol}"
+                )
+    
+            # Validate risk fraction
+            auth_risk = authorization.authorized_risk_fraction
+            if math.isnan(auth_risk) or math.isinf(auth_risk) or auth_risk <= 0.0 or auth_risk > 1.0:
+                raise AuthorizationError(f"Invalid authorized risk fraction: {auth_risk}")
+    
+            # Verify audit lineage presence
+            if not getattr(authorization, "authorization_id", None) or \
+               not getattr(authorization, "source_model_version", None) or \
+               not getattr(authorization, "policy_version", None):
+                raise AuthorizationError("Missing required audit lineage fields in authorization result")
+    
+            # Check expiration/stale authorization if configured
+            if self.policy.authorization_max_age_seconds > 0.0:
+                try:
+                    context_dt = datetime.fromisoformat(context.timestamp.replace("Z", "+00:00"))
+                    auth_dt = datetime.fromisoformat(authorization.evaluated_at.replace("Z", "+00:00"))
+                    age = (context_dt - auth_dt).total_seconds()
+                    if age > self.policy.authorization_max_age_seconds:
+                        raise AuthorizationError(f"Authorization is stale: {age}s age")
+                except (ValueError, TypeError) as e:
+                    raise AuthorizationError(f"Audit timestamp check failed: {str(e)}")
+    
+            # 2. Market Data Freshness
+            try:
+                context_dt = datetime.fromisoformat(context.timestamp.replace("Z", "+00:00"))
+                market_dt = datetime.fromisoformat(context.market_timestamp.replace("Z", "+00:00"))
+            except (ValueError, TypeError) as e:
+                raise PositionSizingValidationError(f"Invalid timestamp formatting: {str(e)}")
+    
+            age_seconds = (context_dt - market_dt).total_seconds()
+    
+            # Future timestamp check
+            if age_seconds < -1.0:  # Allow 1s clock draft toleration
+                raise PositionSizingValidationError(
+                    f"Future-invalid market timestamp: market={context.market_timestamp} vs context={context.timestamp}"
+                )
+    
+            # Wall clock future check
+            now_utc = datetime.now(timezone.utc)
+            if (context_dt - now_utc).total_seconds() > 60.0:
+                raise PositionSizingValidationError(f"Execution timestamp is in the future: {context.timestamp}")
+    
+            if self.policy.reject_if_market_data_stale:
+                if age_seconds > self.policy.market_data_max_age_seconds:
+                    raise PositionSizingValidationError(
+                        f"Stale market data: age is {age_seconds:.2f}s, max allowed {self.policy.market_data_max_age_seconds}s"
+                    )
+    
+            # 3. Direction and Stop-Loss Validation
+            direction = proposal.direction.upper()
+            if direction not in ("BULLISH", "BEARISH", "NEUTRAL"):
+                raise PositionSizingValidationError(f"Unknown proposal direction: {proposal.direction}")
+    
+            if direction == "NEUTRAL":
+                raise PositionSizingValidationError("NEUTRAL direction cannot trade")
+    
+            if context.stop_loss_price <= 0.0:
+                raise PositionSizingValidationError("Stop-loss price must be strictly positive")
+    
+            stop_dist_abs = abs(context.entry_price - context.stop_loss_price)
+            if stop_dist_abs == 0.0:
+                raise InvalidStopDistanceError("Stop-loss distance cannot be zero")
+    
+            # Check stop-loss orientation
+            if direction == "BULLISH":
+                if context.stop_loss_price >= context.entry_price:
+                    raise InvalidStopDistanceError(
+                        f"BULLISH stop-loss price ({context.stop_loss_price}) must be less than entry price ({context.entry_price})"
+                    )
+            elif direction == "BEARISH":
+                if context.stop_loss_price <= context.entry_price:
+                    raise InvalidStopDistanceError(
+                        f"BEARISH stop-loss price ({context.stop_loss_price}) must be greater than entry price ({context.entry_price})"
+                    )
+    
+            # 4. Unsupported Instrument type check
+            if context.instrument_type.lower() not in ("spot", "linear_perpetual"):
+                raise PositionSizingValidationError(f"Unsupported instrument type: {context.instrument_type}")
+    
+            # 5. Core Sizing Formula
+            # risk_amount = equity * authorized_risk_fraction (Leverage does not expand this!)
+            risk_amount = context.equity * auth_risk
+            stop_dist_frac = stop_dist_abs / context.entry_price
+    
+            # Sizing assumes: position_notional = risk_amount / stop_distance_fraction
+            # quantity_raw = position_notional / (entry_price * contract_size)
+            raw_qty = risk_amount / (stop_dist_frac * context.entry_price * context.contract_size)
+    
+            # 6. Apply Sizing Rounding & Step Normalization (Using Decimal to avoid precision bugs)
+            dec_qty = Decimal(str(raw_qty))
+            dec_step = Decimal(str(context.quantity_step))
+    
+            if self.policy.rounding_mode == "DOWN":
+                rounded_qty = (dec_qty // dec_step) * dec_step
+            elif self.policy.rounding_mode == "UP":
+                rounded_qty = Decimal(math.ceil(float(dec_qty / dec_step))) * dec_step
+            else:  # ROUND
+                rounded_qty = Decimal(round(float(dec_qty / dec_step))) * dec_step
+    
+            quantity_normalized = float(rounded_qty)
+    
+            # 7. Recalculate economic parameters after normalisation
+            actual_notional = quantity_normalized * context.entry_price * context.contract_size
+            actual_risk_amount = actual_notional * stop_dist_frac
+            actual_risk_fraction = actual_risk_amount / context.equity
+            estimated_margin = actual_notional / context.leverage
+    
+            # Hard Check: Normalized risk must never exceed authorized risk budget!
+            # Since ROUND_UP or float representation might cause it, we check fraction
+            if actual_risk_fraction > (auth_risk + 1e-9):
+                raise PositionLimitError(
+                    f"Normalized risk fraction ({actual_risk_fraction:.6f}) exceeds authorized limit ({auth_risk:.6f})"
+                )
+    
+            # 8. Exposure & Capital safety gates
+            # context level checks
+            if quantity_normalized < context.min_quantity or quantity_normalized > context.max_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is outside instrument context bounds: min={context.min_quantity}, max={context.max_quantity}"
+                )
+    
+            # policy level checks
+            if self.policy.reject_if_below_min_quantity and quantity_normalized < self.policy.minimum_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is below policy minimum_quantity: {self.policy.minimum_quantity}"
+                )
+            if self.policy.reject_if_above_max_quantity and quantity_normalized > self.policy.maximum_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is above policy maximum_quantity: {self.policy.maximum_quantity}"
+                )
+    
+            if actual_notional < self.policy.minimum_position_notional:
+                raise PositionLimitError(
+                    f"Position notional {actual_notional:.2f} is below policy minimum: {self.policy.minimum_position_notional}"
+                )
+            if actual_notional > self.policy.maximum_position_notional:
+                raise PositionLimitError(
+                    f"Position notional {actual_notional:.2f} is above policy maximum: {self.policy.maximum_position_notional}"
+                )
+    
+            # Leverage constraint
+            if context.leverage > self.policy.maximum_leverage:
+                raise PositionLimitError(
+                    f"Requested leverage {context.leverage} exceeds maximum allowed: {self.policy.maximum_leverage}"
+                )
+    
+            # Margin fraction check
+            max_margin_allowed = context.available_balance * self.policy.maximum_margin_fraction
+            if estimated_margin > max_margin_allowed:
+>               raise InsufficientCapitalError(
+                    f"Estimated margin required {estimated_margin:.2f} exceeds policy maximum margin fraction allocation {max_margin_allowed:.2f}"
+                )
+E               backend.positioning.exceptions.InsufficientCapitalError: Estimated margin required 5000.00 exceeds policy maximum margin fraction allocation 2500.00
+
+backend\positioning\sizing.py:215: InsufficientCapitalError
+_______________________ test_exposure_limit_violations ________________________
+
+base_policy = PositionSizingPolicy(policy_version='1.0.0', minimum_position_notional=10.0, maximum_position_notional=50000.0, minimu...e, reject_if_market_data_stale=True, market_data_max_age_seconds=10.0, authorization_max_age_seconds=10.0, metadata={})
+base_proposal = TradeProposal(proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction='BULLISH', confidence=0.8, fusion_score=0.8...eated_at='2026-07-21T13:23:06.758043+00:00', expires_at='2026-07-21T13:23:16.758047+00:00', risk_flags=[], metadata={})
+base_authorization = RiskAuthorizationResult(authorization_id='auth-xyz-123', proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction=...', latency_ms=1.5, requested_risk_fraction=0.01, authorized_risk_fraction=0.01, reasoning_request_id=None, metadata={})
+base_context = PositionSizingContext(symbol='BTC/USDT', instrument_type='spot', equity=10000.0, available_balance=5000.0, entry_price...re=0.0, market_timestamp='2026-07-21T13:23:06.758092+00:00', timestamp='2026-07-21T13:23:06.758092+00:00', metadata={})
+
+    def test_exposure_limit_violations(base_policy, base_proposal, base_authorization, base_context):
+        engine = PositionSizingEngine(policy=base_policy)
+    
+        # Symbol exposure fraction limit is 20% -> 2000 USDT on 10000 equity.
+        # Current symbol exposure is 1000. Evaluated position is 5000.
+        # Total symbol exposure = 6000 > 2000 -> REJECT
+        context_exposure = PositionSizingContext(
+            symbol=base_context.symbol,
+            instrument_type=base_context.instrument_type,
+            equity=base_context.equity,
+            available_balance=base_context.available_balance,
+            entry_price=base_context.entry_price,
+            stop_loss_price=base_context.stop_loss_price,
+            market_price=base_context.market_price,
+            leverage=base_context.leverage,
+            contract_size=base_context.contract_size,
+            lot_size=base_context.lot_size,
+            min_quantity=base_context.min_quantity,
+            max_quantity=base_context.max_quantity,
+            quantity_step=base_context.quantity_step,
+            price_tick=base_context.price_tick,
+            current_symbol_exposure=1000.0,       # 1000 already exposed
+            current_portfolio_exposure=0.0,
+            market_timestamp=base_context.market_timestamp,
+            timestamp=base_context.timestamp,
+        )
+    
+        with pytest.raises(PositionLimitError) as exc_info:
+>           engine.evaluate(base_proposal, base_authorization, context_exposure)
+
+tests\unit\test_positioning.py:517: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <backend.positioning.sizing.PositionSizingEngine object at 0x00000258A7E9FBD0>
+proposal = TradeProposal(proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction='BULLISH', confidence=0.8, fusion_score=0.8...eated_at='2026-07-21T13:23:06.758043+00:00', expires_at='2026-07-21T13:23:16.758047+00:00', risk_flags=[], metadata={})
+authorization = RiskAuthorizationResult(authorization_id='auth-xyz-123', proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction=...', latency_ms=1.5, requested_risk_fraction=0.01, authorized_risk_fraction=0.01, reasoning_request_id=None, metadata={})
+context = PositionSizingContext(symbol='BTC/USDT', instrument_type='spot', equity=10000.0, available_balance=5000.0, entry_price...re=0.0, market_timestamp='2026-07-21T13:23:06.758092+00:00', timestamp='2026-07-21T13:23:06.758092+00:00', metadata={})
+
+    def evaluate(
+        self,
+        proposal: TradeProposal,
+        authorization: RiskAuthorizationResult,
+        context: PositionSizingContext,
+    ) -> PositionSizeResult:
+        start_time = time.perf_counter()
+        rejection_reason = ""
+        success = False
+        result: Optional[PositionSizeResult] = None
+    
+        try:
+            # 1. Authorization Verification
+            if not authorization or not proposal or not context:
+                raise AuthorizationError("Missing required input parameters")
+    
+            # Check status
+            if authorization.status not in (RiskAuthorizationStatus.APPROVED, RiskAuthorizationStatus.ADJUSTED):
+                raise AuthorizationError(f"Proposal authorization status is invalid: {authorization.status}")
+    
+            # Match proposal
+            if authorization.proposal_id != proposal.proposal_id:
+                raise AuthorizationError(
+                    f"Mismatched proposal_id: auth={authorization.proposal_id}, proposal={proposal.proposal_id}"
+                )
+    
+            # Match symbol
+            if authorization.symbol != proposal.symbol or authorization.symbol != context.symbol:
+                raise AuthorizationError(
+                    f"Mismatched symbols: auth={authorization.symbol}, proposal={proposal.symbol}, context={context.symbol}"
+                )
+    
+            # Validate risk fraction
+            auth_risk = authorization.authorized_risk_fraction
+            if math.isnan(auth_risk) or math.isinf(auth_risk) or auth_risk <= 0.0 or auth_risk > 1.0:
+                raise AuthorizationError(f"Invalid authorized risk fraction: {auth_risk}")
+    
+            # Verify audit lineage presence
+            if not getattr(authorization, "authorization_id", None) or \
+               not getattr(authorization, "source_model_version", None) or \
+               not getattr(authorization, "policy_version", None):
+                raise AuthorizationError("Missing required audit lineage fields in authorization result")
+    
+            # Check expiration/stale authorization if configured
+            if self.policy.authorization_max_age_seconds > 0.0:
+                try:
+                    context_dt = datetime.fromisoformat(context.timestamp.replace("Z", "+00:00"))
+                    auth_dt = datetime.fromisoformat(authorization.evaluated_at.replace("Z", "+00:00"))
+                    age = (context_dt - auth_dt).total_seconds()
+                    if age > self.policy.authorization_max_age_seconds:
+                        raise AuthorizationError(f"Authorization is stale: {age}s age")
+                except (ValueError, TypeError) as e:
+                    raise AuthorizationError(f"Audit timestamp check failed: {str(e)}")
+    
+            # 2. Market Data Freshness
+            try:
+                context_dt = datetime.fromisoformat(context.timestamp.replace("Z", "+00:00"))
+                market_dt = datetime.fromisoformat(context.market_timestamp.replace("Z", "+00:00"))
+            except (ValueError, TypeError) as e:
+                raise PositionSizingValidationError(f"Invalid timestamp formatting: {str(e)}")
+    
+            age_seconds = (context_dt - market_dt).total_seconds()
+    
+            # Future timestamp check
+            if age_seconds < -1.0:  # Allow 1s clock draft toleration
+                raise PositionSizingValidationError(
+                    f"Future-invalid market timestamp: market={context.market_timestamp} vs context={context.timestamp}"
+                )
+    
+            # Wall clock future check
+            now_utc = datetime.now(timezone.utc)
+            if (context_dt - now_utc).total_seconds() > 60.0:
+                raise PositionSizingValidationError(f"Execution timestamp is in the future: {context.timestamp}")
+    
+            if self.policy.reject_if_market_data_stale:
+                if age_seconds > self.policy.market_data_max_age_seconds:
+                    raise PositionSizingValidationError(
+                        f"Stale market data: age is {age_seconds:.2f}s, max allowed {self.policy.market_data_max_age_seconds}s"
+                    )
+    
+            # 3. Direction and Stop-Loss Validation
+            direction = proposal.direction.upper()
+            if direction not in ("BULLISH", "BEARISH", "NEUTRAL"):
+                raise PositionSizingValidationError(f"Unknown proposal direction: {proposal.direction}")
+    
+            if direction == "NEUTRAL":
+                raise PositionSizingValidationError("NEUTRAL direction cannot trade")
+    
+            if context.stop_loss_price <= 0.0:
+                raise PositionSizingValidationError("Stop-loss price must be strictly positive")
+    
+            stop_dist_abs = abs(context.entry_price - context.stop_loss_price)
+            if stop_dist_abs == 0.0:
+                raise InvalidStopDistanceError("Stop-loss distance cannot be zero")
+    
+            # Check stop-loss orientation
+            if direction == "BULLISH":
+                if context.stop_loss_price >= context.entry_price:
+                    raise InvalidStopDistanceError(
+                        f"BULLISH stop-loss price ({context.stop_loss_price}) must be less than entry price ({context.entry_price})"
+                    )
+            elif direction == "BEARISH":
+                if context.stop_loss_price <= context.entry_price:
+                    raise InvalidStopDistanceError(
+                        f"BEARISH stop-loss price ({context.stop_loss_price}) must be greater than entry price ({context.entry_price})"
+                    )
+    
+            # 4. Unsupported Instrument type check
+            if context.instrument_type.lower() not in ("spot", "linear_perpetual"):
+                raise PositionSizingValidationError(f"Unsupported instrument type: {context.instrument_type}")
+    
+            # 5. Core Sizing Formula
+            # risk_amount = equity * authorized_risk_fraction (Leverage does not expand this!)
+            risk_amount = context.equity * auth_risk
+            stop_dist_frac = stop_dist_abs / context.entry_price
+    
+            # Sizing assumes: position_notional = risk_amount / stop_distance_fraction
+            # quantity_raw = position_notional / (entry_price * contract_size)
+            raw_qty = risk_amount / (stop_dist_frac * context.entry_price * context.contract_size)
+    
+            # 6. Apply Sizing Rounding & Step Normalization (Using Decimal to avoid precision bugs)
+            dec_qty = Decimal(str(raw_qty))
+            dec_step = Decimal(str(context.quantity_step))
+    
+            if self.policy.rounding_mode == "DOWN":
+                rounded_qty = (dec_qty // dec_step) * dec_step
+            elif self.policy.rounding_mode == "UP":
+                rounded_qty = Decimal(math.ceil(float(dec_qty / dec_step))) * dec_step
+            else:  # ROUND
+                rounded_qty = Decimal(round(float(dec_qty / dec_step))) * dec_step
+    
+            quantity_normalized = float(rounded_qty)
+    
+            # 7. Recalculate economic parameters after normalisation
+            actual_notional = quantity_normalized * context.entry_price * context.contract_size
+            actual_risk_amount = actual_notional * stop_dist_frac
+            actual_risk_fraction = actual_risk_amount / context.equity
+            estimated_margin = actual_notional / context.leverage
+    
+            # Hard Check: Normalized risk must never exceed authorized risk budget!
+            # Since ROUND_UP or float representation might cause it, we check fraction
+            if actual_risk_fraction > (auth_risk + 1e-9):
+                raise PositionLimitError(
+                    f"Normalized risk fraction ({actual_risk_fraction:.6f}) exceeds authorized limit ({auth_risk:.6f})"
+                )
+    
+            # 8. Exposure & Capital safety gates
+            # context level checks
+            if quantity_normalized < context.min_quantity or quantity_normalized > context.max_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is outside instrument context bounds: min={context.min_quantity}, max={context.max_quantity}"
+                )
+    
+            # policy level checks
+            if self.policy.reject_if_below_min_quantity and quantity_normalized < self.policy.minimum_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is below policy minimum_quantity: {self.policy.minimum_quantity}"
+                )
+            if self.policy.reject_if_above_max_quantity and quantity_normalized > self.policy.maximum_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is above policy maximum_quantity: {self.policy.maximum_quantity}"
+                )
+    
+            if actual_notional < self.policy.minimum_position_notional:
+                raise PositionLimitError(
+                    f"Position notional {actual_notional:.2f} is below policy minimum: {self.policy.minimum_position_notional}"
+                )
+            if actual_notional > self.policy.maximum_position_notional:
+                raise PositionLimitError(
+                    f"Position notional {actual_notional:.2f} is above policy maximum: {self.policy.maximum_position_notional}"
+                )
+    
+            # Leverage constraint
+            if context.leverage > self.policy.maximum_leverage:
+                raise PositionLimitError(
+                    f"Requested leverage {context.leverage} exceeds maximum allowed: {self.policy.maximum_leverage}"
+                )
+    
+            # Margin fraction check
+            max_margin_allowed = context.available_balance * self.policy.maximum_margin_fraction
+            if estimated_margin > max_margin_allowed:
+>               raise InsufficientCapitalError(
+                    f"Estimated margin required {estimated_margin:.2f} exceeds policy maximum margin fraction allocation {max_margin_allowed:.2f}"
+                )
+E               backend.positioning.exceptions.InsufficientCapitalError: Estimated margin required 5000.00 exceeds policy maximum margin fraction allocation 2500.00
+
+backend\positioning\sizing.py:215: InsufficientCapitalError
+_______________________ test_rejected_auth_raises_error _______________________
+
+base_policy = PositionSizingPolicy(policy_version='1.0.0', minimum_position_notional=10.0, maximum_position_notional=50000.0, minimu...e, reject_if_market_data_stale=True, market_data_max_age_seconds=10.0, authorization_max_age_seconds=10.0, metadata={})
+base_proposal = TradeProposal(proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction='BULLISH', confidence=0.8, fusion_score=0.8...eated_at='2026-07-21T13:23:06.770604+00:00', expires_at='2026-07-21T13:23:16.770607+00:00', risk_flags=[], metadata={})
+base_authorization = RiskAuthorizationResult(authorization_id='auth-xyz-123', proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction=...', latency_ms=1.5, requested_risk_fraction=0.01, authorized_risk_fraction=0.01, reasoning_request_id=None, metadata={})
+base_context = PositionSizingContext(symbol='BTC/USDT', instrument_type='spot', equity=10000.0, available_balance=5000.0, entry_price...re=0.0, market_timestamp='2026-07-21T13:23:06.770646+00:00', timestamp='2026-07-21T13:23:06.770646+00:00', metadata={})
+
+    def test_rejected_auth_raises_error(base_policy, base_proposal, base_authorization, base_context):
+        engine = PositionSizingEngine(policy=base_policy)
+    
+>       auth = RiskAuthorizationResult(
+            authorization_id=base_authorization.authorization_id,
+            proposal_id=base_authorization.proposal_id,
+            symbol=base_authorization.symbol,
+            direction=base_authorization.direction,
+            status=RiskAuthorizationStatus.REJECTED,  # REJECTED status
+            original_confidence=base_authorization.original_confidence,
+            effective_confidence=base_authorization.effective_confidence,
+            rejection_reasons=["High volatility"],
+            triggered_rules=["VOLATILITY_GATE"],
+            policy_version=base_authorization.policy_version,
+            source_model_version=base_authorization.source_model_version,
+            fusion_policy_version=base_authorization.fusion_policy_version,
+            proposal_created_at=base_authorization.proposal_created_at,
+            evaluated_at=base_authorization.evaluated_at,
+            latency_ms=1.0,
+            requested_risk_fraction=0.01,
+            authorized_risk_fraction=0.0,
+        )
+E       TypeError: RiskAuthorizationResult.__init__() missing 1 required positional argument: 'adjustment_reasons'
+
+tests\unit\test_positioning.py:642: TypeError
+__________________ test_adjusted_auth_uses_reduced_fraction ___________________
+
+base_policy = PositionSizingPolicy(policy_version='1.0.0', minimum_position_notional=10.0, maximum_position_notional=50000.0, minimu...e, reject_if_market_data_stale=True, market_data_max_age_seconds=10.0, authorization_max_age_seconds=10.0, metadata={})
+base_proposal = TradeProposal(proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction='BULLISH', confidence=0.8, fusion_score=0.8...eated_at='2026-07-21T13:23:06.776376+00:00', expires_at='2026-07-21T13:23:16.776381+00:00', risk_flags=[], metadata={})
+base_context = PositionSizingContext(symbol='BTC/USDT', instrument_type='spot', equity=10000.0, available_balance=5000.0, entry_price...re=0.0, market_timestamp='2026-07-21T13:23:06.776408+00:00', timestamp='2026-07-21T13:23:06.776408+00:00', metadata={})
+
+    def test_adjusted_auth_uses_reduced_fraction(base_policy, base_proposal, base_context):
+        engine = PositionSizingEngine(policy=base_policy)
+    
+        # Adjusted risk fraction has been reduced to 0.005 by RiskGuardEngine
+        auth_adjusted = RiskAuthorizationResult(
+            authorization_id="auth",
+            proposal_id=base_proposal.proposal_id,
+            symbol=base_proposal.symbol,
+            direction=base_proposal.direction,
+            status=RiskAuthorizationStatus.ADJUSTED,
+            original_confidence=0.8,
+            effective_confidence=0.8,
+            rejection_reasons=[],
+            adjustment_reasons=["Reduced via Volatility rules"],
+            triggered_rules=["VOLATILITY_ADJUSTMENT"],
+            policy_version="risk-1.0.0",
+            source_model_version="gbdt-v1",
+            fusion_policy_version="fusion-1.0",
+            proposal_created_at=datetime.now(timezone.utc).isoformat(),
+            evaluated_at=datetime.now(timezone.utc).isoformat(),
+            latency_ms=1.0,
+            requested_risk_fraction=0.01,
+            authorized_risk_fraction=0.005,  # Reduced risk fraction
+        )
+    
+>       result = engine.evaluate(base_proposal, auth_adjusted, base_context)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\test_positioning.py:691: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <backend.positioning.sizing.PositionSizingEngine object at 0x00000258A8059B70>
+proposal = TradeProposal(proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction='BULLISH', confidence=0.8, fusion_score=0.8...eated_at='2026-07-21T13:23:06.776376+00:00', expires_at='2026-07-21T13:23:16.776381+00:00', risk_flags=[], metadata={})
+authorization = RiskAuthorizationResult(authorization_id='auth', proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction='BULLISH..., latency_ms=1.0, requested_risk_fraction=0.01, authorized_risk_fraction=0.005, reasoning_request_id=None, metadata={})
+context = PositionSizingContext(symbol='BTC/USDT', instrument_type='spot', equity=10000.0, available_balance=5000.0, entry_price...re=0.0, market_timestamp='2026-07-21T13:23:06.776408+00:00', timestamp='2026-07-21T13:23:06.776408+00:00', metadata={})
+
+    def evaluate(
+        self,
+        proposal: TradeProposal,
+        authorization: RiskAuthorizationResult,
+        context: PositionSizingContext,
+    ) -> PositionSizeResult:
+        start_time = time.perf_counter()
+        rejection_reason = ""
+        success = False
+        result: Optional[PositionSizeResult] = None
+    
+        try:
+            # 1. Authorization Verification
+            if not authorization or not proposal or not context:
+                raise AuthorizationError("Missing required input parameters")
+    
+            # Check status
+            if authorization.status not in (RiskAuthorizationStatus.APPROVED, RiskAuthorizationStatus.ADJUSTED):
+                raise AuthorizationError(f"Proposal authorization status is invalid: {authorization.status}")
+    
+            # Match proposal
+            if authorization.proposal_id != proposal.proposal_id:
+                raise AuthorizationError(
+                    f"Mismatched proposal_id: auth={authorization.proposal_id}, proposal={proposal.proposal_id}"
+                )
+    
+            # Match symbol
+            if authorization.symbol != proposal.symbol or authorization.symbol != context.symbol:
+                raise AuthorizationError(
+                    f"Mismatched symbols: auth={authorization.symbol}, proposal={proposal.symbol}, context={context.symbol}"
+                )
+    
+            # Validate risk fraction
+            auth_risk = authorization.authorized_risk_fraction
+            if math.isnan(auth_risk) or math.isinf(auth_risk) or auth_risk <= 0.0 or auth_risk > 1.0:
+                raise AuthorizationError(f"Invalid authorized risk fraction: {auth_risk}")
+    
+            # Verify audit lineage presence
+            if not getattr(authorization, "authorization_id", None) or \
+               not getattr(authorization, "source_model_version", None) or \
+               not getattr(authorization, "policy_version", None):
+                raise AuthorizationError("Missing required audit lineage fields in authorization result")
+    
+            # Check expiration/stale authorization if configured
+            if self.policy.authorization_max_age_seconds > 0.0:
+                try:
+                    context_dt = datetime.fromisoformat(context.timestamp.replace("Z", "+00:00"))
+                    auth_dt = datetime.fromisoformat(authorization.evaluated_at.replace("Z", "+00:00"))
+                    age = (context_dt - auth_dt).total_seconds()
+                    if age > self.policy.authorization_max_age_seconds:
+                        raise AuthorizationError(f"Authorization is stale: {age}s age")
+                except (ValueError, TypeError) as e:
+                    raise AuthorizationError(f"Audit timestamp check failed: {str(e)}")
+    
+            # 2. Market Data Freshness
+            try:
+                context_dt = datetime.fromisoformat(context.timestamp.replace("Z", "+00:00"))
+                market_dt = datetime.fromisoformat(context.market_timestamp.replace("Z", "+00:00"))
+            except (ValueError, TypeError) as e:
+                raise PositionSizingValidationError(f"Invalid timestamp formatting: {str(e)}")
+    
+            age_seconds = (context_dt - market_dt).total_seconds()
+    
+            # Future timestamp check
+            if age_seconds < -1.0:  # Allow 1s clock draft toleration
+                raise PositionSizingValidationError(
+                    f"Future-invalid market timestamp: market={context.market_timestamp} vs context={context.timestamp}"
+                )
+    
+            # Wall clock future check
+            now_utc = datetime.now(timezone.utc)
+            if (context_dt - now_utc).total_seconds() > 60.0:
+                raise PositionSizingValidationError(f"Execution timestamp is in the future: {context.timestamp}")
+    
+            if self.policy.reject_if_market_data_stale:
+                if age_seconds > self.policy.market_data_max_age_seconds:
+                    raise PositionSizingValidationError(
+                        f"Stale market data: age is {age_seconds:.2f}s, max allowed {self.policy.market_data_max_age_seconds}s"
+                    )
+    
+            # 3. Direction and Stop-Loss Validation
+            direction = proposal.direction.upper()
+            if direction not in ("BULLISH", "BEARISH", "NEUTRAL"):
+                raise PositionSizingValidationError(f"Unknown proposal direction: {proposal.direction}")
+    
+            if direction == "NEUTRAL":
+                raise PositionSizingValidationError("NEUTRAL direction cannot trade")
+    
+            if context.stop_loss_price <= 0.0:
+                raise PositionSizingValidationError("Stop-loss price must be strictly positive")
+    
+            stop_dist_abs = abs(context.entry_price - context.stop_loss_price)
+            if stop_dist_abs == 0.0:
+                raise InvalidStopDistanceError("Stop-loss distance cannot be zero")
+    
+            # Check stop-loss orientation
+            if direction == "BULLISH":
+                if context.stop_loss_price >= context.entry_price:
+                    raise InvalidStopDistanceError(
+                        f"BULLISH stop-loss price ({context.stop_loss_price}) must be less than entry price ({context.entry_price})"
+                    )
+            elif direction == "BEARISH":
+                if context.stop_loss_price <= context.entry_price:
+                    raise InvalidStopDistanceError(
+                        f"BEARISH stop-loss price ({context.stop_loss_price}) must be greater than entry price ({context.entry_price})"
+                    )
+    
+            # 4. Unsupported Instrument type check
+            if context.instrument_type.lower() not in ("spot", "linear_perpetual"):
+                raise PositionSizingValidationError(f"Unsupported instrument type: {context.instrument_type}")
+    
+            # 5. Core Sizing Formula
+            # risk_amount = equity * authorized_risk_fraction (Leverage does not expand this!)
+            risk_amount = context.equity * auth_risk
+            stop_dist_frac = stop_dist_abs / context.entry_price
+    
+            # Sizing assumes: position_notional = risk_amount / stop_distance_fraction
+            # quantity_raw = position_notional / (entry_price * contract_size)
+            raw_qty = risk_amount / (stop_dist_frac * context.entry_price * context.contract_size)
+    
+            # 6. Apply Sizing Rounding & Step Normalization (Using Decimal to avoid precision bugs)
+            dec_qty = Decimal(str(raw_qty))
+            dec_step = Decimal(str(context.quantity_step))
+    
+            if self.policy.rounding_mode == "DOWN":
+                rounded_qty = (dec_qty // dec_step) * dec_step
+            elif self.policy.rounding_mode == "UP":
+                rounded_qty = Decimal(math.ceil(float(dec_qty / dec_step))) * dec_step
+            else:  # ROUND
+                rounded_qty = Decimal(round(float(dec_qty / dec_step))) * dec_step
+    
+            quantity_normalized = float(rounded_qty)
+    
+            # 7. Recalculate economic parameters after normalisation
+            actual_notional = quantity_normalized * context.entry_price * context.contract_size
+            actual_risk_amount = actual_notional * stop_dist_frac
+            actual_risk_fraction = actual_risk_amount / context.equity
+            estimated_margin = actual_notional / context.leverage
+    
+            # Hard Check: Normalized risk must never exceed authorized risk budget!
+            # Since ROUND_UP or float representation might cause it, we check fraction
+            if actual_risk_fraction > (auth_risk + 1e-9):
+                raise PositionLimitError(
+                    f"Normalized risk fraction ({actual_risk_fraction:.6f}) exceeds authorized limit ({auth_risk:.6f})"
+                )
+    
+            # 8. Exposure & Capital safety gates
+            # context level checks
+            if quantity_normalized < context.min_quantity or quantity_normalized > context.max_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is outside instrument context bounds: min={context.min_quantity}, max={context.max_quantity}"
+                )
+    
+            # policy level checks
+            if self.policy.reject_if_below_min_quantity and quantity_normalized < self.policy.minimum_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is below policy minimum_quantity: {self.policy.minimum_quantity}"
+                )
+            if self.policy.reject_if_above_max_quantity and quantity_normalized > self.policy.maximum_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is above policy maximum_quantity: {self.policy.maximum_quantity}"
+                )
+    
+            if actual_notional < self.policy.minimum_position_notional:
+                raise PositionLimitError(
+                    f"Position notional {actual_notional:.2f} is below policy minimum: {self.policy.minimum_position_notional}"
+                )
+            if actual_notional > self.policy.maximum_position_notional:
+                raise PositionLimitError(
+                    f"Position notional {actual_notional:.2f} is above policy maximum: {self.policy.maximum_position_notional}"
+                )
+    
+            # Leverage constraint
+            if context.leverage > self.policy.maximum_leverage:
+                raise PositionLimitError(
+                    f"Requested leverage {context.leverage} exceeds maximum allowed: {self.policy.maximum_leverage}"
+                )
+    
+            # Margin fraction check
+            max_margin_allowed = context.available_balance * self.policy.maximum_margin_fraction
+            if estimated_margin > max_margin_allowed:
+                raise InsufficientCapitalError(
+                    f"Estimated margin required {estimated_margin:.2f} exceeds policy maximum margin fraction allocation {max_margin_allowed:.2f}"
+                )
+    
+            # Absolute balance check
+            if estimated_margin > context.available_balance:
+                raise InsufficientCapitalError(
+                    f"Estimated margin required {estimated_margin:.2f} exceeds absolute available balance {context.available_balance:.2f}"
+                )
+    
+            # Symbol Exposure check
+            new_sym_exposure = context.current_symbol_exposure + actual_notional
+            max_sym_exp = context.equity * self.policy.maximum_symbol_exposure_fraction
+            if Spec_Symbol_Exceeded := new_sym_exposure > max_sym_exp:
+>               raise PositionLimitError(
+                    f"Symbol exposure ({new_sym_exposure:.2f}) exceeds policy maximum exposure fraction allocation ({max_sym_exp:.2f})"
+                )
+E               backend.positioning.exceptions.PositionLimitError: Symbol exposure (2500.00) exceeds policy maximum exposure fraction allocation (2000.00)
+
+backend\positioning\sizing.py:229: PositionLimitError
+_____________________ test_telemetry_captures_audit_info ______________________
+
+base_policy = PositionSizingPolicy(policy_version='1.0.0', minimum_position_notional=10.0, maximum_position_notional=50000.0, minimu...e, reject_if_market_data_stale=True, market_data_max_age_seconds=10.0, authorization_max_age_seconds=10.0, metadata={})
+base_proposal = TradeProposal(proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction='BULLISH', confidence=0.8, fusion_score=0.8...eated_at='2026-07-21T13:23:06.788737+00:00', expires_at='2026-07-21T13:23:16.788741+00:00', risk_flags=[], metadata={})
+base_authorization = RiskAuthorizationResult(authorization_id='auth-xyz-123', proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction=...', latency_ms=1.5, requested_risk_fraction=0.01, authorized_risk_fraction=0.01, reasoning_request_id=None, metadata={})
+base_context = PositionSizingContext(symbol='BTC/USDT', instrument_type='spot', equity=10000.0, available_balance=5000.0, entry_price...re=0.0, market_timestamp='2026-07-21T13:23:06.788785+00:00', timestamp='2026-07-21T13:23:06.788785+00:00', metadata={})
+
+    def test_telemetry_captures_audit_info(base_policy, base_proposal, base_authorization, base_context):
+        mock_telemetry = MockPositionSizingTelemetrySink()
+        engine = PositionSizingEngine(policy=base_policy, telemetry_sink=mock_telemetry)
+    
+>       result = engine.evaluate(base_proposal, base_authorization, base_context)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\test_positioning.py:783: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <backend.positioning.sizing.PositionSizingEngine object at 0x000002593FFADA90>
+proposal = TradeProposal(proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction='BULLISH', confidence=0.8, fusion_score=0.8...eated_at='2026-07-21T13:23:06.788737+00:00', expires_at='2026-07-21T13:23:16.788741+00:00', risk_flags=[], metadata={})
+authorization = RiskAuthorizationResult(authorization_id='auth-xyz-123', proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction=...', latency_ms=1.5, requested_risk_fraction=0.01, authorized_risk_fraction=0.01, reasoning_request_id=None, metadata={})
+context = PositionSizingContext(symbol='BTC/USDT', instrument_type='spot', equity=10000.0, available_balance=5000.0, entry_price...re=0.0, market_timestamp='2026-07-21T13:23:06.788785+00:00', timestamp='2026-07-21T13:23:06.788785+00:00', metadata={})
+
+    def evaluate(
+        self,
+        proposal: TradeProposal,
+        authorization: RiskAuthorizationResult,
+        context: PositionSizingContext,
+    ) -> PositionSizeResult:
+        start_time = time.perf_counter()
+        rejection_reason = ""
+        success = False
+        result: Optional[PositionSizeResult] = None
+    
+        try:
+            # 1. Authorization Verification
+            if not authorization or not proposal or not context:
+                raise AuthorizationError("Missing required input parameters")
+    
+            # Check status
+            if authorization.status not in (RiskAuthorizationStatus.APPROVED, RiskAuthorizationStatus.ADJUSTED):
+                raise AuthorizationError(f"Proposal authorization status is invalid: {authorization.status}")
+    
+            # Match proposal
+            if authorization.proposal_id != proposal.proposal_id:
+                raise AuthorizationError(
+                    f"Mismatched proposal_id: auth={authorization.proposal_id}, proposal={proposal.proposal_id}"
+                )
+    
+            # Match symbol
+            if authorization.symbol != proposal.symbol or authorization.symbol != context.symbol:
+                raise AuthorizationError(
+                    f"Mismatched symbols: auth={authorization.symbol}, proposal={proposal.symbol}, context={context.symbol}"
+                )
+    
+            # Validate risk fraction
+            auth_risk = authorization.authorized_risk_fraction
+            if math.isnan(auth_risk) or math.isinf(auth_risk) or auth_risk <= 0.0 or auth_risk > 1.0:
+                raise AuthorizationError(f"Invalid authorized risk fraction: {auth_risk}")
+    
+            # Verify audit lineage presence
+            if not getattr(authorization, "authorization_id", None) or \
+               not getattr(authorization, "source_model_version", None) or \
+               not getattr(authorization, "policy_version", None):
+                raise AuthorizationError("Missing required audit lineage fields in authorization result")
+    
+            # Check expiration/stale authorization if configured
+            if self.policy.authorization_max_age_seconds > 0.0:
+                try:
+                    context_dt = datetime.fromisoformat(context.timestamp.replace("Z", "+00:00"))
+                    auth_dt = datetime.fromisoformat(authorization.evaluated_at.replace("Z", "+00:00"))
+                    age = (context_dt - auth_dt).total_seconds()
+                    if age > self.policy.authorization_max_age_seconds:
+                        raise AuthorizationError(f"Authorization is stale: {age}s age")
+                except (ValueError, TypeError) as e:
+                    raise AuthorizationError(f"Audit timestamp check failed: {str(e)}")
+    
+            # 2. Market Data Freshness
+            try:
+                context_dt = datetime.fromisoformat(context.timestamp.replace("Z", "+00:00"))
+                market_dt = datetime.fromisoformat(context.market_timestamp.replace("Z", "+00:00"))
+            except (ValueError, TypeError) as e:
+                raise PositionSizingValidationError(f"Invalid timestamp formatting: {str(e)}")
+    
+            age_seconds = (context_dt - market_dt).total_seconds()
+    
+            # Future timestamp check
+            if age_seconds < -1.0:  # Allow 1s clock draft toleration
+                raise PositionSizingValidationError(
+                    f"Future-invalid market timestamp: market={context.market_timestamp} vs context={context.timestamp}"
+                )
+    
+            # Wall clock future check
+            now_utc = datetime.now(timezone.utc)
+            if (context_dt - now_utc).total_seconds() > 60.0:
+                raise PositionSizingValidationError(f"Execution timestamp is in the future: {context.timestamp}")
+    
+            if self.policy.reject_if_market_data_stale:
+                if age_seconds > self.policy.market_data_max_age_seconds:
+                    raise PositionSizingValidationError(
+                        f"Stale market data: age is {age_seconds:.2f}s, max allowed {self.policy.market_data_max_age_seconds}s"
+                    )
+    
+            # 3. Direction and Stop-Loss Validation
+            direction = proposal.direction.upper()
+            if direction not in ("BULLISH", "BEARISH", "NEUTRAL"):
+                raise PositionSizingValidationError(f"Unknown proposal direction: {proposal.direction}")
+    
+            if direction == "NEUTRAL":
+                raise PositionSizingValidationError("NEUTRAL direction cannot trade")
+    
+            if context.stop_loss_price <= 0.0:
+                raise PositionSizingValidationError("Stop-loss price must be strictly positive")
+    
+            stop_dist_abs = abs(context.entry_price - context.stop_loss_price)
+            if stop_dist_abs == 0.0:
+                raise InvalidStopDistanceError("Stop-loss distance cannot be zero")
+    
+            # Check stop-loss orientation
+            if direction == "BULLISH":
+                if context.stop_loss_price >= context.entry_price:
+                    raise InvalidStopDistanceError(
+                        f"BULLISH stop-loss price ({context.stop_loss_price}) must be less than entry price ({context.entry_price})"
+                    )
+            elif direction == "BEARISH":
+                if context.stop_loss_price <= context.entry_price:
+                    raise InvalidStopDistanceError(
+                        f"BEARISH stop-loss price ({context.stop_loss_price}) must be greater than entry price ({context.entry_price})"
+                    )
+    
+            # 4. Unsupported Instrument type check
+            if context.instrument_type.lower() not in ("spot", "linear_perpetual"):
+                raise PositionSizingValidationError(f"Unsupported instrument type: {context.instrument_type}")
+    
+            # 5. Core Sizing Formula
+            # risk_amount = equity * authorized_risk_fraction (Leverage does not expand this!)
+            risk_amount = context.equity * auth_risk
+            stop_dist_frac = stop_dist_abs / context.entry_price
+    
+            # Sizing assumes: position_notional = risk_amount / stop_distance_fraction
+            # quantity_raw = position_notional / (entry_price * contract_size)
+            raw_qty = risk_amount / (stop_dist_frac * context.entry_price * context.contract_size)
+    
+            # 6. Apply Sizing Rounding & Step Normalization (Using Decimal to avoid precision bugs)
+            dec_qty = Decimal(str(raw_qty))
+            dec_step = Decimal(str(context.quantity_step))
+    
+            if self.policy.rounding_mode == "DOWN":
+                rounded_qty = (dec_qty // dec_step) * dec_step
+            elif self.policy.rounding_mode == "UP":
+                rounded_qty = Decimal(math.ceil(float(dec_qty / dec_step))) * dec_step
+            else:  # ROUND
+                rounded_qty = Decimal(round(float(dec_qty / dec_step))) * dec_step
+    
+            quantity_normalized = float(rounded_qty)
+    
+            # 7. Recalculate economic parameters after normalisation
+            actual_notional = quantity_normalized * context.entry_price * context.contract_size
+            actual_risk_amount = actual_notional * stop_dist_frac
+            actual_risk_fraction = actual_risk_amount / context.equity
+            estimated_margin = actual_notional / context.leverage
+    
+            # Hard Check: Normalized risk must never exceed authorized risk budget!
+            # Since ROUND_UP or float representation might cause it, we check fraction
+            if actual_risk_fraction > (auth_risk + 1e-9):
+                raise PositionLimitError(
+                    f"Normalized risk fraction ({actual_risk_fraction:.6f}) exceeds authorized limit ({auth_risk:.6f})"
+                )
+    
+            # 8. Exposure & Capital safety gates
+            # context level checks
+            if quantity_normalized < context.min_quantity or quantity_normalized > context.max_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is outside instrument context bounds: min={context.min_quantity}, max={context.max_quantity}"
+                )
+    
+            # policy level checks
+            if self.policy.reject_if_below_min_quantity and quantity_normalized < self.policy.minimum_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is below policy minimum_quantity: {self.policy.minimum_quantity}"
+                )
+            if self.policy.reject_if_above_max_quantity and quantity_normalized > self.policy.maximum_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is above policy maximum_quantity: {self.policy.maximum_quantity}"
+                )
+    
+            if actual_notional < self.policy.minimum_position_notional:
+                raise PositionLimitError(
+                    f"Position notional {actual_notional:.2f} is below policy minimum: {self.policy.minimum_position_notional}"
+                )
+            if actual_notional > self.policy.maximum_position_notional:
+                raise PositionLimitError(
+                    f"Position notional {actual_notional:.2f} is above policy maximum: {self.policy.maximum_position_notional}"
+                )
+    
+            # Leverage constraint
+            if context.leverage > self.policy.maximum_leverage:
+                raise PositionLimitError(
+                    f"Requested leverage {context.leverage} exceeds maximum allowed: {self.policy.maximum_leverage}"
+                )
+    
+            # Margin fraction check
+            max_margin_allowed = context.available_balance * self.policy.maximum_margin_fraction
+            if estimated_margin > max_margin_allowed:
+>               raise InsufficientCapitalError(
+                    f"Estimated margin required {estimated_margin:.2f} exceeds policy maximum margin fraction allocation {max_margin_allowed:.2f}"
+                )
+E               backend.positioning.exceptions.InsufficientCapitalError: Estimated margin required 5000.00 exceeds policy maximum margin fraction allocation 2500.00
+
+backend\positioning\sizing.py:215: InsufficientCapitalError
+___________________________ test_sizing_determinism ___________________________
+
+base_policy = PositionSizingPolicy(policy_version='1.0.0', minimum_position_notional=10.0, maximum_position_notional=50000.0, minimu...e, reject_if_market_data_stale=True, market_data_max_age_seconds=10.0, authorization_max_age_seconds=10.0, metadata={})
+base_proposal = TradeProposal(proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction='BULLISH', confidence=0.8, fusion_score=0.8...eated_at='2026-07-21T13:23:06.798907+00:00', expires_at='2026-07-21T13:23:16.798912+00:00', risk_flags=[], metadata={})
+base_authorization = RiskAuthorizationResult(authorization_id='auth-xyz-123', proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction=...', latency_ms=1.5, requested_risk_fraction=0.01, authorized_risk_fraction=0.01, reasoning_request_id=None, metadata={})
+base_context = PositionSizingContext(symbol='BTC/USDT', instrument_type='spot', equity=10000.0, available_balance=5000.0, entry_price...re=0.0, market_timestamp='2026-07-21T13:23:06.798964+00:00', timestamp='2026-07-21T13:23:06.798964+00:00', metadata={})
+
+    def test_sizing_determinism(base_policy, base_proposal, base_authorization, base_context):
+        engine = PositionSizingEngine(policy=base_policy)
+    
+>       result_1 = engine.evaluate(base_proposal, base_authorization, base_context)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\unit\test_positioning.py:799: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <backend.positioning.sizing.PositionSizingEngine object at 0x000002593FFAD010>
+proposal = TradeProposal(proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction='BULLISH', confidence=0.8, fusion_score=0.8...eated_at='2026-07-21T13:23:06.798907+00:00', expires_at='2026-07-21T13:23:16.798912+00:00', risk_flags=[], metadata={})
+authorization = RiskAuthorizationResult(authorization_id='auth-xyz-123', proposal_id='proposal-xyz-789', symbol='BTC/USDT', direction=...', latency_ms=1.5, requested_risk_fraction=0.01, authorized_risk_fraction=0.01, reasoning_request_id=None, metadata={})
+context = PositionSizingContext(symbol='BTC/USDT', instrument_type='spot', equity=10000.0, available_balance=5000.0, entry_price...re=0.0, market_timestamp='2026-07-21T13:23:06.798964+00:00', timestamp='2026-07-21T13:23:06.798964+00:00', metadata={})
+
+    def evaluate(
+        self,
+        proposal: TradeProposal,
+        authorization: RiskAuthorizationResult,
+        context: PositionSizingContext,
+    ) -> PositionSizeResult:
+        start_time = time.perf_counter()
+        rejection_reason = ""
+        success = False
+        result: Optional[PositionSizeResult] = None
+    
+        try:
+            # 1. Authorization Verification
+            if not authorization or not proposal or not context:
+                raise AuthorizationError("Missing required input parameters")
+    
+            # Check status
+            if authorization.status not in (RiskAuthorizationStatus.APPROVED, RiskAuthorizationStatus.ADJUSTED):
+                raise AuthorizationError(f"Proposal authorization status is invalid: {authorization.status}")
+    
+            # Match proposal
+            if authorization.proposal_id != proposal.proposal_id:
+                raise AuthorizationError(
+                    f"Mismatched proposal_id: auth={authorization.proposal_id}, proposal={proposal.proposal_id}"
+                )
+    
+            # Match symbol
+            if authorization.symbol != proposal.symbol or authorization.symbol != context.symbol:
+                raise AuthorizationError(
+                    f"Mismatched symbols: auth={authorization.symbol}, proposal={proposal.symbol}, context={context.symbol}"
+                )
+    
+            # Validate risk fraction
+            auth_risk = authorization.authorized_risk_fraction
+            if math.isnan(auth_risk) or math.isinf(auth_risk) or auth_risk <= 0.0 or auth_risk > 1.0:
+                raise AuthorizationError(f"Invalid authorized risk fraction: {auth_risk}")
+    
+            # Verify audit lineage presence
+            if not getattr(authorization, "authorization_id", None) or \
+               not getattr(authorization, "source_model_version", None) or \
+               not getattr(authorization, "policy_version", None):
+                raise AuthorizationError("Missing required audit lineage fields in authorization result")
+    
+            # Check expiration/stale authorization if configured
+            if self.policy.authorization_max_age_seconds > 0.0:
+                try:
+                    context_dt = datetime.fromisoformat(context.timestamp.replace("Z", "+00:00"))
+                    auth_dt = datetime.fromisoformat(authorization.evaluated_at.replace("Z", "+00:00"))
+                    age = (context_dt - auth_dt).total_seconds()
+                    if age > self.policy.authorization_max_age_seconds:
+                        raise AuthorizationError(f"Authorization is stale: {age}s age")
+                except (ValueError, TypeError) as e:
+                    raise AuthorizationError(f"Audit timestamp check failed: {str(e)}")
+    
+            # 2. Market Data Freshness
+            try:
+                context_dt = datetime.fromisoformat(context.timestamp.replace("Z", "+00:00"))
+                market_dt = datetime.fromisoformat(context.market_timestamp.replace("Z", "+00:00"))
+            except (ValueError, TypeError) as e:
+                raise PositionSizingValidationError(f"Invalid timestamp formatting: {str(e)}")
+    
+            age_seconds = (context_dt - market_dt).total_seconds()
+    
+            # Future timestamp check
+            if age_seconds < -1.0:  # Allow 1s clock draft toleration
+                raise PositionSizingValidationError(
+                    f"Future-invalid market timestamp: market={context.market_timestamp} vs context={context.timestamp}"
+                )
+    
+            # Wall clock future check
+            now_utc = datetime.now(timezone.utc)
+            if (context_dt - now_utc).total_seconds() > 60.0:
+                raise PositionSizingValidationError(f"Execution timestamp is in the future: {context.timestamp}")
+    
+            if self.policy.reject_if_market_data_stale:
+                if age_seconds > self.policy.market_data_max_age_seconds:
+                    raise PositionSizingValidationError(
+                        f"Stale market data: age is {age_seconds:.2f}s, max allowed {self.policy.market_data_max_age_seconds}s"
+                    )
+    
+            # 3. Direction and Stop-Loss Validation
+            direction = proposal.direction.upper()
+            if direction not in ("BULLISH", "BEARISH", "NEUTRAL"):
+                raise PositionSizingValidationError(f"Unknown proposal direction: {proposal.direction}")
+    
+            if direction == "NEUTRAL":
+                raise PositionSizingValidationError("NEUTRAL direction cannot trade")
+    
+            if context.stop_loss_price <= 0.0:
+                raise PositionSizingValidationError("Stop-loss price must be strictly positive")
+    
+            stop_dist_abs = abs(context.entry_price - context.stop_loss_price)
+            if stop_dist_abs == 0.0:
+                raise InvalidStopDistanceError("Stop-loss distance cannot be zero")
+    
+            # Check stop-loss orientation
+            if direction == "BULLISH":
+                if context.stop_loss_price >= context.entry_price:
+                    raise InvalidStopDistanceError(
+                        f"BULLISH stop-loss price ({context.stop_loss_price}) must be less than entry price ({context.entry_price})"
+                    )
+            elif direction == "BEARISH":
+                if context.stop_loss_price <= context.entry_price:
+                    raise InvalidStopDistanceError(
+                        f"BEARISH stop-loss price ({context.stop_loss_price}) must be greater than entry price ({context.entry_price})"
+                    )
+    
+            # 4. Unsupported Instrument type check
+            if context.instrument_type.lower() not in ("spot", "linear_perpetual"):
+                raise PositionSizingValidationError(f"Unsupported instrument type: {context.instrument_type}")
+    
+            # 5. Core Sizing Formula
+            # risk_amount = equity * authorized_risk_fraction (Leverage does not expand this!)
+            risk_amount = context.equity * auth_risk
+            stop_dist_frac = stop_dist_abs / context.entry_price
+    
+            # Sizing assumes: position_notional = risk_amount / stop_distance_fraction
+            # quantity_raw = position_notional / (entry_price * contract_size)
+            raw_qty = risk_amount / (stop_dist_frac * context.entry_price * context.contract_size)
+    
+            # 6. Apply Sizing Rounding & Step Normalization (Using Decimal to avoid precision bugs)
+            dec_qty = Decimal(str(raw_qty))
+            dec_step = Decimal(str(context.quantity_step))
+    
+            if self.policy.rounding_mode == "DOWN":
+                rounded_qty = (dec_qty // dec_step) * dec_step
+            elif self.policy.rounding_mode == "UP":
+                rounded_qty = Decimal(math.ceil(float(dec_qty / dec_step))) * dec_step
+            else:  # ROUND
+                rounded_qty = Decimal(round(float(dec_qty / dec_step))) * dec_step
+    
+            quantity_normalized = float(rounded_qty)
+    
+            # 7. Recalculate economic parameters after normalisation
+            actual_notional = quantity_normalized * context.entry_price * context.contract_size
+            actual_risk_amount = actual_notional * stop_dist_frac
+            actual_risk_fraction = actual_risk_amount / context.equity
+            estimated_margin = actual_notional / context.leverage
+    
+            # Hard Check: Normalized risk must never exceed authorized risk budget!
+            # Since ROUND_UP or float representation might cause it, we check fraction
+            if actual_risk_fraction > (auth_risk + 1e-9):
+                raise PositionLimitError(
+                    f"Normalized risk fraction ({actual_risk_fraction:.6f}) exceeds authorized limit ({auth_risk:.6f})"
+                )
+    
+            # 8. Exposure & Capital safety gates
+            # context level checks
+            if quantity_normalized < context.min_quantity or quantity_normalized > context.max_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is outside instrument context bounds: min={context.min_quantity}, max={context.max_quantity}"
+                )
+    
+            # policy level checks
+            if self.policy.reject_if_below_min_quantity and quantity_normalized < self.policy.minimum_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is below policy minimum_quantity: {self.policy.minimum_quantity}"
+                )
+            if self.policy.reject_if_above_max_quantity and quantity_normalized > self.policy.maximum_quantity:
+                raise PositionLimitError(
+                    f"Quantity {quantity_normalized} is above policy maximum_quantity: {self.policy.maximum_quantity}"
+                )
+    
+            if actual_notional < self.policy.minimum_position_notional:
+                raise PositionLimitError(
+                    f"Position notional {actual_notional:.2f} is below policy minimum: {self.policy.minimum_position_notional}"
+                )
+            if actual_notional > self.policy.maximum_position_notional:
+                raise PositionLimitError(
+                    f"Position notional {actual_notional:.2f} is above policy maximum: {self.policy.maximum_position_notional}"
+                )
+    
+            # Leverage constraint
+            if context.leverage > self.policy.maximum_leverage:
+                raise PositionLimitError(
+                    f"Requested leverage {context.leverage} exceeds maximum allowed: {self.policy.maximum_leverage}"
+                )
+    
+            # Margin fraction check
+            max_margin_allowed = context.available_balance * self.policy.maximum_margin_fraction
+            if estimated_margin > max_margin_allowed:
+>               raise InsufficientCapitalError(
+                    f"Estimated margin required {estimated_margin:.2f} exceeds policy maximum margin fraction allocation {max_margin_allowed:.2f}"
+                )
+E               backend.positioning.exceptions.InsufficientCapitalError: Estimated margin required 5000.00 exceeds policy maximum margin fraction allocation 2500.00
+
+backend\positioning\sizing.py:215: InsufficientCapitalError
+============================== warnings summary ===============================
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_training.py::test_model_persistence
+tests/unit/test_training.py::test_model_persistence
+tests/unit/test_training.py::test_model_persistence
+tests/unit/test_training.py::test_model_persistence
+  C:\Users\safad\QuantForge\.venv\Lib\site-packages\joblib\numpy_pickle.py:207: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+  As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+    array.shape = self.shape
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/unit/test_positioning.py::test_valid_bullish_sizing - backend.po...
+FAILED tests/unit/test_positioning.py::test_valid_bearish_sizing - backend.po...
+FAILED tests/unit/test_positioning.py::test_quantity_rounding_down - backend....
+FAILED tests/unit/test_positioning.py::test_leverage_does_not_increase_risk_budget
+FAILED tests/unit/test_positioning.py::test_exposure_limit_violations - backe...
+FAILED tests/unit/test_positioning.py::test_rejected_auth_raises_error - Type...
+FAILED tests/unit/test_positioning.py::test_adjusted_auth_uses_reduced_fraction
+FAILED tests/unit/test_positioning.py::test_telemetry_captures_audit_info - b...
+FAILED tests/unit/test_positioning.py::test_sizing_determinism - backend.posi...
+================== 9 failed, 142 passed, 8 warnings in 7.07s ==================

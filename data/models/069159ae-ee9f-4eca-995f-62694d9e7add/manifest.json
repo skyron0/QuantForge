@@ -1,0 +1,47 @@
+{
+    "model_version": "069159ae-ee9f-4eca-995f-62694d9e7add",
+    "dataset_version": "",
+    "feature_version": "v1",
+    "label_version": "v1",
+    "experiment_id": "",
+    "git_commit": "572f20def6281790747f2f6342b4f0fcdc71539f",
+    "trainer": "lightgbm",
+    "task_type": "classification",
+    "hyperparameters": {
+        "n_estimators": 5,
+        "max_depth": 3,
+        "learning_rate": 0.1
+    },
+    "random_seed": 42,
+    "train_metrics": {
+        "accuracy": 0.7833333333333333,
+        "precision": 0.8445652173913043,
+        "recall": 0.7833333333333333,
+        "f1": 0.7668107440568076,
+        "roc_auc": 0.8793490460157127
+    },
+    "val_metrics": {
+        "accuracy": 0.65,
+        "precision": 0.825,
+        "recall": 0.65,
+        "f1": 0.6438596491228069,
+        "roc_auc": 0.8296703296703298
+    },
+    "test_metrics": {
+        "accuracy": 0.8,
+        "precision": 0.85,
+        "recall": 0.8,
+        "f1": 0.7809523809523808,
+        "roc_auc": 0.8333333333333334
+    },
+    "feature_importance": {
+        "f1": 2.0,
+        "f2": 3.0
+    },
+    "candidate_status": "NO",
+    "training_duration_seconds": 1.440359354019165,
+    "model_path": "data/models\\069159ae-ee9f-4eca-995f-62694d9e7add\\model.joblib",
+    "artifact_sha256": "9fe1ee9ea7cc5fa5106b6040aefd638f678473cbd073f15fa598aeed39d99e8d",
+    "artifact_size_bytes": 6756,
+    "creation_timestamp": "2026-07-21T13:35:24.557202+00:00"
+}

@@ -16,7 +16,10 @@ graph TD
     RM --> DF[Decision Fusion]
     DF --> TP[Trade Proposal]
     TP --> RG[Risk Guard]
-    RG --> EE[Execution Engine]
+    RG --> PS[Position Sizing]
+    PS --> EA[Execution Authorization]
+    EA --> EX[Execution Adapter]
+    EX --> PE[Portfolio Engine]
 ```
 
 1. **Market Data**: Raw candles and clock ticks.
@@ -26,7 +29,10 @@ graph TD
 5. **Decision Fusion**: Reconciles and merges disparate model predictions.
 6. **Trade Proposal**: Wraps decisions into a validated, immutable structure.
 7. **Risk Guard**: Validates position sizing, exposure boundaries, and stop adjustments.
-8. **Execution Engine**: Executes the trade via paper/live executor endpoints.
+8. **Position Sizing**: Dynamically calculates order quantities based on authorized risk fractions and entry/stop distances.
+9. **Execution Authorization**: Evaluates execution enable status, daily limits, and issue order intents.
+10. **Execution Adapter**: Simulates paper executions or passes fills to live exchange adapters.
+11. **Portfolio Engine**: Ingests execution result fills atomically to maintain positions, balances, high-water marks, and PnL accounting.
 
 ---
 
@@ -41,6 +47,8 @@ Every step in the decision pipeline is decoupled to prevent provider or model-sp
 - **Decision Fusion**: A mathematical consensus layer (e.g., weighted voting, ensemble filters) that receives various predictions and reasoning outputs, filtering out low-consensus noise.
 - **Confidence Engine**: Dynamically calculates confidence scores mapping to risk thresholds (e.g., only trading signals having >0.85 confidence confidence).
 - **Trade Proposal Generation**: Synthesizes the final consensus trade schema consisting of action (BUY/SELL/HOLD), size, target entries, stop losses, and take profits.
+- **Risk Guard**: A deterministic, fail-closed system that authorizes TradeProposals against drawdown constraints, volatility gates, and max-allowable risk budgets.
+- **Position Sizing**: A deterministic, math-exact capital allocation engine that calculates order quantities based on authorized risk fractions and context-level entry/stop-loss distances.
 
 ---
 
@@ -201,6 +209,345 @@ class ProviderHealth:
     model: str
     latency_ms: float
     error: Optional[str] = None
+```
+
+### 4.6 Risk Guard & Trade Authorization Contracts (Sprint 3.1)
+
+Risk authorization layer structures under `backend/risk/models.py`:
+
+```python
+@dataclass(frozen=True)
+class RiskContext:
+    symbol: str
+    current_equity: float
+    current_multiplier: float
+    max_portfolio_drawdown: float
+    daily_drawdown_limit: float
+    volatility_threshold: float
+    pending_risk_fraction: float
+    current_drawdown: float
+    timestamp: str
+
+@dataclass(frozen=True)
+class RiskAuthorizationResult:
+    authorization_id: str
+    proposal_id: str
+    symbol: str
+    direction: str
+    status: RiskAuthorizationStatus  # APPROVED, REJECTED, ADJUSTED
+    original_confidence: float
+    effective_confidence: float
+    rejection_reasons: List[str]
+    adjustment_reasons: List[str]
+    triggered_rules: List[str]
+    policy_version: str
+    source_model_version: str
+    fusion_policy_version: str
+    proposal_created_at: str
+    evaluated_at: str
+    latency_ms: float
+    requested_risk_fraction: float
+    authorized_risk_fraction: float
+```
+
+### 4.7 Position Sizing & Capital Allocation Contracts (Sprint 3.2)
+
+Position sizing contracts under `backend/positioning/models.py`:
+
+```python
+@dataclass(frozen=True)
+class PositionSizingContext:
+    symbol: str
+    instrument_type: str  # spot, linear_perpetual
+    equity: float
+    available_balance: float
+    entry_price: float
+    stop_loss_price: float
+    market_price: float
+    leverage: float
+    contract_size: float
+    lot_size: float
+    min_quantity: float
+    max_quantity: float
+    quantity_step: float
+    price_tick: float
+    current_symbol_exposure: float
+    current_portfolio_exposure: float
+    market_timestamp: str
+    timestamp: str
+
+@dataclass(frozen=True)
+class PositionSizeResult:
+    sizing_id: str
+    proposal_id: str
+    symbol: str
+    direction: str
+    quantity: float
+    position_notional: float
+    entry_price: float
+    stop_loss_price: float
+    stop_distance_absolute: float
+    stop_distance_fraction: float
+    authorized_risk_fraction: float
+    risk_amount: float
+    leverage: float
+    estimated_margin_required: float
+    policy_version: str
+    created_at: str
+    authorization_id: Optional[str]
+    source_model_version: str
+    metadata: Dict[str, Any] = field(default_factory=dict)
+```
+
+### 4.8 Execution Authorization Contracts (Sprint 3.3)
+
+Execution Authorization schemas under `backend/execution_authorization/models.py`:
+
+```python
+@dataclass(frozen=True)
+class ExecutionContext:
+    environment: ExecutionEnvironment
+    current_timestamp: str  # ISO 8601
+    market_timestamp: str   # ISO 8601
+    execution_enabled: bool
+    kill_switch_active: bool
+    symbol_trading_enabled: bool
+    available_balance: float
+    current_price: float
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+@dataclass(frozen=True)
+class OrderIntent:
+    intent_id: str
+    idempotency_key: str
+    proposal_id: str
+    risk_authorization_id: str
+    sizing_id: str
+    symbol: str
+    direction: OrderDirection
+    quantity: float
+    order_type: OrderType
+    limit_price: Optional[float] = None
+    stop_loss: Optional[float] = None
+    take_profit: Optional[float] = None
+    environment: ExecutionEnvironment = ExecutionEnvironment.PAPER
+    source_model_version: str = ""
+    fusion_policy_version: str = ""
+    risk_policy_version: str = ""
+    position_sizing_policy_version: str = ""
+    execution_policy_version: str = ""
+    reasoning_request_id: Optional[str] = None
+    created_at: str = ""
+    expires_at: str = ""
+
+@dataclass(frozen=True)
+class ExecutionAuthorizationResult:
+    authorization_id: str
+    status: ExecutionAuthorizationStatus
+    intent: Optional[OrderIntent] = None
+    rejection_reason: str = ""
+    triggered_rules: List[str] = field(default_factory=list)
+    proposal_id: str = ""
+    risk_authorization_id: str = ""
+    sizing_id: str = ""
+    latency_ms: float = 0.0
+    timestamp: str = ""
+    metadata: Dict[str, Any] = field(default_factory=dict)
+```
+
+### 4.9 Execution Adapter & Simulation Engine Contracts (Sprint 3.4)
+
+Execution Simulation schemas under `backend/execution_adapter/models.py`:
+
+```python
+class ExecutionStatus(Enum):
+    ACCEPTED = "ACCEPTED"
+    FILLED = "FILLED"
+    PARTIALLY_FILLED = "PARTIALLY_FILLED"
+    REJECTED = "REJECTED"
+    CANCELLED = "CANCELLED"
+    EXPIRED = "EXPIRED"
+
+@dataclass(frozen=True)
+class Fill:
+    fill_id: str
+    intent_id: str
+    symbol: str
+    direction: OrderDirection
+    quantity: float
+    price: float
+    notional: float
+    fee: float
+    slippage_amount: float
+    timestamp: str  # ISO 8601
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+@dataclass(frozen=True)
+class ExecutionResult:
+    execution_id: str
+    intent_id: str
+    proposal_id: str
+    risk_authorization_id: str
+    sizing_id: str
+    symbol: str
+    direction: OrderDirection
+    requested_quantity: float
+    filled_quantity: float
+    average_fill_price: float
+    total_notional: float
+    total_fees: float
+    total_slippage: float
+    status: ExecutionStatus
+    fills: List[Fill]
+    rejection_reason: str
+    adapter_name: str
+    environment: ExecutionEnvironment
+    started_at: str  # ISO 8601
+    completed_at: str  # ISO 8601
+    latency_ms: float
+    policy_version: str
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+@dataclass(frozen=True)
+class PaperExecutionContext:
+    current_market_price: float
+    bid_price: float
+    ask_price: float
+    available_liquidity: float
+    timestamp: str  # ISO 8601
+    metadata: Dict[str, Any] = field(default_factory=dict)
+```
+
+### 4.10 Portfolio, Position & Accounting Contracts (Sprint 3.5)
+
+Portfolio, Position, and Snapshot contracts under `backend/portfolio/models.py`:
+
+```python
+class PositionSide(Enum):
+    LONG = "LONG"
+    SHORT = "SHORT"
+
+@dataclass(frozen=True)
+class Position:
+    position_id: str
+    symbol: str
+    side: PositionSide
+    quantity: Decimal
+    average_entry_price: Decimal
+    current_price: Decimal
+    position_notional: Decimal
+    unrealized_pnl: Decimal
+    realized_pnl: Decimal
+    accumulated_fees: Decimal
+    leverage: Decimal
+    margin_used: Decimal
+    opened_at: str
+    updated_at: str
+    source_execution_ids: List[str]
+    source_fill_ids: List[str]
+    metadata: Dict[str, Any]
+
+@dataclass(frozen=True)
+class PortfolioState:
+    portfolio_id: str
+    initial_balance: Decimal
+    cash_balance: Decimal
+    equity: Decimal
+    realized_pnl: Decimal
+    unrealized_pnl: Decimal
+    total_fees: Decimal
+    used_margin: Decimal
+    available_balance: Decimal
+    gross_exposure: Decimal
+    net_exposure: Decimal
+    open_position_count: int
+    positions: Mapping[str, Position]
+    timestamp: str
+    metadata: Dict[str, Any]
+
+@dataclass(frozen=True)
+class PortfolioSnapshot:
+    portfolio_id: str
+    initial_balance: Decimal
+    cash_balance: Decimal
+    equity: Decimal
+    realized_pnl: Decimal
+    unrealized_pnl: Decimal
+    total_fees: Decimal
+    used_margin: Decimal
+    available_balance: Decimal
+    gross_exposure: Decimal
+    net_exposure: Decimal
+    open_positions: List[Position]
+    timestamp: str
+    metadata: Dict[str, Any]
+```
+
+### 4.11 Position Lifecycle Management Contracts (Sprint 3.6)
+
+Coordinates protective bounds adjustments and exit proposals under `backend/position_lifecycle/models.py`:
+
+```python
+class PositionLifecycleStatus(Enum):
+    OPEN = "OPEN"
+    CLOSING = "CLOSING"
+    CLOSED = "CLOSED"
+
+class ProtectiveTriggerType(Enum):
+    STOP_LOSS = "STOP_LOSS"
+    TAKE_PROFIT = "TAKE_PROFIT"
+    TRAILING_STOP = "TRAILING_STOP"
+    MANUAL_EXIT = "MANUAL_EXIT"
+
+class ExitReason(Enum):
+    STOP_LOSS_TRIGGERED = "STOP_LOSS_TRIGGERED"
+    TAKE_PROFIT_TRIGGERED = "TAKE_PROFIT_TRIGGERED"
+    TRAILING_STOP_TRIGGERED = "TRAILING_STOP_TRIGGERED"
+    MANUAL_EXIT = "MANUAL_EXIT"
+    RISK_EXIT = "RISK_EXIT"
+
+@dataclass(frozen=True)
+class ProtectivePositionState:
+    lifecycle_id: str
+    position_id: str
+    symbol: str
+    side: PositionSide
+    quantity: Decimal
+    average_entry_price: Decimal
+    stop_loss: Optional[Decimal]
+    take_profit: Optional[Decimal]
+    trailing_stop_enabled: bool
+    trailing_distance: Optional[Decimal]
+    trailing_activation_price: Optional[Decimal]
+    highest_price_since_entry: Optional[Decimal]
+    lowest_price_since_entry: Optional[Decimal]
+    active_trailing_stop_price: Optional[Decimal]
+    status: PositionLifecycleStatus
+    created_at: str
+    updated_at: str
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+@dataclass(frozen=True)
+class ExitProposal:
+    exit_proposal_id: str
+    lifecycle_id: str
+    position_id: str
+    symbol: str
+    position_side: PositionSide
+    exit_direction: OrderDirection
+    requested_quantity: Decimal
+    trigger_type: ProtectiveTriggerType
+    exit_reason: ExitReason
+    trigger_price: Decimal
+    market_price: Decimal
+    source_stop_loss: Optional[Decimal]
+    source_take_profit: Optional[Decimal]
+    source_trailing_stop: Optional[Decimal]
+    created_at: str
+    expires_at: str
+    lifecycle_policy_version: str
+    source_execution_id: str
+    metadata: Dict[str, Any] = field(default_factory=dict)
 ```
 
 ---

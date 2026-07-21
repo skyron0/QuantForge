@@ -1,0 +1,39 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.13.13, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\Users\safad\QuantForge
+plugins: anyio-4.14.1, langsmith-0.10.2
+collected 201 items
+
+tests\unit\test_dataset.py ............                                  [  5%]
+tests\unit\test_decision.py .................                            [ 14%]
+tests\unit\test_execution_adapter.py ........................            [ 26%]
+tests\unit\test_execution_authorization.py ..........................    [ 39%]
+tests\unit\test_experiment.py ....                                       [ 41%]
+tests\unit\test_inference.py .............                               [ 47%]
+tests\unit\test_inference_trust.py .......                               [ 51%]
+tests\unit\test_intelligence.py ......                                   [ 54%]
+tests\unit\test_metrics_engine.py ..........                             [ 59%]
+tests\unit\test_optimization.py ........                                 [ 63%]
+tests\unit\test_positioning.py ....................                      [ 73%]
+tests\unit\test_registry.py .....                                        [ 75%]
+tests\unit\test_risk.py .......................                          [ 87%]
+tests\unit\test_strategy_framework.py ......                             [ 90%]
+tests\unit\test_training.py .......                                      [ 93%]
+tests\unit\test_validation.py ..........                                 [ 98%]
+tests\unit\test_walk_forward.py ...                                      [100%]
+
+============================== warnings summary ===============================
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_training.py::test_model_persistence
+tests/unit/test_training.py::test_model_persistence
+tests/unit/test_training.py::test_model_persistence
+tests/unit/test_training.py::test_model_persistence
+  C:\Users\safad\QuantForge\.venv\Lib\site-packages\joblib\numpy_pickle.py:207: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+  As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+    array.shape = self.shape
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================= 201 passed, 8 warnings in 9.37s =======================

@@ -1,9 +1,0 @@
-============================= test session starts =============================
-platform win32 -- Python 3.13.13, pytest-9.1.1, pluggy-1.6.0
-rootdir: C:\Users\safad\QuantForge
-plugins: anyio-4.14.1, langsmith-0.10.2
-collected 17 items
-
-tests\unit\test_decision.py .................                            [100%]
-
-============================= 17 passed in 0.06s ==============================
