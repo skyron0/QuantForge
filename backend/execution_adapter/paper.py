@@ -25,6 +25,8 @@ from backend.execution_adapter.policy import PaperExecutionPolicy
 from backend.execution_adapter.idempotency import ExecutionIdempotencyStore
 from backend.execution_adapter.telemetry import ExecutionTelemetrySink, ConsoleExecutionTelemetrySink
 
+from backend.execution_adapter.base import BaseExecutionAdapter
+
 def parse_iso(iso_str: str) -> datetime:
     try:
         # Standard timezone parsing or replace Z with +00:00
@@ -33,7 +35,7 @@ def parse_iso(iso_str: str) -> datetime:
     except Exception as e:
         raise ExecutionAdapterValidationError(f"Invalid timestamp format: {iso_str}") from e
 
-class PaperExecutionAdapter:
+class PaperExecutionAdapter(BaseExecutionAdapter):
     def __init__(
         self,
         policy: PaperExecutionPolicy,

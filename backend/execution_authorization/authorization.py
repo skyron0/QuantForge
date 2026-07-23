@@ -2,7 +2,9 @@ import time
 import math
 import uuid
 from datetime import datetime, timezone
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, Callable
+
+from backend.replay.clock import Clock, SystemClock
 
 # Decoupled domain inputs
 from backend.decision.models import TradeProposal
@@ -59,13 +61,17 @@ class ExecutionAuthorizationEngine:
         self,
         policy: ExecutionPolicy,
         idempotency_store: IdempotencyStore,
-        telemetry_sink: Optional[ExecutionAuthorizationTelemetrySink] = None
+        telemetry_sink: Optional[ExecutionAuthorizationTelemetrySink] = None,
+        clock: Optional[Clock] = None,
+        uuid_generator: Optional[Callable[[], str]] = None
     ):
         if not isinstance(policy, ExecutionPolicy):
             raise InvalidExecutionPolicyError("Invalid Policy provided")
         self.policy = policy
         self.idempotency_store = idempotency_store
         self.telemetry_sink = telemetry_sink
+        self.clock = clock or SystemClock()
+        self._uuid_generator = uuid_generator or (lambda: str(uuid.uuid4()))
 
     def evaluate(
         self,
@@ -292,7 +298,7 @@ class ExecutionAuthorizationEngine:
 
             # 12. Create OrderIntent
             try:
-                intent_id = str(uuid.uuid4())
+                intent_id = self._uuid_generator()
                 created_at = context.current_timestamp
                 # Calculate expires_at
                 created_dt = parse_iso(created_at)
@@ -334,7 +340,7 @@ class ExecutionAuthorizationEngine:
             latency_ms = (time.perf_counter() - start_counter) * 1000.0
 
             result = EngineResult(
-                authorization_id=str(uuid.uuid4()),
+                authorization_id=self._uuid_generator(),
                 status=ExecutionAuthorizationStatus.AUTHORIZED,
                 intent=intent,
                 rejection_reason="",
@@ -344,7 +350,7 @@ class ExecutionAuthorizationEngine:
                 risk_authorization_id=risk_auth.authorization_id,
                 sizing_id=size_res.sizing_id,
                 latency_ms=latency_ms,
-                timestamp=datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+                timestamp=self.clock.now().isoformat().replace("+00:00", "Z"),
                 metadata={}
             )
 
@@ -361,7 +367,7 @@ class ExecutionAuthorizationEngine:
                 triggered_rules.append(type(e).__name__)
 
             result = EngineResult(
-                authorization_id=str(uuid.uuid4()),
+                authorization_id=self._uuid_generator(),
                 status=ExecutionAuthorizationStatus.REJECTED,
                 intent=None,
                 rejection_reason=rejection_reason,
@@ -371,7 +377,7 @@ class ExecutionAuthorizationEngine:
                 risk_authorization_id=risk_auth.authorization_id if risk_auth else "UNKNOWN",
                 sizing_id=size_res.sizing_id if size_res else "UNKNOWN",
                 latency_ms=latency_ms,
-                timestamp=datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+                timestamp=self.clock.now().isoformat().replace("+00:00", "Z"),
                 metadata={}
             )
 

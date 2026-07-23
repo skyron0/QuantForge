@@ -1,0 +1,286 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.13, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\Users\safad\QuantForge
+plugins: anyio-4.14.1, langsmith-0.10.2
+collected 0 items / 25 errors
+
+=================================== ERRORS ====================================
+___________ ERROR collecting tests/unit/test_application_runtime.py ___________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_application_runtime.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_application_runtime.py:6: in <module>
+    from backend.application.exceptions import (
+E   ModuleNotFoundError: No module named 'backend'
+_________________ ERROR collecting tests/unit/test_dataset.py _________________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_dataset.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_dataset.py:7: in <module>
+    from backend.dataset.labelers import (
+E   ModuleNotFoundError: No module named 'backend'
+________________ ERROR collecting tests/unit/test_decision.py _________________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_decision.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_decision.py:10: in <module>
+    from backend.decision.exceptions import DecisionError, InvalidPolicyError, ContextStoreError
+E   ModuleNotFoundError: No module named 'backend'
+____________ ERROR collecting tests/unit/test_execution_adapter.py ____________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_execution_adapter.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_execution_adapter.py:12: in <module>
+    from backend.execution_authorization.models import OrderIntent, ExecutionEnvironment, OrderDirection, OrderType
+E   ModuleNotFoundError: No module named 'backend'
+_________ ERROR collecting tests/unit/test_execution_authorization.py _________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_execution_authorization.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_execution_authorization.py:12: in <module>
+    from backend.decision.models import TradeProposal
+E   ModuleNotFoundError: No module named 'backend'
+_______________ ERROR collecting tests/unit/test_experiment.py ________________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_experiment.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_experiment.py:5: in <module>
+    from backend.experiment.models import (
+E   ModuleNotFoundError: No module named 'backend'
+_____________ ERROR collecting tests/unit/test_feature_runtime.py _____________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_feature_runtime.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_feature_runtime.py:24: in <module>
+    from backend.feature_runtime.exceptions import (
+E   ModuleNotFoundError: No module named 'backend'
+________________ ERROR collecting tests/unit/test_inference.py ________________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_inference.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_inference.py:9: in <module>
+    from backend.training.lifecycle import ModelStatus
+E   ModuleNotFoundError: No module named 'backend'
+_____________ ERROR collecting tests/unit/test_inference_trust.py _____________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_inference_trust.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_inference_trust.py:7: in <module>
+    from backend.training.lifecycle import ModelStatus
+E   ModuleNotFoundError: No module named 'backend'
+______________ ERROR collecting tests/unit/test_intelligence.py _______________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_intelligence.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_intelligence.py:7: in <module>
+    from backend.intelligence.exceptions import (
+E   ModuleNotFoundError: No module named 'backend'
+_______________ ERROR collecting tests/unit/test_market_data.py _______________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_market_data.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_market_data.py:8: in <module>
+    from backend.market_data.exceptions import (
+E   ModuleNotFoundError: No module named 'backend'
+_____________ ERROR collecting tests/unit/test_metrics_engine.py ______________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_metrics_engine.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_metrics_engine.py:3: in <module>
+    from backend.database.models.trade import Trade
+E   ModuleNotFoundError: No module named 'backend'
+______________ ERROR collecting tests/unit/test_optimization.py _______________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_optimization.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_optimization.py:2: in <module>
+    from backend.optimization.optimizer import (
+E   ModuleNotFoundError: No module named 'backend'
+______________ ERROR collecting tests/unit/test_orchestration.py ______________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_orchestration.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_orchestration.py:7: in <module>
+    from backend.orchestration.models import TradingCycleInput, TradingCycleResult, TradingCycleStatus
+E   ModuleNotFoundError: No module named 'backend'
+_______________ ERROR collecting tests/unit/test_persistence.py _______________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_persistence.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_persistence.py:7: in <module>
+    from backend.persistence.exceptions import (
+E   ModuleNotFoundError: No module named 'backend'
+________________ ERROR collecting tests/unit/test_portfolio.py ________________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_portfolio.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_portfolio.py:9: in <module>
+    from backend.execution_authorization.models import OrderDirection, OrderType, ExecutionEnvironment
+E   ModuleNotFoundError: No module named 'backend'
+___________ ERROR collecting tests/unit/test_position_lifecycle.py ____________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_position_lifecycle.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_position_lifecycle.py:10: in <module>
+    from backend.portfolio.models import PositionSide
+E   ModuleNotFoundError: No module named 'backend'
+_______________ ERROR collecting tests/unit/test_positioning.py _______________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_positioning.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_positioning.py:7: in <module>
+    from backend.decision.models import TradeProposal
+E   ModuleNotFoundError: No module named 'backend'
+________________ ERROR collecting tests/unit/test_registry.py _________________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_registry.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_registry.py:7: in <module>
+    from backend.training.lifecycle import ModelStatus, InvalidStateTransitionError
+E   ModuleNotFoundError: No module named 'backend'
+__________________ ERROR collecting tests/unit/test_risk.py ___________________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_risk.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_risk.py:6: in <module>
+    from backend.decision.models import TradeProposal
+E   ModuleNotFoundError: No module named 'backend'
+_________________ ERROR collecting tests/unit/test_runtime.py _________________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_runtime.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_runtime.py:12: in <module>
+    from backend.orchestration.models import TradingCycleInput, TradingCycleResult, TradingCycleStatus
+E   ModuleNotFoundError: No module named 'backend'
+___________ ERROR collecting tests/unit/test_strategy_framework.py ____________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_strategy_framework.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_strategy_framework.py:3: in <module>
+    from backend.strategy.base import BaseStrategy
+E   ModuleNotFoundError: No module named 'backend'
+________________ ERROR collecting tests/unit/test_training.py _________________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_training.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_training.py:10: in <module>
+    import backend.training.trainers
+E   ModuleNotFoundError: No module named 'backend'
+_______________ ERROR collecting tests/unit/test_validation.py ________________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_validation.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_validation.py:10: in <module>
+    from backend.models.candle import Candle
+E   ModuleNotFoundError: No module named 'backend'
+______________ ERROR collecting tests/unit/test_walk_forward.py _______________
+ImportError while importing test module 'C:\Users\safad\QuantForge\tests\unit\test_walk_forward.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+..\AppData\Local\Programs\Python\Python313\Lib\importlib\__init__.py:88: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\unit\test_walk_forward.py:4: in <module>
+    from backend.models.candle import Candle
+E   ModuleNotFoundError: No module named 'backend'
+=========================== short test summary info ===========================
+ERROR tests/unit/test_application_runtime.py
+ERROR tests/unit/test_dataset.py
+ERROR tests/unit/test_decision.py
+ERROR tests/unit/test_execution_adapter.py
+ERROR tests/unit/test_execution_authorization.py
+ERROR tests/unit/test_experiment.py
+ERROR tests/unit/test_feature_runtime.py
+ERROR tests/unit/test_inference.py
+ERROR tests/unit/test_inference_trust.py
+ERROR tests/unit/test_intelligence.py
+ERROR tests/unit/test_market_data.py
+ERROR tests/unit/test_metrics_engine.py
+ERROR tests/unit/test_optimization.py
+ERROR tests/unit/test_orchestration.py
+ERROR tests/unit/test_persistence.py
+ERROR tests/unit/test_portfolio.py
+ERROR tests/unit/test_position_lifecycle.py
+ERROR tests/unit/test_positioning.py
+ERROR tests/unit/test_registry.py
+ERROR tests/unit/test_risk.py
+ERROR tests/unit/test_runtime.py
+ERROR tests/unit/test_strategy_framework.py
+ERROR tests/unit/test_training.py
+ERROR tests/unit/test_validation.py
+ERROR tests/unit/test_walk_forward.py
+!!!!!!!!!!!!!!!!!! Interrupted: 25 errors during collection !!!!!!!!!!!!!!!!!!!
+=================== no tests collected, 25 errors in 1.03s ====================
+

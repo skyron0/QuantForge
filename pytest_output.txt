@@ -1,0 +1,37 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.13, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\safad\QuantForge\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\safad\QuantForge
+plugins: anyio-4.14.1, langsmith-0.10.2
+collecting ... collected 28 items
+
+tests/unit/test_orchestration.py::test_successful_trading_cycle PASSED   [  3%]
+tests/unit/test_orchestration.py::test_validation_failure_clock_skew PASSED [  7%]
+tests/unit/test_orchestration.py::test_validation_failure_stale_cycle PASSED [ 10%]
+tests/unit/test_orchestration.py::test_fusion_no_proposal PASSED         [ 14%]
+tests/unit/test_orchestration.py::test_fusion_rejection PASSED           [ 17%]
+tests/unit/test_orchestration.py::test_fusion_crash PASSED               [ 21%]
+tests/unit/test_orchestration.py::test_risk_rejection PASSED             [ 25%]
+tests/unit/test_orchestration.py::test_risk_crash PASSED                 [ 28%]
+tests/unit/test_orchestration.py::test_sizing_non_positive_quantity PASSED [ 32%]
+tests/unit/test_orchestration.py::test_sizing_risk_cap_violation PASSED  [ 35%]
+tests/unit/test_orchestration.py::test_sizing_crash PASSED               [ 39%]
+tests/unit/test_orchestration.py::test_exec_auth_rejection PASSED        [ 42%]
+tests/unit/test_orchestration.py::test_exec_auth_proposal_mismatch PASSED [ 46%]
+tests/unit/test_orchestration.py::test_exec_auth_risk_auth_mismatch PASSED [ 50%]
+tests/unit/test_orchestration.py::test_exec_auth_sizing_mismatch PASSED  [ 53%]
+tests/unit/test_orchestration.py::test_exec_auth_crash PASSED            [ 57%]
+tests/unit/test_orchestration.py::test_exec_block_live PASSED            [ 60%]
+tests/unit/test_orchestration.py::test_exec_shadow_redirect PASSED       [ 64%]
+tests/unit/test_orchestration.py::test_exec_status_failed PASSED         [ 67%]
+tests/unit/test_orchestration.py::test_exec_crash PASSED                 [ 71%]
+tests/unit/test_orchestration.py::test_portfolio_crash PASSED            [ 75%]
+tests/unit/test_orchestration.py::test_lifecycle_registration_crash PASSED [ 78%]
+tests/unit/test_orchestration.py::test_partial_fill_success PASSED       [ 82%]
+tests/unit/test_orchestration.py::test_successful_exit_cycle PASSED      [ 85%]
+tests/unit/test_orchestration.py::test_exit_cycle_evaluation_crash PASSED [ 89%]
+tests/unit/test_orchestration.py::test_exit_cycle_auth_rejection_reverts_state PASSED [ 92%]
+tests/unit/test_orchestration.py::test_exit_cycle_execution_failure_reverts_state PASSED [ 96%]
+tests/unit/test_orchestration.py::test_exit_cycle_portfolio_crash PASSED [100%]
+
+============================= 28 passed in 0.16s ==============================

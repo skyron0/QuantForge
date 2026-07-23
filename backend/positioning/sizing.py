@@ -3,7 +3,9 @@ import math
 import time
 from datetime import datetime, timezone
 from decimal import Decimal, ROUND_DOWN, ROUND_UP, ROUND_HALF_UP
-from typing import Optional
+from typing import Optional, Callable
+
+from backend.replay.clock import Clock, SystemClock
 
 from backend.decision.models import TradeProposal
 from backend.risk.models import RiskAuthorizationResult, RiskAuthorizationStatus
@@ -27,9 +29,13 @@ class PositionSizingEngine:
         self,
         policy: PositionSizingPolicy,
         telemetry_sink: Optional[PositionSizingTelemetrySink] = None,
+        clock: Optional[Clock] = None,
+        uuid_generator: Optional[Callable[[], str]] = None,
     ):
         self.policy = policy
         self.telemetry_sink = telemetry_sink
+        self.clock = clock or SystemClock()
+        self._uuid_generator = uuid_generator or (lambda: str(uuid.uuid4()))
 
     def evaluate(
         self,
@@ -241,7 +247,7 @@ class PositionSizingEngine:
             # 9. Assembly of successful result
             success = True
             result = PositionSizeResult(
-                sizing_id=str(uuid.uuid4()),
+                sizing_id=self._uuid_generator(),
                 proposal_id=proposal.proposal_id,
                 symbol=context.symbol,
                 direction=proposal.direction,
@@ -256,7 +262,7 @@ class PositionSizingEngine:
                 leverage=context.leverage,
                 estimated_margin_required=estimated_margin,
                 policy_version=self.policy.policy_version,
-                created_at=datetime.now(timezone.utc).isoformat(),
+                created_at=self.clock.now().isoformat(),
                 authorization_id=authorization.authorization_id,
                 source_model_version=proposal.source_model_version,
                 metadata={},

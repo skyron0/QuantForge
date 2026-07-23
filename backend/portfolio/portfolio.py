@@ -5,6 +5,8 @@ from decimal import Decimal
 from typing import Dict, List, Optional
 import threading
 
+from backend.replay.clock import Clock, SystemClock
+
 from backend.execution_authorization.models import OrderDirection
 from backend.execution_adapter.models import ExecutionResult, Fill
 from backend.portfolio.exceptions import (
@@ -43,13 +45,15 @@ class PortfolioEngine:
         initial_balance: Decimal,
         policy: PortfolioPolicy,
         idempotency_store: FillIdempotencyStore,
-        telemetry_sink: Optional[PortfolioTelemetrySink] = None
+        telemetry_sink: Optional[PortfolioTelemetrySink] = None,
+        clock: Optional[Clock] = None
     ):
         self.portfolio_id = portfolio_id
         self.initial_balance = to_decimal(initial_balance)
         self.policy = policy
         self.idempotency_store = idempotency_store
         self.telemetry_sink = telemetry_sink
+        self.clock = clock or SystemClock()
         
         # Validations
         if self.initial_balance <= Decimal("0"):
@@ -74,7 +78,7 @@ class PortfolioEngine:
         self._net_exposure = Decimal("0")
         self._open_position_count = 0
         self._high_water_mark = self.initial_balance
-        self._timestamp = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+        self._timestamp = self.clock.now().isoformat().replace("+00:00", "Z")
 
     def _validate_timestamp_unlocked(self, timestamp_str: str):
         try:
@@ -82,7 +86,7 @@ class PortfolioEngine:
         except Exception as e:
             raise PortfolioValidationError(f"Invalid timestamp format: {timestamp_str}") from e
             
-        now_dt = datetime.now(timezone.utc)
+        now_dt = self.clock.now()
         age = (now_dt - ts_dt).total_seconds()
         
         if age > self.policy.market_price_max_age_seconds:
@@ -563,7 +567,7 @@ class PortfolioEngine:
             self._net_exposure = Decimal("0")
             self._open_position_count = 0
             self._high_water_mark = self.initial_balance
-            self._timestamp = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+            self._timestamp = self.clock.now().isoformat().replace("+00:00", "Z")
             self.idempotency_store.clear()
 
 class Portfolio:

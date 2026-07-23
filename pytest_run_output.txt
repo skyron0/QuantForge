@@ -1,0 +1,23 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.13, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\safad\QuantForge\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\safad\QuantForge
+plugins: anyio-4.14.1, langsmith-0.10.2
+collecting ... collected 13 items
+
+tests/unit/test_runtime.py::test_event_immutability PASSED
+tests/unit/test_runtime.py::test_event_bus_pub_sub_unsub PASSED
+tests/unit/test_runtime.py::test_event_bus_duplicate_subscribers PASSED
+tests/unit/test_runtime.py::test_dispatcher_error_isolation PASSED
+tests/unit/test_runtime.py::test_dispatch_nesting_order_determinism PASSED
+tests/unit/test_runtime.py::test_event_bus_queue_overflow PASSED
+tests/unit/test_runtime.py::test_telemetry_latency_tracking PASSED
+tests/unit/test_runtime.py::test_runtime_policy_validation PASSED
+tests/unit/test_runtime.py::test_session_state_updates PASSED
+tests/unit/test_runtime.py::test_manual_scheduler_tick PASSED
+tests/unit/test_runtime.py::test_runtime_lifecycle_transitions PASSED
+tests/unit/test_runtime.py::test_runtime_cycle_event_propagation PASSED
+tests/unit/test_runtime.py::test_runtime_package_execution_isolation PASSED
+
+============================= 13 passed in 0.13s ==============================
+

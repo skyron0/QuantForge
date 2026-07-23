@@ -550,6 +550,182 @@ class ExitProposal:
     metadata: Dict[str, Any] = field(default_factory=dict)
 ```
 
+### 4.12 Paper Trading Orchestrator & E2E Cycle Contracts (Sprint 3.7)
+
+Execution and exit cycle orchestration models under `backend/orchestration/models.py`:
+
+```python
+class TradingCycleStatus(Enum):
+    COMPLETED = "COMPLETED"
+    NO_PROPOSAL = "NO_PROPOSAL"
+    FUSION_REJECTED = "FUSION_REJECTED"
+    RISK_REJECTED = "RISK_REJECTED"
+    SIZING_REJECTED = "SIZING_REJECTED"
+    EXECUTION_AUTHORIZATION_REJECTED = "EXECUTION_AUTHORIZATION_REJECTED"
+    EXECUTION_FAILED = "EXECUTION_FAILED"
+    PORTFOLIO_UPDATE_FAILED = "PORTFOLIO_UPDATE_FAILED"
+    LIFECYCLE_REGISTRATION_FAILED = "LIFECYCLE_REGISTRATION_FAILED"
+    FAILED = "FAILED"
+
+@dataclass(frozen=True)
+class TradingCycleInput:
+    ml_signal: MLSignal
+    risk_context: RiskContext
+    position_sizing_context: PositionSizingContext
+    execution_context: ExecutionContext
+    paper_execution_context: PaperExecutionContext
+    timestamp: str  # ISO 8601 format
+    intelligence_snapshot: Optional[IntelligenceSnapshot] = None
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+@dataclass(frozen=True)
+class TradingCycleResult:
+    cycle_id: str
+    symbol: str
+    timeframe: str
+    status: TradingCycleStatus
+    fusion_id: Optional[str] = None
+    proposal_id: Optional[str] = None
+    risk_authorization_id: Optional[str] = None
+    sizing_id: Optional[str] = None
+    execution_authorization_id: Optional[str] = None
+    intent_id: Optional[str] = None
+    execution_id: Optional[str] = None
+    fill_ids: List[str] = field(default_factory=list)
+    intelligence_used: bool = False
+    proposal_generated: bool = False
+    risk_authorized: bool = False
+    execution_authorized: bool = False
+    executed: bool = False
+    portfolio_updated: bool = False
+    lifecycle_registered: bool = False
+    rejection_stage: Optional[str] = None
+    failed_stage: Optional[str] = None
+    rejection_reason: Optional[str] = None
+    started_at: str = ""
+    completed_at: str = ""
+    latency_ms: float = 0.0
+    total_latency_ms: float = 0.0
+    stage_timings: Dict[str, float] = field(default_factory=dict)
+    policy_version: str = ""
+    metadata: Dict[str, Any] = field(default_factory=dict)
+```
+
+### 4.13 Decoupled Runtime & Event-Driven Operating Contracts (Sprint 3.8)
+
+QuantForge's event-driven trading execution and scheduler lifecycle contracts under `backend/runtime/events.py`:
+
+```python
+@dataclass(frozen=True)
+class Event:
+    event_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+@dataclass(frozen=True)
+class RuntimeStateChanged(Event):
+    previous_state: str
+    new_state: str
+    reason: str
+
+@dataclass(frozen=True)
+class TradingCycleTick(Event):
+    cycle_index: int
+    cycle_input: TradingCycleInput
+    scheduled_time: str
+
+@dataclass(frozen=True)
+class TradingCycleCompleted(Event):
+    cycle_index: int
+    result: TradingCycleResult
+    cycle_time_ms: float
+```
+
+### 4.14 Market Data Foundation & Feed Pipeline (Sprint 3.10)
+
+QuantForge's provider-independent, deterministic market data ingestion contracts and models under `backend/market_data/models.py`:
+
+```python
+class MarketDataType(Enum):
+    TRADE = "TRADE"
+    TICKER = "TICKER"
+    CANDLE = "CANDLE"
+    ORDER_BOOK = "ORDER_BOOK"
+
+@dataclass(frozen=True)
+class TradeTick:
+    symbol: str
+    price: Decimal
+    quantity: Decimal
+    side: str  # "buy" or "sell"
+    trade_id: str
+    timestamp: str  # ISO 8601 UTC
+    sequence: int
+    source: str
+    received_at: str  # ISO 8601 UTC
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+@dataclass(frozen=True)
+class Candle:
+    symbol: str
+    timeframe: str
+    open_time: str  # ISO 8601 UTC
+    close_time: str  # ISO 8601 UTC
+    open: Decimal
+    high: Decimal
+    low: Decimal
+    close: Decimal
+    volume: Decimal
+    trade_count: int
+    closed: bool
+    source: str
+    sequence: int
+    received_at: str  # ISO 8601 UTC
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+@dataclass(frozen=True)
+class TickerSnapshot:
+    symbol: str
+    bid: Decimal
+    ask: Decimal
+    last: Decimal
+    bid_quantity: Decimal
+    ask_quantity: Decimal
+    volume_24h: Decimal
+    timestamp: str  # ISO 8601 UTC
+    source: str
+    received_at: str  # ISO 8601 UTC
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+@dataclass(frozen=True)
+class OrderBookLevel:
+    price: Decimal
+    quantity: Decimal
+
+@dataclass(frozen=True)
+class OrderBookSnapshot:
+    symbol: str
+    bids: List[OrderBookLevel]
+    asks: List[OrderBookLevel]
+    sequence: int
+    timestamp: str  # ISO 8601 UTC
+    source: str
+    received_at: str  # ISO 8601 UTC
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+@dataclass(frozen=True)
+class MarketDataSnapshot:
+    symbol: str
+    timestamp: str  # ISO 8601 UTC
+    ticker: TickerSnapshot
+    latest_trade: Optional[TradeTick]
+    raw_candles: Dict[str, List[Candle]]
+    order_book: OrderBookSnapshot
+    source_health: str  # CONNECTED, STALE, DEGRADED, DISCONNECTED
+    data_age: float
+    sequence_state: Dict[str, Any]
+    metadata: Dict[str, Any] = field(default_factory=dict)
+```
+
 ---
 
 ## 5. Memory Architecture

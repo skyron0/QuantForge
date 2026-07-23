@@ -1,0 +1,673 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.13, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\safad\QuantForge\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\safad\QuantForge
+plugins: anyio-4.14.1, langsmith-0.10.2
+collecting ... Merhaba! Ben Sen QuantForge projesinde çalışıyorum ve bir kıdemli Python ve AI trading mühendisi olarak görevliyim. Bu projede, yüksek performanslı algoritmik trading sistemlerinin geliştirilmesi ve optimize edilmesi üzerine çalışmaktayım.
+
+Python programlama dili ile veriyi analiz etme, modellemeye ve makine öğrenimi teknikleri uygulama konusunda uzmanlaşmış olup, bu bilgiyi kullanarak çeşitli finansal stratejilerin geliştirilmesinde bulunmaktayım. Özellikle AI tabanlı trading sistemlerinin oluşturulması ve mevcut sistemlerin performansını artırmak için çalışıyorum.
+
+Sen QuantForge projesi ile ilgili olarak, projenin amacını ve hedeflerini anlamak ve bu hedeflere ulaşmak için gerekli olan tüm stratejileri ve teknikleri geliştirmekteyim. Ayrıca, projeye katkıda bulunmak ve diğer ekibinle işbirliği yapmaktan mutluluk duymaktayım.
+
+Sen QuantForge projesindeki çalışmalarım sayesinde, finansal algoritmik trading alanındaki en yeni teknolojileri ve yöntemleri öğrenmek ve uygulamak fırsatı bulabiliyorum. Bu deneyimlerim ve bilgilerim, projenin başarısını artıracaktır.
+
+Son olarak, Sen QuantForge projesinde çalışmaktan mutluluk duymaktayım ve bu projeye katkıda bulunmak için her türlü destekten memnuniyet duydum.
+collected 278 items
+
+tests/unit/test_dataset.py::test_future_return_classification_up PASSED
+tests/unit/test_dataset.py::test_future_return_classification_down PASSED
+tests/unit/test_dataset.py::test_future_return_classification_neutral PASSED
+tests/unit/test_dataset.py::test_future_return_classification_none_at_end PASSED
+tests/unit/test_dataset.py::test_future_return_regression PASSED
+tests/unit/test_dataset.py::test_tpsl_tp_hit PASSED
+tests/unit/test_dataset.py::test_tpsl_sl_hit PASSED
+tests/unit/test_dataset.py::test_metadata_serialization PASSED
+tests/unit/test_dataset.py::test_metadata_version_uniqueness PASSED
+tests/unit/test_dataset.py::test_dataset_builder_generation 2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 1/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 2/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 3/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 4/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 5/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 6/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 7/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 8/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 9/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 10/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 11/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 12/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 13/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 14/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 15/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 16/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 17/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 18/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 19/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 20/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 21/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 22/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 23/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 24/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 25/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 26/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 27/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 28/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 29/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 30/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 31/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 32/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 33/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 34/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 35/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 36/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 37/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 38/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 39/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 40/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 41/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 42/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 43/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 44/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 45/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 46/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 47/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 48/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 49/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=119.78522691523362 | MACD={'macd': 3.356847921112518, 'signal': 3.2926612570680653, 'histogram': 0.06418666404445261} | ATR=4.729021832318089 | ADX=100.0 | VWAP=121.25 | BOLL={'upper': 125.5162812973354, 'middle': 119.75, 'lower': 113.9837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=120.28187197092565 | MACD={'macd': 3.3673906563347487, 'signal': 3.307607136921402, 'histogram': 0.059783519413346475} | ATR=4.7483774157239385 | ADX=100.0 | VWAP=121.75 | BOLL={'upper': 126.0162812973354, 'middle': 120.25, 'lower': 114.4837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=120.7788365451232 | MACD={'macd': 3.3771618516645816, 'signal': 3.321518079870038, 'histogram': 0.05564377179454372} | ATR=4.7677790288865145 | ADX=100.0 | VWAP=122.25 | BOLL={'upper': 126.5162812973354, 'middle': 120.75, 'lower': 114.9837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=121.27609020749242 | MACD={'macd': 3.3862172115194227, 'signal': 3.334457906199915, 'histogram': 0.051759305319507565} | ATR=4.787223383966049 | ADX=100.0 | VWAP=122.75 | BOLL={'upper': 127.0162812973354, 'middle': 121.25, 'lower': 115.4837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=121.77360542582647 | MACD={'macd': 3.3946085366305425, 'signal': 3.346488032286041, 'histogram': 0.04812050434450166} | ATR=4.806707427968474 | ADX=100.0 | VWAP=123.25 | BOLL={'upper': 127.5162812973354, 'middle': 121.75, 'lower': 115.9837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=122.27135729003348 | MACD={'macd': 3.402383978963968, 'signal': 3.3576672216216266, 'histogram': 0.044716757342341484} | ATR=4.8262283259707255 | ADX=100.0 | VWAP=123.75 | BOLL={'upper': 128.0162812973354, 'middle': 122.25, 'lower': 116.4837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=122.76932326241123 | MACD={'macd': 3.4095882830261814, 'signal': 3.368051433902538, 'histogram': 0.04153684912364364} | ATR=4.845783445544247 | ADX=100.0 | VWAP=124.25 | BOLL={'upper': 128.5162812973354, 'middle': 122.75, 'lower': 116.9837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=123.2674829517054 | MACD={'macd': 3.4162630137526975, 'signal': 3.37769374987257, 'histogram': 0.03856926388012738} | ATR=4.865370342291087 | ADX=100.0 | VWAP=124.75 | BOLL={'upper': 129.0162812973354, 'middle': 123.25, 'lower': 117.4837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=123.76581790868585 | MACD={'macd': 3.4224467712876816, 'signal': 3.3866443541555924, 'histogram': 0.035802417132089204} | ATR=4.884986746413152 | ADX=100.0 | VWAP=125.25 | BOLL={'upper': 129.5162812973354, 'middle': 123.75, 'lower': 117.9837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=124.26431144119195 | MACD={'macd': 3.4281753930454215, 'signal': 3.394950561933558, 'histogram': 0.03322483111186347} | ATR=4.9046305502407845 | ADX=100.0 | VWAP=125.75 | BOLL={'upper': 130.0162812973354, 'middle': 124.25, 'lower': 118.4837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=124.7629484467927 | MACD={'macd': 3.4334821435046763, 'signal': 3.402656878247782, 'histogram': 0.03082526525689433} | ATR=4.924299796652158 | ADX=100.0 | VWAP=126.25 | BOLL={'upper': 130.5162812973354, 'middle': 124.75, 'lower': 118.9837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=125.26171526138387 | MACD={'macd': 3.438397892229105, 'signal': 3.409805081044047, 'histogram': 0.028592811185057965} | ATR=4.9439926683198605 | ADX=100.0 | VWAP=126.75 | BOLL={'upper': 131.0162812973354, 'middle': 125.25, 'lower': 119.4837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=125.76059952220446 | MACD={'macd': 3.4429512806345173, 'signal': 3.416434320962141, 'histogram': 0.026516959672376217} | ATR=4.963707477725586 | ADX=100.0 | VWAP=127.25 | BOLL={'upper': 131.5162812973354, 'middle': 125.75, 'lower': 119.9837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=126.25959004389928 | MACD={'macd': 3.447168878038923, 'signal': 3.422581232377498, 'histogram': 0.024587645661425128} | ATR=4.983442657888044 | ADX=100.0 | VWAP=127.75 | BOLL={'upper': 132.0162812973354, 'middle': 126.25, 'lower': 120.4837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=126.75867670638506 | MACD={'macd': 3.451075327537694, 'signal': 3.428280051409537, 'histogram': 0.022795276128157127} | ATR=5.0031967537531825 | ADX=100.0 | VWAP=128.25 | BOLL={'upper': 132.5162812973354, 'middle': 126.75, 'lower': 120.9837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=127.25785035339601 | MACD={'macd': 3.4546934822442665, 'signal': 3.4335627375764832, 'histogram': 0.021130744667783308} | ATR=5.022968414199386 | ADX=100.0 | VWAP=128.75 | BOLL={'upper': 133.0162812973354, 'middle': 127.25, 'lower': 121.4837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=127.75710270069163 | MACD={'macd': 3.4580445324304065, 'signal': 3.438459096547268, 'histogram': 0.019585435883138658} | ATR=5.042756384613716 | ADX=100.0 | VWAP=129.25 | BOLL={'upper': 133.5162812973354, 'middle': 127.75, 'lower': 121.9837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=128.2564262530067 | MACD={'macd': 3.4611481240869892, 'signal': 3.4429969020552127, 'histogram': 0.018151222031776548} | ATR=5.06255949999845 | ADX=100.0 | VWAP=129.75 | BOLL={'upper': 134.0162812973354, 'middle': 128.25, 'lower': 122.4837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=128.75581422891082 | MACD={'macd': 3.4640224694123845, 'signal': 3.4472020155266474, 'histogram': 0.016820453885737052} | ATR=5.082376678569992 | ADX=100.0 | VWAP=130.25 | BOLL={'upper': 134.5162812973354, 'middle': 128.75, 'lower': 122.9837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=129.25526049282408 | MACD={'macd': 3.466684449716766, 'signal': 3.451098502364671, 'histogram': 0.015585947352094731} | ATR=5.102206915814994 | ADX=100.0 | VWAP=130.75 | BOLL={'upper': 135.0162812973354, 'middle': 129.25, 'lower': 123.4837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=129.7547594935075 | MACD={'macd': 3.4691497112119976, 'signal': 3.4547087441341366, 'histogram': 0.014440967077860911} | ATR=5.122049278971066 | ADX=100.0 | VWAP=131.25 | BOLL={'upper': 135.5162812973354, 'middle': 129.75, 'lower': 123.9837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=130.25430620841155 | MACD={'macd': 3.4714327541360603, 'signal': 3.4580535461345216, 'histogram': 0.01337920800153869} | ATR=5.141902901901703 | ADX=100.0 | VWAP=131.75 | BOLL={'upper': 136.0162812973354, 'middle': 130.25, 'lower': 124.4837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=130.75389609332473 | MACD={'macd': 3.4735470156391273, 'signal': 3.461152240035443, 'histogram': 0.012394775603684405} | ATR=5.161766980337297 | ADX=100.0 | VWAP=132.25 | BOLL={'upper': 136.5162812973354, 'middle': 130.75, 'lower': 124.9837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=131.25352503681762 | MACD={'macd': 3.475504946837958, 'signal': 3.464022781395946, 'histogram': 0.011482165442012082} | ATR=5.181640767456061 | ADX=100.0 | VWAP=132.75 | BOLL={'upper': 137.0162812973354, 'middle': 131.25, 'lower': 125.4837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=131.75318931902547 | MACD={'macd': 3.477318084422933, 'signal': 3.4666818420013437, 'histogram': 0.010636242421589337} | ATR=5.201523569780627 | ADX=100.0 | VWAP=133.25 | BOLL={'upper': 137.5162812973354, 'middle': 131.75, 'lower': 125.9837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=132.25288557435638 | MACD={'macd': 3.478997117181251, 'signal': 3.4691448970373253, 'histogram': 0.009852220143925727} | ATR=5.221414743367726 | ADX=100.0 | VWAP=133.75 | BOLL={'upper': 138.0162812973354, 'middle': 132.25, 'lower': 126.4837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=132.752610757751 | MACD={'macd': 3.4805519477789915, 'signal': 3.471426307185659, 'histogram': 0.009125640593332651} | ATR=5.241313690270031 | ADX=100.0 | VWAP=134.25 | BOLL={'upper': 138.5162812973354, 'middle': 132.75, 'lower': 126.9837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=133.25236211415566 | MACD={'macd': 3.4819917501245072, 'signal': 3.4735393957734284, 'histogram': 0.008452354351078828} | ATR=5.261219855250742 | ADX=100.0 | VWAP=134.75 | BOLL={'upper': 139.0162812973354, 'middle': 133.25, 'lower': 127.4837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=133.75213715090274 | MACD={'macd': 3.483325022615986, 'signal': 3.47549652114194, 'histogram': 0.007828501474046234} | ATR=5.281132722732833 | ADX=100.0 | VWAP=135.25 | BOLL={'upper': 139.5162812973354, 'middle': 133.75, 'lower': 127.9837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=134.25193361272153 | MACD={'macd': 3.484559637558135, 'signal': 3.4773091444251794, 'histogram': 0.007250493132955782} | ATR=5.301051813966202 | ADX=100.0 | VWAP=135.75 | BOLL={'upper': 140.0162812973354, 'middle': 134.25, 'lower': 128.4837187026646}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=134.751749459129 | MACD={'macd': 3.4857028870135593, 'signal': 3.4789878929428557, 'histogram': 0.006714994070703639} | ATR=5.320976684397187 | ADX=100.0 | VWAP=136.25 | BOLL={'upper': 140.5162812973354, 'middle': 134.75, 'lower': 128.9837187026646}
+PASSED
+tests/unit/test_dataset.py::test_dataset_builder_splits 2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 1/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 2/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 3/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 4/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 5/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 6/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 7/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 8/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 9/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 10/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 11/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 12/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 13/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 14/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 15/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 16/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 17/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 18/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 19/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 20/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 21/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 22/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 23/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 24/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 25/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 26/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 27/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 28/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 29/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 30/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 31/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 32/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 33/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 34/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 35/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 36/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 37/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 38/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 39/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 40/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 41/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 42/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 43/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 44/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 45/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 46/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 47/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 48/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 49/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=111.87113614914016 | MACD={'macd': 2.0141087526674966, 'signal': 1.9755967542408284, 'histogram': 0.03851199842666819} | ATR=4.437413099390852 | ADX=100.0 | VWAP=112.75 | BOLL={'upper': 115.30976877840084, 'middle': 111.85, 'lower': 108.39023122159915}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=112.16912318255538 | MACD={'macd': 2.0204343938008265, 'signal': 1.984564282152828, 'histogram': 0.03587011164799847} | ATR=4.4490264494343625 | ADX=100.0 | VWAP=113.05 | BOLL={'upper': 115.60976877840083, 'middle': 112.15, 'lower': 108.69023122159918}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=112.4673019270739 | MACD={'macd': 2.026297110998712, 'signal': 1.9929108479220048, 'histogram': 0.03338626307670722} | ATR=4.460667417331908 | ADX=100.0 | VWAP=113.35 | BOLL={'upper': 115.90976877840082, 'middle': 112.45, 'lower': 108.99023122159919}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=112.76565412449544 | MACD={'macd': 2.031730326911614, 'signal': 2.0006747437199266, 'histogram': 0.03105558319168722} | ATR=4.472334030379629 | ADX=100.0 | VWAP=113.65 | BOLL={'upper': 116.2097687784008, 'middle': 112.75, 'lower': 109.2902312215992}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=113.06416325549587 | MACD={'macd': 2.0367651219783056, 'signal': 2.0078928193716026, 'histogram': 0.028872302606703037} | ATR=4.484024456781084 | ADX=100.0 | VWAP=113.95 | BOLL={'upper': 116.50976877840078, 'middle': 113.05, 'lower': 109.59023122159921}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=113.36281437402008 | MACD={'macd': 2.0414303873783695, 'signal': 2.014600332972956, 'histogram': 0.026830054405413417} | ATR=4.495736995582435 | ADX=100.0 | VWAP=114.25 | BOLL={'upper': 116.80976877840078, 'middle': 113.35, 'lower': 109.89023122159921}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=113.66159395744674 | MACD={'macd': 2.0457529698156804, 'signal': 2.0208308603415013, 'histogram': 0.024922109474179166} | ATR=4.507470067326547 | ADX=100.0 | VWAP=114.55 | BOLL={'upper': 117.10976877840078, 'middle': 113.65, 'lower': 110.19023122159923}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=113.96048977102325 | MACD={'macd': 2.0497578082515986, 'signal': 2.0266162499235207, 'histogram': 0.02314155832807785} | ATR=4.519222205374651 | ADX=100.0 | VWAP=114.85 | BOLL={'upper': 117.40976877840076, 'middle': 113.95, 'lower': 110.49023122159925}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=114.25949074521151 | MACD={'macd': 2.0534680627725947, 'signal': 2.0319866124933355, 'histogram': 0.021481450279259295} | ATR=4.53099204784789 | ADX=100.0 | VWAP=115.15 | BOLL={'upper': 117.70976877840074, 'middle': 114.25, 'lower': 110.79023122159926}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=114.55858686471517 | MACD={'macd': 2.0569052358272444, 'signal': 2.0369703371601173, 'histogram': 0.019934898667127054} | ATR=4.542778330144469 | ADX=100.0 | VWAP=115.45 | BOLL={'upper': 118.00976877840073, 'middle': 114.55, 'lower': 111.09023122159927}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=114.85776906807564 | MACD={'macd': 2.0600892861027944, 'signal': 2.041594126948653, 'histogram': 0.01849515915414157} | ATR=4.5545798779912925 | ADX=100.0 | VWAP=115.75 | BOLL={'upper': 118.30976877840071, 'middle': 114.85, 'lower': 111.39023122159928}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=115.15702915683035 | MACD={'macd': 2.0630387353374715, 'signal': 2.0458830486264166, 'histogram': 0.01715568671105494} | ATR=4.566395600991915 | ADX=100.0 | VWAP=116.05 | BOLL={'upper': 118.6097687784007, 'middle': 115.15, 'lower': 111.6902312215993}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=115.4563597133227 | MACD={'macd': 2.0657707683807303, 'signal': 2.0498605925772795, 'histogram': 0.015910175803450777} | ATR=4.578224486635349 | ADX=100.0 | VWAP=116.35 | BOLL={'upper': 118.90976877840069, 'middle': 115.45, 'lower': 111.99023122159932}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=115.75575402633957 | MACD={'macd': 2.068301326823388, 'signal': 2.053548739426501, 'histogram': 0.014752587396886785} | ATR=4.590065594732825 | ADX=100.0 | VWAP=116.65 | BOLL={'upper': 119.20976877840067, 'middle': 115.75, 'lower': 112.29023122159933}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=116.05520602383105 | MACD={'macd': 2.0706451965226194, 'signal': 2.056968030845725, 'histogram': 0.013677165676894365} | ATR=4.601918052251909 | ADX=100.0 | VWAP=116.95 | BOLL={'upper': 119.50976877840067, 'middle': 116.05, 'lower': 112.59023122159932}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=116.35471021203762 | MACD={'macd': 2.072816089346574, 'signal': 2.060137642545895, 'histogram': 0.01267844680067931} | ATR=4.61378104851963 | ADX=100.0 | VWAP=117.25 | BOLL={'upper': 119.80976877840065, 'middle': 116.35, 'lower': 112.89023122159934}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=116.65426162041499 | MACD={'macd': 2.074826719458258, 'signal': 2.0630754579283677, 'histogram': 0.011751261529890478} | ATR=4.625653830768227 | ADX=100.0 | VWAP=117.55 | BOLL={'upper': 120.10976877840065, 'middle': 116.65, 'lower': 113.19023122159936}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=116.95385575180403 | MACD={'macd': 2.076688874452202, 'signal': 2.0657981412331345, 'histogram': 0.010890733219067528} | ATR=4.637535699999069 | ADX=100.0 | VWAP=117.85 | BOLL={'upper': 120.40976877840063, 'middle': 116.95, 'lower': 113.49023122159937}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=117.2534885373465 | MACD={'macd': 2.078413481647445, 'signal': 2.0683212093159966, 'histogram': 0.010092272331448271} | ATR=4.649426007141993 | ADX=100.0 | VWAP=118.15 | BOLL={'upper': 120.70976877840062, 'middle': 117.25, 'lower': 113.79023122159938}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=117.55315629569445 | MACD={'macd': 2.0800106698300738, 'signal': 2.070659101418812, 'histogram': 0.009351568411261724} | ATR=4.661324149488993 | ADX=100.0 | VWAP=118.45 | BOLL={'upper': 121.0097687784006, 'middle': 117.55, 'lower': 114.0902312215994}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=117.8528556961045 | MACD={'macd': 2.0814898267272355, 'signal': 2.072825246480497, 'histogram': 0.008664580246738662} | ATR=4.673229567382636 | ADX=100.0 | VWAP=118.75 | BOLL={'upper': 121.30976877840058, 'middle': 117.85, 'lower': 114.39023122159941}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=118.15258372504692 | MACD={'macd': 2.082859652481673, 'signal': 2.0748321276807324, 'histogram': 0.00802752480094071} | ATR=4.6851417411410194 | ADX=100.0 | VWAP=119.05 | BOLL={'upper': 121.60976877840058, 'middle': 118.15, 'lower': 114.69023122159943}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=118.45233765599484 | MACD={'macd': 2.0841282093835076, 'signal': 2.0766913440212873, 'histogram': 0.007436865362220324} | ATR=4.697060188202376 | ADX=100.0 | VWAP=119.35 | BOLL={'upper': 121.90976877840056, 'middle': 118.45, 'lower': 114.99023122159944}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=118.75211502209056 | MACD={'macd': 2.085302968102795, 'signal': 2.078413668837589, 'histogram': 0.006889299265205651} | ATR=4.708984460473635 | ADX=100.0 | VWAP=119.65 | BOLL={'upper': 122.20976877840056, 'middle': 118.75, 'lower': 115.29023122159944}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=119.05191359141527 | MACD={'macd': 2.086390850653771, 'signal': 2.080009105200826, 'histogram': 0.006381745452945342} | ATR=4.720914141868376 | ADX=100.0 | VWAP=119.95 | BOLL={'upper': 122.50976877840054, 'middle': 119.05, 'lower': 115.59023122159945}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=119.35173134461381 | MACD={'macd': 2.0873982703087677, 'signal': 2.0814869382224144, 'histogram': 0.005911332086353305} | ATR=4.7328488460206355 | ADX=100.0 | VWAP=120.25 | BOLL={'upper': 122.80976877840052, 'middle': 119.35, 'lower': 115.89023122159946}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=119.65156645465059 | MACD={'macd': 2.0883311686674233, 'signal': 2.082855784311416, 'histogram': 0.00547538435600714} | ATR=4.7447882141620195 | ADX=100.0 | VWAP=120.55 | BOLL={'upper': 123.10976877840052, 'middle': 119.65, 'lower': 116.19023122159949}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=119.9514172684934 | MACD={'macd': 2.0891950500747214, 'signal': 2.084123637464077, 'histogram': 0.005071412610644366} | ATR=4.756731913150447 | ADX=100.0 | VWAP=120.85 | BOLL={'upper': 123.4097687784005, 'middle': 119.95, 'lower': 116.4902312215995}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=120.25128229054165 | MACD={'macd': 2.08999501356962, 'signal': 2.085297912685186, 'histogram': 0.004697100884434313} | ATR=4.768679633639701 | ADX=100.0 | VWAP=121.15 | BOLL={'upper': 123.70976877840049, 'middle': 120.25, 'lower': 116.79023122159951}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=120.55116016763291 | MACD={'macd': 2.090735782534921, 'signal': 2.086385486655133, 'histogram': 0.004350295879787858} | ATR=4.780631088379723 | ADX=100.0 | VWAP=121.45 | BOLL={'upper': 124.00976877840047, 'middle': 120.55, 'lower': 117.09023122159952}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=120.8510496754774 | MACD={'macd': 2.0914217322081754, 'signal': 2.0873927357657416, 'histogram': 0.004028996442433819} | ATR=4.792586010638315 | ADX=100.0 | VWAP=121.75 | BOLL={'upper': 124.30976877840047, 'middle': 120.85, 'lower': 117.39023122159952}
+PASSED
+tests/unit/test_dataset.py::test_dataset_builder_csv_export 2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 1/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 2/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 3/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 4/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 5/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 6/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 7/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 8/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 9/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 10/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 11/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 12/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 13/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 14/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 15/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 16/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 17/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 18/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 19/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 20/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 21/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 22/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 23/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 24/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 25/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 26/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 27/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 28/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 29/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 30/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 31/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 32/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 33/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 34/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 35/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 36/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 37/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 38/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 39/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 40/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 41/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 42/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 43/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 44/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 45/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 46/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 47/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 48/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 49/50 candles
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=139.57045383046727 | MACD={'macd': 6.7136958422250075, 'signal': 6.58532251413611, 'histogram': 0.12837332808889723} | ATR=5.458043664636172 | ADX=100.0 | VWAP=142.5 | BOLL={'upper': 151.0325625946708, 'middle': 139.5, 'lower': 127.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=140.56374394185133 | MACD={'macd': 6.734781312669469, 'signal': 6.615214273842782, 'histogram': 0.11956703882668673} | ATR=5.496754831447873 | ADX=100.0 | VWAP=143.5 | BOLL={'upper': 152.0325625946708, 'middle': 140.5, 'lower': 128.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=141.55767309024645 | MACD={'macd': 6.754323703329163, 'signal': 6.643036159740058, 'histogram': 0.1112875435891052} | ATR=5.535558057773026 | ADX=100.0 | VWAP=144.5 | BOLL={'upper': 153.0325625946708, 'middle': 141.5, 'lower': 129.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=142.5521804149849 | MACD={'macd': 6.772434423038817, 'signal': 6.668915812399811, 'histogram': 0.10351861063900625} | ATR=5.574446767932095 | ADX=100.0 | VWAP=145.5 | BOLL={'upper': 154.0325625946708, 'middle': 142.5, 'lower': 130.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=143.547210851653 | MACD={'macd': 6.789217073261028, 'signal': 6.692976064572055, 'histogram': 0.09624100868897312} | ATR=5.613414855936946 | ADX=100.0 | VWAP=146.5 | BOLL={'upper': 155.0325625946708, 'middle': 143.5, 'lower': 131.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=144.54271458006698 | MACD={'macd': 6.804767957927879, 'signal': 6.71533444324322, 'histogram': 0.08943351468465899} | ATR=5.652456651941451 | ADX=100.0 | VWAP=147.5 | BOLL={'upper': 156.0325625946708, 'middle': 144.5, 'lower': 132.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=145.5386465248225 | MACD={'macd': 6.819176566052278, 'signal': 6.736102867805032, 'histogram': 0.08307369824724553} | ATR=5.69156689108849 | ADX=100.0 | VWAP=148.5 | BOLL={'upper': 157.0325625946708, 'middle': 145.5, 'lower': 133.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=146.53496590341084 | MACD={'macd': 6.83252602750531, 'signal': 6.755387499745089, 'histogram': 0.07713852776022101} | ATR=5.7307406845821705 | ADX=100.0 | VWAP=149.5 | BOLL={'upper': 158.0325625946708, 'middle': 146.5, 'lower': 134.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=147.53163581737172 | MACD={'macd': 6.844893542575278, 'signal': 6.773288708311127, 'histogram': 0.07160483426415087} | ATR=5.769973492826304 | ADX=100.0 | VWAP=150.5 | BOLL={'upper': 159.0325625946708, 'middle': 147.5, 'lower': 135.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=148.52862288238393 | MACD={'macd': 6.856350786090786, 'signal': 6.789901123867059, 'histogram': 0.06644966222372695} | ATR=5.809261100481566 | ADX=100.0 | VWAP=151.5 | BOLL={'upper': 160.0325625946708, 'middle': 148.5, 'lower': 136.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=149.52589689358547 | MACD={'macd': 6.866964287009296, 'signal': 6.805313756495506, 'histogram': 0.06165053051378955} | ATR=5.8485995933043124 | ADX=100.0 | VWAP=152.5 | BOLL={'upper': 161.0325625946708, 'middle': 149.5, 'lower': 137.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=150.5234305227678 | MACD={'macd': 6.8767957844581815, 'signal': 6.819610162088042, 'histogram': 0.05718562237013991} | ATR=5.887985336639717 | ADX=100.0 | VWAP=153.5 | BOLL={'upper': 162.0325625946708, 'middle': 150.5, 'lower': 138.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=151.52119904440897 | MACD={'macd': 6.8859025612690345, 'signal': 6.832868641924241, 'histogram': 0.05303391934479329} | ATR=5.927414955451165 | ADX=100.0 | VWAP=154.5 | BOLL={'upper': 163.0325625946708, 'middle': 151.5, 'lower': 139.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=152.5191800877986 | MACD={'macd': 6.894337756077903, 'signal': 6.845162464754973, 'histogram': 0.049175291322929304} | ATR=5.966885315776083 | ADX=100.0 | VWAP=155.5 | BOLL={'upper': 164.0325625946708, 'middle': 152.5, 'lower': 140.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=153.51735341277015 | MACD={'macd': 6.90215065507536, 'signal': 6.856560102819051, 'histogram': 0.045590552256308925} | ATR=6.0063935075063615 | ADX=100.0 | VWAP=156.5 | BOLL={'upper': 165.0325625946708, 'middle': 153.5, 'lower': 141.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=154.51570070679205 | MACD={'macd': 6.909386964488476, 'signal': 6.867125475152936, 'histogram': 0.04226148933553997} | ATR=6.045936828398765 | ADX=100.0 | VWAP=157.5 | BOLL={'upper': 166.0325625946708, 'middle': 154.5, 'lower': 142.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=155.5142054013833 | MACD={'macd': 6.916089064860728, 'signal': 6.876918193094495, 'histogram': 0.039170871766232906} | ATR=6.085512769227426 | ADX=100.0 | VWAP=158.5 | BOLL={'upper': 167.0325625946708, 'middle': 155.5, 'lower': 143.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=156.51285250601345 | MACD={'macd': 6.922296248173893, 'signal': 6.885993804110376, 'histogram': 0.03630244406351757} | ATR=6.125118999996895 | ADX=100.0 | VWAP=159.5 | BOLL={'upper': 168.0325625946708, 'middle': 156.5, 'lower': 144.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=157.51162845782167 | MACD={'macd': 6.928044938824655, 'signal': 6.894404031053233, 'histogram': 0.03364090777142259} | ATR=6.164753357139974 | ADX=100.0 | VWAP=160.5 | BOLL={'upper': 169.0325625946708, 'middle': 157.5, 'lower': 145.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=158.51052098564818 | MACD={'macd': 6.933368899433361, 'signal': 6.902197004729259, 'histogram': 0.03117189470410242} | ATR=6.204413831629978 | ADX=100.0 | VWAP=161.5 | BOLL={'upper': 170.0325625946708, 'middle': 158.5, 'lower': 146.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=159.50951898701504 | MACD={'macd': 6.93829942242391, 'signal': 6.90941748826819, 'histogram': 0.028881934155720046} | ATR=6.244098557942122 | ADX=100.0 | VWAP=162.5 | BOLL={'upper': 171.0325625946708, 'middle': 159.5, 'lower': 147.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=160.50861241682315 | MACD={'macd': 6.942865508272064, 'signal': 6.916107092268965, 'histogram': 0.026758416003098695} | ATR=6.283805803803399 | ADX=100.0 | VWAP=163.5 | BOLL={'upper': 172.0325625946708, 'middle': 160.5, 'lower': 148.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=161.5077921866495 | MACD={'macd': 6.947094031278226, 'signal': 6.922304480070818, 'histogram': 0.02478955120740789} | ATR=6.323533960674587 | ADX=100.0 | VWAP=164.5 | BOLL={'upper': 173.0325625946708, 'middle': 161.5, 'lower': 149.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=162.50705007363527 | MACD={'macd': 6.9510098936758595, 'signal': 6.928045562791827, 'histogram': 0.022964330884032158} | ATR=6.363281534912117 | ADX=100.0 | VWAP=165.5 | BOLL={'upper': 174.0325625946708, 'middle': 162.5, 'lower': 150.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=163.50637863805096 | MACD={'macd': 6.954636168845809, 'signal': 6.933363684002624, 'histogram': 0.02127248484318489} | ATR=6.403047139561252 | ADX=100.0 | VWAP=166.5 | BOLL={'upper': 175.0325625946708, 'middle': 163.5, 'lower': 151.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=164.50577114871277 | MACD={'macd': 6.957994234362474, 'signal': 6.938289794074595, 'histogram': 0.019704440287878988} | ATR=6.442829486735447 | ADX=100.0 | VWAP=167.5 | BOLL={'upper': 176.0325625946708, 'middle': 164.5, 'lower': 152.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=165.50522151550203 | MACD={'macd': 6.96110389555804, 'signal': 6.942852614371284, 'histogram': 0.018251281186755897} | ATR=6.482627380540058 | ADX=100.0 | VWAP=168.5 | BOLL={'upper': 177.0325625946708, 'middle': 165.5, 'lower': 153.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=166.50472422831135 | MACD={'macd': 6.963983500249043, 'signal': 6.947078791546836, 'histogram': 0.016904708702206506} | ATR=6.522439710501485 | ADX=100.0 | VWAP=169.5 | BOLL={'upper': 178.0325625946708, 'middle': 166.5, 'lower': 154.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=167.5042743018055 | MACD={'macd': 6.966650045232029, 'signal': 6.9509930422838755, 'histogram': 0.015657002948153753} | ATR=6.5622654454656635 | ADX=100.0 | VWAP=170.5 | BOLL={'upper': 179.0325625946708, 'middle': 167.5, 'lower': 155.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=168.5038672254431 | MACD={'macd': 6.969119275116327, 'signal': 6.954618288850367, 'histogram': 0.014500986265960414} | ATR=6.602103627932402 | ADX=100.0 | VWAP=171.5 | BOLL={'upper': 180.0325625946708, 'middle': 168.5, 'lower': 156.9674374053292}
+2026-07-22 12:39:14 | INFO | backend.indicator.indicator_engine:calculate - Indicators -> RSI=100.0 | EMA20=169.50349891825803 | MACD={'macd': 6.971405774027204, 'signal': 6.9579757858857345, 'histogram': 0.013429988141469451} | ATR=6.641953368794375 | ADX=100.0 | VWAP=172.5 | BOLL={'upper': 181.0325625946708, 'middle': 169.5, 'lower': 157.9674374053292}
+PASSED
+tests/unit/test_decision.py::test_execution_import_isolation PASSED
+tests/unit/test_decision.py::test_context_store_put_and_get PASSED
+tests/unit/test_decision.py::test_context_store_expired_ttl PASSED
+tests/unit/test_decision.py::test_context_store_bounded_memory PASSED
+tests/unit/test_decision.py::test_context_store_invalidate_and_clear PASSED
+tests/unit/test_decision.py::test_invalid_policy_weight PASSED
+tests/unit/test_decision.py::test_policy_weight_normalization PASSED
+tests/unit/test_decision.py::test_valid_ml_fresh_aligned_intelligence PASSED
+tests/unit/test_decision.py::test_valid_ml_fresh_conflicting_intelligence PASSED
+tests/unit/test_decision.py::test_ml_only_fallback_allowed PASSED
+tests/unit/test_decision.py::test_ml_only_fallback_rejected PASSED
+tests/unit/test_decision.py::test_critical_ml_drift_rejection PASSED
+tests/unit/test_decision.py::test_intel_risk_flags_rejection PASSED
+tests/unit/test_decision.py::test_invalid_directional_values PASSED
+tests/unit/test_decision.py::test_repeated_fusion_determinism PASSED
+tests/unit/test_decision.py::test_agreement_score_matrix PASSED
+tests/unit/test_decision.py::test_telemetry_and_latency_measurement PASSED
+tests/unit/test_execution_adapter.py::test_valid_buy_market_execution PASSED
+tests/unit/test_execution_adapter.py::test_valid_sell_market_execution PASSED
+tests/unit/test_execution_adapter.py::test_valid_buy_limit_fill PASSED
+tests/unit/test_execution_adapter.py::test_valid_sell_limit_fill PASSED
+tests/unit/test_execution_adapter.py::test_unfilled_buy_limit_behavior PASSED
+tests/unit/test_execution_adapter.py::test_unfilled_sell_limit_behavior PASSED
+tests/unit/test_execution_adapter.py::test_partial_fill PASSED
+tests/unit/test_execution_adapter.py::test_insufficient_liquidity_rejection PASSED
+tests/unit/test_execution_adapter.py::test_partial_fills_disabled PASSED
+tests/unit/test_execution_adapter.py::test_filled_quantity_never_exceeds_requested_quantity PASSED
+tests/unit/test_execution_adapter.py::test_filled_quantity_never_exceeds_available_liquidity PASSED
+tests/unit/test_execution_adapter.py::test_stale_market_context_rejection PASSED
+tests/unit/test_execution_adapter.py::test_future_timestamp_rejection PASSED
+tests/unit/test_execution_adapter.py::test_expired_order_intent_rejection PASSED
+tests/unit/test_execution_adapter.py::test_live_intent_rejection PASSED
+tests/unit/test_execution_adapter.py::test_shadow_intent_rejection PASSED
+tests/unit/test_execution_adapter.py::test_invalid_nan_inf_values PASSED
+tests/unit/test_execution_adapter.py::test_invalid_bid_ask_state PASSED
+tests/unit/test_execution_adapter.py::test_lineage_preservation PASSED
+tests/unit/test_execution_adapter.py::test_duplicate_execution_rejection PASSED
+tests/unit/test_execution_adapter.py::test_idempotency_rollback_on_failure PASSED
+tests/unit/test_execution_adapter.py::test_concurrent_duplicate_execution_safety PASSED
+tests/unit/test_execution_adapter.py::test_bounded_idempotency_memory_behavior PASSED
+tests/unit/test_execution_adapter.py::test_architecture_isolation_ast_tests PASSED
+tests/unit/test_execution_authorization.py::test_valid_paper_authorization PASSED
+tests/unit/test_execution_authorization.py::test_valid_shadow_authorization PASSED
+tests/unit/test_execution_authorization.py::test_live_rejected_by_default PASSED
+tests/unit/test_execution_authorization.py::test_explicitly_enabled_live_authorization PASSED
+tests/unit/test_execution_authorization.py::test_execution_disabled_rejection PASSED
+tests/unit/test_execution_authorization.py::test_kill_switch_rejection PASSED
+tests/unit/test_execution_authorization.py::test_disabled_symbol_rejection PASSED
+tests/unit/test_execution_authorization.py::test_lineage_proposal_mismatch PASSED
+tests/unit/test_execution_authorization.py::test_lineage_risk_auth_id_mismatch PASSED
+tests/unit/test_execution_authorization.py::test_lineage_symbol_mismatch PASSED
+tests/unit/test_execution_authorization.py::test_lineage_direction_mismatch PASSED
+tests/unit/test_execution_authorization.py::test_zero_or_negative_quantity PASSED
+tests/unit/test_execution_authorization.py::test_nan_quantity_validation PASSED
+tests/unit/test_execution_authorization.py::test_actual_risk_exceeding_authorized_risk PASSED
+tests/unit/test_execution_authorization.py::test_bullish_bearish_neutral_mapping PASSED
+tests/unit/test_execution_authorization.py::test_market_order_with_limit_price_rejection PASSED
+tests/unit/test_execution_authorization.py::test_limit_order_without_limit_price_rejection PASSED
+tests/unit/test_execution_authorization.py::test_stop_loss_orientation_violations PASSED
+tests/unit/test_execution_authorization.py::test_take_profit_orientation_violations PASSED
+tests/unit/test_execution_authorization.py::test_stale_market_data_gate PASSED
+tests/unit/test_execution_authorization.py::test_future_market_data_skew_gate PASSED
+tests/unit/test_execution_authorization.py::test_expired_proposal_rejection PASSED
+tests/unit/test_execution_authorization.py::test_idempotency_store_bounds_ttl_rollback PASSED
+tests/unit/test_execution_authorization.py::test_idempotency_store_rollback_on_construction_failure PASSED
+tests/unit/test_execution_authorization.py::test_simultaneous_authorization_attempts_concurrency PASSED
+tests/unit/test_execution_authorization.py::test_execution_authorization_import_isolation PASSED
+tests/unit/test_experiment.py::test_models_to_from_dict PASSED
+tests/unit/test_experiment.py::test_git_commit_hash_resolution PASSED
+tests/unit/test_experiment.py::test_repository_lifecycle PASSED
+tests/unit/test_experiment.py::test_optimizer_integration PASSED
+tests/unit/test_inference.py::test_successful_single_inference_classification PASSED
+tests/unit/test_inference.py::test_successful_single_inference_regression PASSED
+tests/unit/test_inference.py::test_true_batch_inference PASSED
+tests/unit/test_inference.py::test_partial_batch_failure_semantics PASSED
+tests/unit/test_inference.py::test_exact_model_version_pinning_and_no_implicit_switching PASSED
+tests/unit/test_inference.py::test_cache_hits_and_invalidation_lifecycle PASSED
+tests/unit/test_inference.py::test_explicit_reload PASSED
+tests/unit/test_inference.py::test_lifecycle_gates_eligibility PASSED
+tests/unit/test_inference.py::test_cached_model_becomes_deprecated_registry_check PASSED
+tests/unit/test_inference.py::test_schema_feature_validation_failures PASSED
+tests/unit/test_inference.py::test_canonical_feature_ordering_enforcement PASSED
+tests/unit/test_inference.py::test_corrupted_model_artifact_load_handling PASSED
+tests/unit/test_inference.py::test_prediction_model_exception_fail_closed PASSED
+tests/unit/test_inference_trust.py::test_calculate_sha256 PASSED
+tests/unit/test_inference_trust.py::test_integrity_verifier_policies PASSED
+tests/unit/test_inference_trust.py::test_platt_calibration PASSED
+tests/unit/test_inference_trust.py::test_isotonic_calibration PASSED
+tests/unit/test_inference_trust.py::test_evaluation_metrics PASSED
+tests/unit/test_inference_trust.py::test_feature_drift_calculations PASSED
+tests/unit/test_inference_trust.py::test_active_drift_observer PASSED
+tests/unit/test_intelligence.py::test_registry_resolution PASSED
+tests/unit/test_intelligence.py::test_ollama_provider_health_check PASSED
+tests/unit/test_intelligence.py::test_ollama_provider_generation PASSED
+tests/unit/test_intelligence.py::test_ollama_exceptions_translation PASSED
+tests/unit/test_intelligence.py::test_structured_validation_pipeline PASSED
+tests/unit/test_intelligence.py::test_architecture_import_boundary PASSED
+tests/unit/test_metrics_engine.py::test_zero_trades PASSED
+tests/unit/test_metrics_engine.py::test_single_trade PASSED
+tests/unit/test_metrics_engine.py::test_only_winning_trades PASSED
+tests/unit/test_metrics_engine.py::test_only_losing_trades PASSED
+tests/unit/test_metrics_engine.py::test_mixed_trades PASSED
+tests/unit/test_metrics_engine.py::test_open_trades_ignored PASSED
+tests/unit/test_metrics_engine.py::test_identical_close_time_values PASSED
+tests/unit/test_metrics_engine.py::test_floating_point_precision_cases PASSED
+tests/unit/test_metrics_engine.py::test_very_large_profit_loss_values PASSED
+tests/unit/test_metrics_engine.py::test_drawdown_negative_zero_peak_edge_cases PASSED
+tests/unit/test_optimization.py::test_validate_parameters_correct PASSED
+tests/unit/test_optimization.py::test_validate_parameters_invalid_name PASSED
+tests/unit/test_optimization.py::test_validate_parameters_invalid_values_type PASSED
+tests/unit/test_optimization.py::test_validate_parameters_empty_values PASSED
+tests/unit/test_optimization.py::test_validate_parameters_unknown_strategy PASSED
+tests/unit/test_optimization.py::test_generate_parameter_grid_combinations PASSED
+tests/unit/test_optimization.py::test_generate_parameter_grid_deduplication PASSED
+tests/unit/test_optimization.py::test_optimizer_runs_and_ranks PASSED
+tests/unit/test_orchestration.py::test_successful_trading_cycle PASSED
+tests/unit/test_orchestration.py::test_validation_failure_clock_skew PASSED
+tests/unit/test_orchestration.py::test_validation_failure_stale_cycle PASSED
+tests/unit/test_orchestration.py::test_fusion_no_proposal PASSED
+tests/unit/test_orchestration.py::test_fusion_rejection PASSED
+tests/unit/test_orchestration.py::test_fusion_crash PASSED
+tests/unit/test_orchestration.py::test_risk_rejection PASSED
+tests/unit/test_orchestration.py::test_risk_crash PASSED
+tests/unit/test_orchestration.py::test_sizing_non_positive_quantity PASSED
+tests/unit/test_orchestration.py::test_sizing_risk_cap_violation PASSED
+tests/unit/test_orchestration.py::test_sizing_crash PASSED
+tests/unit/test_orchestration.py::test_exec_auth_rejection PASSED
+tests/unit/test_orchestration.py::test_exec_auth_proposal_mismatch PASSED
+tests/unit/test_orchestration.py::test_exec_auth_risk_auth_mismatch PASSED
+tests/unit/test_orchestration.py::test_exec_auth_sizing_mismatch PASSED
+tests/unit/test_orchestration.py::test_exec_auth_crash PASSED
+tests/unit/test_orchestration.py::test_exec_block_live PASSED
+tests/unit/test_orchestration.py::test_exec_shadow_redirect PASSED
+tests/unit/test_orchestration.py::test_exec_status_failed PASSED
+tests/unit/test_orchestration.py::test_exec_crash PASSED
+tests/unit/test_orchestration.py::test_portfolio_crash PASSED
+tests/unit/test_orchestration.py::test_lifecycle_registration_crash PASSED
+tests/unit/test_orchestration.py::test_partial_fill_success PASSED
+tests/unit/test_orchestration.py::test_successful_exit_cycle PASSED
+tests/unit/test_orchestration.py::test_exit_cycle_evaluation_crash PASSED
+tests/unit/test_orchestration.py::test_exit_cycle_auth_rejection_reverts_state PASSED
+tests/unit/test_orchestration.py::test_exit_cycle_execution_failure_reverts_state PASSED
+tests/unit/test_orchestration.py::test_exit_cycle_portfolio_crash PASSED
+tests/unit/test_portfolio.py::test_long_position_lifecycle PASSED
+tests/unit/test_portfolio.py::test_short_position_lifecycle PASSED
+tests/unit/test_portfolio.py::test_position_reversal PASSED
+tests/unit/test_portfolio.py::test_position_reversal_disabled_rejection PASSED
+tests/unit/test_portfolio.py::test_multiple_fills_atomic_application PASSED
+tests/unit/test_portfolio.py::test_total_fee_mismatch_rejection PASSED
+tests/unit/test_portfolio.py::test_atomic_application_partial_failure_rollback PASSED
+tests/unit/test_portfolio.py::test_market_price_update_mtm PASSED
+tests/unit/test_portfolio.py::test_margin_and_leverage PASSED
+tests/unit/test_portfolio.py::test_exposures PASSED
+tests/unit/test_portfolio.py::test_high_water_mark_and_drawdown PASSED
+tests/unit/test_portfolio.py::test_duplicate_fill_ingestion_rejection PASSED
+tests/unit/test_portfolio.py::test_fill_idempotency_store_eviction PASSED
+tests/unit/test_portfolio.py::test_fill_idempotency_concurrency PASSED
+tests/unit/test_portfolio.py::test_portfolio_risk_context_bridge PASSED
+tests/unit/test_portfolio.py::test_snapshots_lineage PASSED
+tests/unit/test_portfolio.py::test_telemetry_invocation PASSED
+tests/unit/test_portfolio.py::test_invalid_parameters_and_bounds PASSED
+tests/unit/test_portfolio.py::test_portfolio_ast_dependencies PASSED
+tests/unit/test_position_lifecycle.py::test_stop_loss_validation PASSED
+tests/unit/test_position_lifecycle.py::test_stop_loss_triggering PASSED
+tests/unit/test_position_lifecycle.py::test_take_profit_validation PASSED
+tests/unit/test_position_lifecycle.py::test_take_profit_triggering PASSED
+tests/unit/test_position_lifecycle.py::test_trailing_stop_activation_and_adjustment PASSED
+tests/unit/test_position_lifecycle.py::test_trailing_activation_threshold PASSED
+tests/unit/test_position_lifecycle.py::test_breakeven_adjustment PASSED
+tests/unit/test_position_lifecycle.py::test_machine_states_and_idempotency PASSED
+tests/unit/test_position_lifecycle.py::test_partial_quantity_synchronization PASSED
+tests/unit/test_position_lifecycle.py::test_reversal_creates_new_lifecycle PASSED
+tests/unit/test_position_lifecycle.py::test_market_data_freshness_validations PASSED
+tests/unit/test_position_lifecycle.py::test_nan_inf_safety PASSED
+tests/unit/test_position_lifecycle.py::test_gap_limitations_and_priority PASSED
+tests/unit/test_position_lifecycle.py::test_exit_execution_request_builder_and_bridge PASSED
+tests/unit/test_position_lifecycle.py::test_thread_safety_and_single_exit_generation PASSED
+tests/unit/test_position_lifecycle.py::test_package_dependencies_isolation PASSED
+tests/unit/test_position_lifecycle.py::test_telemetry_latency_recording PASSED
+tests/unit/test_positioning.py::test_valid_bullish_sizing PASSED
+tests/unit/test_positioning.py::test_valid_bearish_sizing PASSED
+tests/unit/test_positioning.py::test_quantity_rounding_down PASSED
+tests/unit/test_positioning.py::test_rounding_up_risk_violation PASSED
+tests/unit/test_positioning.py::test_leverage_does_not_increase_risk_budget PASSED
+tests/unit/test_positioning.py::test_invalid_stop_orientation PASSED
+tests/unit/test_positioning.py::test_sizing_limits_gates PASSED
+tests/unit/test_positioning.py::test_exposure_limit_violations PASSED
+tests/unit/test_positioning.py::test_insufficient_margin_capital PASSED
+tests/unit/test_positioning.py::test_stale_market_data PASSED
+tests/unit/test_positioning.py::test_stale_authorization PASSED
+tests/unit/test_positioning.py::test_rejected_auth_raises_error PASSED
+tests/unit/test_positioning.py::test_adjusted_auth_uses_reduced_fraction PASSED
+tests/unit/test_positioning.py::test_neutral_direction_fail_closed PASSED
+tests/unit/test_positioning.py::test_future_market_timestamp PASSED
+tests/unit/test_positioning.py::test_nan_inf_inputs_rejected PASSED
+tests/unit/test_positioning.py::test_telemetry_captures_audit_info PASSED
+tests/unit/test_positioning.py::test_sizing_determinism PASSED
+tests/unit/test_positioning.py::test_unsupported_instrument_fails_closed PASSED
+tests/unit/test_positioning.py::test_positioning_package_execution_isolation PASSED
+tests/unit/test_registry.py::test_lifecycle_transitions PASSED
+tests/unit/test_registry.py::test_registry_registration_and_promotion PASSED
+tests/unit/test_registry.py::test_registry_loading PASSED
+tests/unit/test_registry.py::test_registry_find_best PASSED
+tests/unit/test_registry.py::test_registry_experiment_integration PASSED
+tests/unit/test_risk.py::test_valid_proposal_approved PASSED
+tests/unit/test_risk.py::test_expired_proposal_rejected PASSED
+tests/unit/test_risk.py::test_stale_and_future_proposal_rejected PASSED
+tests/unit/test_risk.py::test_confidence_validation PASSED
+tests/unit/test_risk.py::test_daily_loss_gate_rejected PASSED
+tests/unit/test_risk.py::test_drawdown_gate_rejected PASSED
+tests/unit/test_risk.py::test_exposure_gates_rejected PASSED
+tests/unit/test_risk.py::test_leverage_gate_rejected PASSED
+tests/unit/test_risk.py::test_open_position_limits_rejected PASSED
+tests/unit/test_risk.py::test_consecutive_loss_gate PASSED
+tests/unit/test_risk.py::test_volatility_and_liquidity_gates PASSED
+tests/unit/test_risk.py::test_ml_drift_defense_in_depth PASSED
+tests/unit/test_risk.py::test_blocking_risk_flags PASSED
+tests/unit/test_risk.py::test_unrecognized_safety_flags_rejected PASSED
+tests/unit/test_risk.py::test_risk_adjustments PASSED
+tests/unit/test_risk.py::test_floor_and_cap_limits PASSED
+tests/unit/test_risk.py::test_risk_telemetry PASSED
+tests/unit/test_risk.py::test_invalid_context_fail_closed PASSED
+tests/unit/test_risk.py::test_repeated_evaluations_deterministic PASSED
+tests/unit/test_risk.py::test_policy_validations PASSED
+tests/unit/test_risk.py::test_risk_package_execution_isolation PASSED
+tests/unit/test_risk.py::test_audit_lineage_preserved PASSED
+tests/unit/test_risk.py::test_execution_order_isolation_boundary PASSED
+tests/unit/test_runtime.py::test_event_immutability PASSED
+tests/unit/test_runtime.py::test_event_bus_pub_sub_unsub PASSED
+tests/unit/test_runtime.py::test_event_bus_duplicate_subscribers PASSED
+tests/unit/test_runtime.py::test_dispatcher_error_isolation PASSED
+tests/unit/test_runtime.py::test_dispatch_nesting_order_determinism PASSED
+tests/unit/test_runtime.py::test_event_bus_queue_overflow PASSED
+tests/unit/test_runtime.py::test_telemetry_latency_tracking PASSED
+tests/unit/test_runtime.py::test_runtime_policy_validation PASSED
+tests/unit/test_runtime.py::test_session_state_updates PASSED
+tests/unit/test_runtime.py::test_manual_scheduler_tick PASSED
+tests/unit/test_runtime.py::test_runtime_lifecycle_transitions PASSED
+tests/unit/test_runtime.py::test_runtime_cycle_event_propagation PASSED
+tests/unit/test_runtime.py::test_runtime_package_execution_isolation PASSED
+tests/unit/test_strategy_framework.py::test_base_strategy_cannot_be_instantiated PASSED
+tests/unit/test_strategy_framework.py::test_rule_based_strategy_decision_parity 2026-07-22 12:39:17 | INFO | backend.strategy.rule_based:decide - [DECISION] Score=70 Confidence=0.70 Reasons=RSI Oversold, MACD Bullish, Above EMA20, Above VWAP
+2026-07-22 12:39:17 | INFO | backend.strategy.rule_based:decide - [DECISION] Score=-70 Confidence=0.70 Reasons=RSI Overbought, MACD Bearish, Below EMA20, Below VWAP
+2026-07-22 12:39:17 | INFO | backend.strategy.rule_based:decide - [DECISION] Score=-20 Confidence=0.20 Reasons=Below EMA20, Below VWAP
+PASSED
+tests/unit/test_strategy_framework.py::test_strategy_registry_registration PASSED
+tests/unit/test_strategy_framework.py::test_strategy_loader_loads_successfully PASSED
+tests/unit/test_strategy_framework.py::test_decision_engine_delegation PASSED
+tests/unit/test_strategy_framework.py::test_invalid_strategy_fails_gracefully PASSED
+tests/unit/test_training.py::test_trainer_registry PASSED
+tests/unit/test_training.py::test_dataset_validator PASSED
+tests/unit/test_training.py::test_evaluation_metrics PASSED
+tests/unit/test_training.py::test_model_persistence PASSED
+tests/unit/test_training.py::test_candidate_selection PASSED
+tests/unit/test_training.py::test_deterministic_training PASSED
+tests/unit/test_training.py::test_pipeline_experiment_integration PASSED
+tests/unit/test_validation.py::test_benchmark_registry_loading PASSED
+tests/unit/test_validation.py::test_custom_validator_paper_executor_applies_commissions_and_slippage PASSED
+tests/unit/test_validation.py::test_validation_pipeline_fully_concludes PASSED
+tests/unit/test_validation.py::test_purged_time_series_split_chronological_and_bounds PASSED
+tests/unit/test_validation.py::test_purged_time_series_split_purging_and_embargo PASSED
+tests/unit/test_validation.py::test_purged_time_series_split_small_dataset PASSED
+tests/unit/test_validation.py::test_purged_time_series_split_zero_horizon PASSED
+tests/unit/test_validation.py::test_purged_time_series_split_determinism PASSED
+tests/unit/test_validation.py::test_purged_time_series_split_leakage_prevention_comparison PASSED
+tests/unit/test_validation.py::test_validation_pipeline_cv_rejections_and_data PASSED
+tests/unit/test_walk_forward.py::test_walk_forward_split_generation PASSED
+tests/unit/test_walk_forward.py::test_walk_forward_result_aggregation PASSED
+tests/unit/test_walk_forward.py::test_walk_forward_engine_run_with_memory_db 2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+2026-07-22 12:39:20 | INFO | backend.market.consumer:feed_candle - Candle Closed -> BTCUSDT O:49999.0 H:50002.0 L:49998.0 C:50000.0
+2026-07-22 12:39:20 | INFO | backend.indicator.indicator_engine:calculate - IndicatorEngine waiting... 0/50 candles
+PASSED
+
+============================== warnings summary ===============================
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_training.py::test_model_persistence
+tests/unit/test_training.py::test_model_persistence
+tests/unit/test_training.py::test_model_persistence
+tests/unit/test_training.py::test_model_persistence
+  C:\Users\safad\QuantForge\.venv\Lib\site-packages\joblib\numpy_pickle.py:207: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+  As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+    array.shape = self.shape
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================= 278 passed, 8 warnings in 62.75s (0:01:02) ==================
+
+[2026-07-22 12:39:14,734] [INFO] [QuantForge.ExecutionAuthorization] Execution AUTHORIZED: Intent fef81307-b458-4ac9-9a11-ca22c27c9586 | Proposal proposal-123 | Symbol BTC/USDT | Direction BUY | Qty 0.1 | Latency 0.08ms
+[2026-07-22 12:39:14,735] [INFO] [QuantForge.ExecutionAuthorization] Execution AUTHORIZED: Intent bbeb0b35-bbd1-44d7-a4e9-5c3177a3f28d | Proposal proposal-123 | Symbol BTC/USDT | Direction BUY | Qty 0.1 | Latency 0.06ms
+[2026-07-22 12:39:14,738] [WARNING] [QuantForge.ExecutionAuthorization] Execution REJECTED: Proposal proposal-123 | Symbol BTC/USDT | Reason: 'Global execution is disabled' | Rules Triggered: ['EXECUTION_DISABLED'] | Latency 0.01ms
+[2026-07-22 12:39:14,739] [WARNING] [QuantForge.ExecutionAuthorization] Execution REJECTED: Proposal proposal-123 | Symbol BTC/USDT | Reason: 'Kill switch is active' | Rules Triggered: ['KILL_SWITCH'] | Latency 0.01ms
+[2026-07-22 12:39:14,740] [WARNING] [QuantForge.ExecutionAuthorization] Execution REJECTED: Proposal proposal-123 | Symbol BTC/USDT | Reason: 'Symbol trading is disabled for BTC/USDT' | Rules Triggered: ['SYMBOL_DISABLED'] | Latency 0.01ms
+[2026-07-22 12:39:14,741] [WARNING] [QuantForge.ExecutionAuthorization] Execution REJECTED: Proposal proposal-123 | Symbol BTC/USDT | Reason: 'Risk proposal ID proposal-mismatch-xxx mismatch with Proposal ID proposal-123' | Rules Triggered: ['LineageMismatchError'] | Latency 0.00ms
+[2026-07-22 12:39:14,742] [WARNING] [QuantForge.ExecutionAuthorization] Execution REJECTED: Proposal proposal-123 | Symbol BTC/USDT | Reason: 'Sizing auth ID auth-mismatch-xxx mismatch with Risk Auth ID auth-risk-456' | Rules Triggered: ['LineageMismatchError'] | Latency 0.00ms
+[2026-07-22 12:39:14,743] [WARNING] [QuantForge.ExecutionAuthorization] Execution REJECTED: Proposal proposal-123 | Symbol ETH/USDT | Reason: 'Symbol mismatch across components: Proposal=ETH/USDT, Risk=BTC/USDT, Sizing=BTC/USDT' | Rules Triggered: ['LineageMismatchError'] | Latency 0.00ms
+[2026-07-22 12:39:14,744] [WARNING] [QuantForge.ExecutionAuthorization] Execution REJECTED: Proposal proposal-123 | Symbol BTC/USDT | Reason: 'Direction mismatch across components: Proposal=BULLISH, Risk=BULLISH, Sizing=BEARISH' | Rules Triggered: ['LineageMismatchError'] | Latency 0.00ms
+[2026-07-22 12:39:14,745] [WARNING] [QuantForge.ExecutionAuthorization] Execution REJECTED: Proposal proposal-123 | Symbol BTC/USDT | Reason: 'Sizing quantity must be finite and greater than zero' | Rules Triggered: ['ExecutionValidationError'] | Latency 0.01ms
+[2026-07-22 12:39:14,746] [WARNING] [QuantForge.ExecutionAuthorization] Execution REJECTED: Proposal proposal-123 | Symbol BTC/USDT | Reason: 'Sizing authorized risk fraction 0.05 exceeds authorized RiskGuard fraction 0.01' | Rules Triggered: ['ExecutionValidationError'] | Latency 0.01ms
+[2026-07-22 12:39:14,747] [INFO] [QuantForge.ExecutionAuthorization] Execution AUTHORIZED: Intent 23e53825-0a68-4466-9dfb-a8971d8b22c7 | Proposal proposal-123 | Symbol BTC/USDT | Direction SELL | Qty 0.1 | Latency 0.04ms
+[2026-07-22 12:39:14,747] [WARNING] [QuantForge.ExecutionAuthorization] Execution REJECTED: Proposal proposal-123 | Symbol BTC/USDT | Reason: 'NEUTRAL proposals are rejected' | Rules Triggered: ['ExecutionValidationError'] | Latency 0.00ms
+[2026-07-22 12:39:14,748] [WARNING] [QuantForge.ExecutionAuthorization] Execution REJECTED: Proposal proposal-123 | Symbol BTC/USDT | Reason: 'MARKET order cannot contain a limit price' | Rules Triggered: ['ExecutionValidationError'] | Latency 0.01ms
+[2026-07-22 12:39:14,749] [WARNING] [QuantForge.ExecutionAuthorization] Execution REJECTED: Proposal proposal-123 | Symbol BTC/USDT | Reason: 'LIMIT order requires a limit price' | Rules Triggered: ['ExecutionValidationError'] | Latency 0.01ms
+[2026-07-22 12:39:14,750] [WARNING] [QuantForge.ExecutionAuthorization] Execution REJECTED: Proposal proposal-123 | Symbol BTC/USDT | Reason: 'BUY Stop loss 50500.0 must be below entry price 50000.0' | Rules Triggered: ['ExecutionValidationError'] | Latency 0.01ms
+[2026-07-22 12:39:14,752] [WARNING] [QuantForge.ExecutionAuthorization] Execution REJECTED: Proposal proposal-123 | Symbol BTC/USDT | Reason: 'Stale market data: age of 20.0s exceeds policy maximum of 10.0s' | Rules Triggered: ['STALE_MARKET_DATA'] | Latency 0.01ms
+[2026-07-22 12:39:14,753] [WARNING] [QuantForge.ExecutionAuthorization] Execution REJECTED: Proposal proposal-123 | Symbol BTC/USDT | Reason: 'Market timestamp is in the future. Skew of 10.0s exceeds max allowance of 5.0s' | Rules Triggered: ['CLOCK_SKEW_LIMIT'] | Latency 0.01ms
+[2026-07-22 12:39:14,753] [WARNING] [QuantForge.ExecutionAuthorization] Execution REJECTED: Proposal proposal-123 | Symbol BTC/USDT | Reason: 'Trade proposal is expired: current 2026-07-21 12:06:00+00:00 > expiry 2026-07-21 12:05:00+00:00' | Rules Triggered: ['PROPOSAL_EXPIRED'] | Latency 0.01ms

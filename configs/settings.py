@@ -41,6 +41,18 @@ class Settings(BaseSettings):
     AI_STRUCTURED_MAX_RETRIES: int = 3
     AI_CONTEXT_TTL_SECONDS: float = 300.0
 
+    # Persistence Configuration
+    PERSISTENCE_ENABLED: bool = True
+    PERSISTENCE_BACKEND: str = "postgres"
+    DATABASE_POOL_SIZE: int = 5
+    DATABASE_POOL_MAX_OVERFLOW: int = 10
+    DATABASE_CONNECT_TIMEOUT_SECONDS: float = 5.0
+
+    # Feature Runtime Configuration
+    FEATURE_RUNTIME_ENABLED: bool = True
+    FEATURE_MINIMUM_HISTORY: int = 100
+    FEATURE_STALENESS_LIMIT_SECONDS: float = 10.0
+
     model_config = SettingsConfigDict(
         env_file=".env",
         extra="ignore"

@@ -2,8 +2,44 @@
 platform win32 -- Python 3.13.13, pytest-9.1.1, pluggy-1.6.0
 rootdir: C:\Users\safad\QuantForge
 plugins: anyio-4.14.1, langsmith-0.10.2
-collected 26 items
+collected 291 items
 
-tests\unit\test_execution_authorization.py ..........................    [100%]
+tests\integration\test_postgres_persistence.py sssss                     [  1%]
+tests\unit\test_dataset.py ............                                  [  5%]
+tests\unit\test_decision.py .................                            [ 11%]
+tests\unit\test_execution_adapter.py ........................            [ 19%]
+tests\unit\test_execution_authorization.py ..........................    [ 28%]
+tests\unit\test_experiment.py ....                                       [ 30%]
+tests\unit\test_inference.py .............                               [ 34%]
+tests\unit\test_inference_trust.py .......                               [ 37%]
+tests\unit\test_intelligence.py ......                                   [ 39%]
+tests\unit\test_metrics_engine.py ..........                             [ 42%]
+tests\unit\test_optimization.py ........                                 [ 45%]
+tests\unit\test_orchestration.py ............................            [ 54%]
+tests\unit\test_persistence.py ........                                  [ 57%]
+tests\unit\test_portfolio.py ...................                         [ 64%]
+tests\unit\test_position_lifecycle.py .................                  [ 70%]
+tests\unit\test_positioning.py ....................                      [ 76%]
+tests\unit\test_registry.py .....                                        [ 78%]
+tests\unit\test_risk.py .......................                          [ 86%]
+tests\unit\test_runtime.py .............                                 [ 91%]
+tests\unit\test_strategy_framework.py ......                             [ 93%]
+tests\unit\test_training.py .......                                      [ 95%]
+tests\unit\test_validation.py ..........                                 [ 98%]
+tests\unit\test_walk_forward.py ...                                      [100%]
 
-============================= 26 passed in 0.26s ==============================
+============================== warnings summary ===============================
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_inference_trust.py::test_platt_calibration
+tests/unit/test_training.py::test_model_persistence
+tests/unit/test_training.py::test_model_persistence
+tests/unit/test_training.py::test_model_persistence
+tests/unit/test_training.py::test_model_persistence
+  C:\Users\safad\QuantForge\.venv\Lib\site-packages\joblib\numpy_pickle.py:207: DeprecationWarning: Setting the shape on a NumPy array has been deprecated in NumPy 2.5.
+  As an alternative, you can create a new view using np.reshape (with copy=False if needed).
+    array.shape = self.shape
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================= 286 passed, 5 skipped, 8 warnings in 9.87s ==================

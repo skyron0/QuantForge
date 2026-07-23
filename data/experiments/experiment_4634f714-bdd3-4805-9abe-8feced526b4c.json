@@ -1,0 +1,88 @@
+{
+    "experiment_id": "4634f714-bdd3-4805-9abe-8feced526b4c",
+    "experiment_name": "Opt_rule_based_2026-07-23T09-52-26.721617+00-00",
+    "timestamp": "2026-07-23T09:52:26.721617+00:00",
+    "git_commit_hash": "baa8ddf417832562cb97a8a6d533fe48fe751f51",
+    "strategy_name": "rule_based",
+    "strategy_parameters": {
+        "buy_threshold": [
+            50.0,
+            60.0
+        ],
+        "sell_threshold": [
+            -40.0
+        ]
+    },
+    "optimization_parameters": {
+        "train_days": 10,
+        "test_days": 5,
+        "step_days": 5,
+        "sorting_metric": "net_profit",
+        "sorting_reverse": true
+    },
+    "dataset_identifier": "empty",
+    "timeframe": "unknown",
+    "symbols": [
+        "unknown"
+    ],
+    "training_window": 10,
+    "testing_window": 5,
+    "walk_forward_config": {
+        "train_days": 10,
+        "test_days": 5,
+        "step_days": 5,
+        "sorting_metric": "net_profit",
+        "sorting_reverse": true
+    },
+    "performance_metrics": {
+        "net_profit": 80.0,
+        "win_rate": 55.0
+    },
+    "notes": "Auto-generated from ParameterOptimizer run",
+    "runs": [
+        {
+            "run_id": "2e836736-de52-4afb-8ae4-149c4d37e99c",
+            "parameter_set": {
+                "buy_threshold": 60.0,
+                "sell_threshold": -40.0
+            },
+            "metrics": {
+                "net_profit": 80.0,
+                "win_rate": 55.0
+            },
+            "artifacts": []
+        },
+        {
+            "run_id": "85c57275-1d3c-45e1-9b14-85c2df2c7eb6",
+            "parameter_set": {
+                "buy_threshold": 50.0,
+                "sell_threshold": -40.0
+            },
+            "metrics": {
+                "net_profit": 60.0,
+                "win_rate": 55.0
+            },
+            "artifacts": []
+        }
+    ],
+    "artifacts": [],
+    "summary": {
+        "total_runs": 2,
+        "best_run_parameters": {
+            "buy_threshold": 60.0,
+            "sell_threshold": -40.0
+        },
+        "best_run_metrics": {
+            "net_profit": 80.0,
+            "win_rate": 55.0
+        },
+        "aggregated_metrics": {
+            "avg_win_rate": 55.0,
+            "avg_net_profit": 70.0,
+            "avg_gross_profit": 0.0,
+            "avg_gross_loss": 0.0,
+            "avg_profit_factor": 0.0,
+            "avg_maximum_drawdown_pct": 0.0
+        }
+    }
+}

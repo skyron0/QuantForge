@@ -61,12 +61,15 @@ class TradingCycleResult:
     
     # Failure Details
     rejection_stage: Optional[str] = None
+    failed_stage: Optional[str] = None
     rejection_reason: Optional[str] = None
     
     # Latency & Timestamps
-    started_at: str
-    completed_at: str
+    started_at: str = ""
+    completed_at: str = ""
     latency_ms: float = 0.0
+    total_latency_ms: float = 0.0
+    stage_timings: Dict[str, float] = field(default_factory=dict)
     
     policy_version: str = ""
     metadata: Dict[str, Any] = field(default_factory=dict)

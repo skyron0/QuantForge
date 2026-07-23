@@ -31,7 +31,8 @@ from backend.execution_authorization.models import (
     ExecutionAuthorizationStatus,
     ExecutionAuthorizationResult,
     ExecutionEnvironment,
-    OrderIntent
+    OrderIntent,
+    ExecutionContext
 )
 from backend.execution_adapter.paper import PaperExecutionAdapter
 from backend.execution_adapter.models import ExecutionStatus, ExecutionResult
@@ -97,10 +98,15 @@ class TradingCycleOrchestrator:
         cycle_id = str(uuid.uuid4())
         started_at = datetime.now(timezone.utc).isoformat()
         
+        stage_timings: Dict[str, float] = {}
+
         # 1. Input and clock validation
+        validation_start = time.perf_counter()
         try:
             self._validate_input_and_clocks(input_data)
+            stage_timings["validation"] = (time.perf_counter() - validation_start) * 1000.0
         except OrchestrationValidationError as e:
+            stage_timings["validation"] = (time.perf_counter() - validation_start) * 1000.0
             completed_at = datetime.now(timezone.utc).isoformat()
             latency_ms = (time.perf_counter() - start_counter) * 1000.0
             return TradingCycleResult(
@@ -111,8 +117,11 @@ class TradingCycleOrchestrator:
                 started_at=started_at,
                 completed_at=completed_at,
                 latency_ms=latency_ms,
+                total_latency_ms=latency_ms,
                 rejection_stage="VALIDATION",
+                failed_stage="VALIDATION",
                 rejection_reason=str(e),
+                stage_timings=stage_timings,
                 policy_version=self.policy.policy_version,
                 metadata=input_data.metadata
             )
@@ -135,6 +144,13 @@ class TradingCycleOrchestrator:
         portfolio_updated = False
         lifecycle_registered = False
 
+        proposal: Optional[TradeProposal] = None
+        risk_result: Optional[RiskAuthorizationResult] = None
+        sizing_result: Optional[PositionSizeResult] = None
+        intent: Optional[OrderIntent] = None
+        execution_result: Optional[ExecutionResult] = None
+        portfolio_state: Optional[PortfolioState] = None
+
         status = TradingCycleStatus.FAILED
         rejection_stage: Optional[str] = None
         rejection_reason: Optional[str] = None
@@ -142,6 +158,7 @@ class TradingCycleOrchestrator:
         curr_dt = parse_iso(input_data.timestamp)
 
         # 2. Decision Fusion Stage
+        fusion_start = time.perf_counter()
         try:
             fusion_result, proposal = self.decision_fusion_engine.fuse(
                 ml_signal=input_data.ml_signal,
@@ -150,13 +167,14 @@ class TradingCycleOrchestrator:
             )
             fusion_id = fusion_result.fusion_id
             intel_used = fusion_result.intelligence_used
+            stage_timings["fusion"] = (time.perf_counter() - fusion_start) * 1000.0
             
             if proposal is None:
                 proposal_generated = False
                 rejection_reason = fusion_result.metadata.get("rejection_reason")
+                rejection_stage = "FUSION"
                 if rejection_reason and ("confidence" in rejection_reason.lower() or "drift" in rejection_reason.lower() or "allow_ml_only" in rejection_reason.lower()):
                     status = TradingCycleStatus.FUSION_REJECTED
-                    rejection_stage = "FUSION"
                 else:
                     status = TradingCycleStatus.NO_PROPOSAL
                 raise StageExecutionError("Decision Fusion produced no trade proposal")
@@ -166,19 +184,24 @@ class TradingCycleOrchestrator:
         except StageExecutionError:
             pass
         except Exception as e:
+            if "fusion" not in stage_timings:
+                stage_timings["fusion"] = (time.perf_counter() - fusion_start) * 1000.0
             rejection_stage = "FUSION"
             rejection_reason = str(e)
             status = TradingCycleStatus.FAILED
 
         # 3. Risk Guard Stage
         if proposal_generated and status == TradingCycleStatus.FAILED:
+            risk_start = time.perf_counter()
             try:
+                assert proposal is not None
                 risk_result = self.risk_guard_engine.evaluate(
                     proposal=proposal,
                     context=input_data.risk_context,
                     current_time=curr_dt
                 )
                 risk_auth_id = risk_result.authorization_id
+                stage_timings["risk"] = (time.perf_counter() - risk_start) * 1000.0
                 
                 if risk_result.status == RiskAuthorizationStatus.REJECTED:
                     status = TradingCycleStatus.RISK_REJECTED
@@ -187,19 +210,25 @@ class TradingCycleOrchestrator:
                 else:
                     risk_authorized = True
             except Exception as e:
+                if "risk" not in stage_timings:
+                    stage_timings["risk"] = (time.perf_counter() - risk_start) * 1000.0
                 rejection_stage = "RISK"
                 rejection_reason = str(e)
                 status = TradingCycleStatus.FAILED
 
         # 4. Position Sizing Stage
         if risk_authorized and status == TradingCycleStatus.FAILED:
+            sizing_start = time.perf_counter()
             try:
+                assert proposal is not None
+                assert risk_result is not None
                 sizing_result = self.position_sizing_engine.evaluate(
                     proposal=proposal,
                     authorization=risk_result,
                     context=input_data.position_sizing_context
                 )
                 sizing_id = sizing_result.sizing_id
+                stage_timings["sizing"] = (time.perf_counter() - sizing_start) * 1000.0
                 
                 if sizing_result.quantity <= 0.0:
                     status = TradingCycleStatus.SIZING_REJECTED
@@ -212,13 +241,19 @@ class TradingCycleOrchestrator:
                         f"exceeds RiskGuard authorized risk ({risk_result.authorized_risk_fraction})"
                     )
             except Exception as e:
+                if "sizing" not in stage_timings:
+                    stage_timings["sizing"] = (time.perf_counter() - sizing_start) * 1000.0
                 status = TradingCycleStatus.SIZING_REJECTED
                 rejection_stage = "SIZING"
                 rejection_reason = str(e)
 
         # 5. Execution Authorization Stage
         if risk_authorized and sizing_id and status == TradingCycleStatus.FAILED:
+            exec_auth_start = time.perf_counter()
             try:
+                assert proposal is not None
+                assert risk_result is not None
+                assert sizing_result is not None
                 exec_auth_result = self.execution_authorization_engine.evaluate(
                     proposal=proposal,
                     risk_auth=risk_result,
@@ -226,6 +261,7 @@ class TradingCycleOrchestrator:
                     context=input_data.execution_context
                 )
                 execution_auth_id = exec_auth_result.authorization_id
+                stage_timings["execution_authorization"] = (time.perf_counter() - exec_auth_start) * 1000.0
                 
                 if exec_auth_result.status != ExecutionAuthorizationStatus.AUTHORIZED:
                     status = TradingCycleStatus.EXECUTION_AUTHORIZATION_REJECTED
@@ -233,9 +269,13 @@ class TradingCycleOrchestrator:
                     rejection_reason = exec_auth_result.rejection_reason
                 else:
                     intent = exec_auth_result.intent
+                    assert intent is not None
                     intent_id = intent.intent_id
                     
                     # Lineage validation (Orchestrator defense-in-depth verification)
+                    assert proposal is not None
+                    assert risk_result is not None
+                    assert sizing_result is not None
                     if intent.proposal_id != proposal.proposal_id:
                         raise LineageIntegrityError("Intent proposal UUID mismatch")
                     if intent.risk_authorization_id != risk_result.authorization_id:
@@ -245,6 +285,8 @@ class TradingCycleOrchestrator:
                         
                     execution_authorized = True
             except Exception as e:
+                if "execution_authorization" not in stage_timings:
+                    stage_timings["execution_authorization"] = (time.perf_counter() - exec_auth_start) * 1000.0
                 status = TradingCycleStatus.EXECUTION_AUTHORIZATION_REJECTED
                 rejection_stage = "EXECUTION_AUTHORIZATION"
                 rejection_reason = str(e)
@@ -252,6 +294,7 @@ class TradingCycleOrchestrator:
         # 6. Paper Execution Adapter Stage
         if execution_authorized and status == TradingCycleStatus.FAILED:
             # Shield live environments
+            assert intent is not None
             if intent.environment == ExecutionEnvironment.LIVE:
                 status = TradingCycleStatus.EXECUTION_FAILED
                 rejection_stage = "EXECUTION"
@@ -262,13 +305,16 @@ class TradingCycleOrchestrator:
                 status = TradingCycleStatus.COMPLETED
                 executed = False
             else:
+                exec_start = time.perf_counter()
                 try:
+                    assert intent is not None
                     execution_result = self.paper_execution_adapter.execute(
                         intent=intent,
                         context=input_data.paper_execution_context
                     )
                     execution_id = execution_result.execution_id
                     fill_ids = [f.fill_id for f in execution_result.fills]
+                    stage_timings["execution"] = (time.perf_counter() - exec_start) * 1000.0
                     
                     if execution_result.status not in (ExecutionStatus.FILLED, ExecutionStatus.PARTIALLY_FILLED):
                         status = TradingCycleStatus.EXECUTION_FAILED
@@ -277,16 +323,23 @@ class TradingCycleOrchestrator:
                     else:
                         executed = True
                 except Exception as e:
+                    if "execution" not in stage_timings:
+                        stage_timings["execution"] = (time.perf_counter() - exec_start) * 1000.0
                     status = TradingCycleStatus.EXECUTION_FAILED
                     rejection_stage = "EXECUTION"
                     rejection_reason = str(e)
 
         # 7. Portfolio Engine Stage (Fills Ingestion)
         if executed and status == TradingCycleStatus.FAILED:
+            portfolio_start = time.perf_counter()
             try:
+                assert execution_result is not None
                 portfolio_state = self.portfolio_engine.apply_execution_result(execution_result)
                 portfolio_updated = True
+                stage_timings["portfolio"] = (time.perf_counter() - portfolio_start) * 1000.0
             except Exception as e:
+                if "portfolio" not in stage_timings:
+                    stage_timings["portfolio"] = (time.perf_counter() - portfolio_start) * 1000.0
                 status = TradingCycleStatus.PORTFOLIO_UPDATE_FAILED
                 rejection_stage = "PORTFOLIO"
                 rejection_reason = str(e)
@@ -314,10 +367,13 @@ class TradingCycleOrchestrator:
                     portfolio_updated=portfolio_updated,
                     lifecycle_registered=lifecycle_registered,
                     rejection_stage=rejection_stage,
+                    failed_stage=rejection_stage,
                     rejection_reason=rejection_reason,
                     started_at=started_at,
                     completed_at=completed_at,
                     latency_ms=latency_ms,
+                    total_latency_ms=latency_ms,
+                    stage_timings=stage_timings,
                     policy_version=self.policy.policy_version,
                     metadata=input_data.metadata
                 )
@@ -327,11 +383,14 @@ class TradingCycleOrchestrator:
 
         # 8. Position Lifecycle Registration Stage
         if portfolio_updated:
+            lifecycle_start = time.perf_counter()
             try:
                 # Verify that position exists in the portfolio engine
+                assert portfolio_state is not None
                 pos = portfolio_state.positions.get(input_data.ml_signal.symbol)
                 if pos:
                     # Enforce stop-loss and take-profit fields from authorized intent
+                    assert intent is not None
                     stop_loss_val = Decimal(str(intent.stop_loss)) if intent.stop_loss is not None else None
                     take_profit_val = Decimal(str(intent.take_profit)) if intent.take_profit is not None else None
                     
@@ -377,7 +436,10 @@ class TradingCycleOrchestrator:
                     # No active position exists, execution closed it or it reversed
                     status = TradingCycleStatus.COMPLETED
                     lifecycle_registered = False
+                stage_timings["lifecycle"] = (time.perf_counter() - lifecycle_start) * 1000.0
             except Exception as e:
+                if "lifecycle" not in stage_timings:
+                    stage_timings["lifecycle"] = (time.perf_counter() - lifecycle_start) * 1000.0
                 # Do NOT rollback or hide executed portfolio stats; fail lifecycle register only
                 status = TradingCycleStatus.LIFECYCLE_REGISTRATION_FAILED
                 rejection_stage = "LIFECYCLE"
@@ -407,10 +469,13 @@ class TradingCycleOrchestrator:
             portfolio_updated=portfolio_updated,
             lifecycle_registered=lifecycle_registered,
             rejection_stage=rejection_stage,
+            failed_stage=rejection_stage,
             rejection_reason=rejection_reason,
             started_at=started_at,
             completed_at=completed_at,
             latency_ms=latency_ms,
+            total_latency_ms=latency_ms,
+            stage_timings=stage_timings,
             policy_version=self.policy.policy_version,
             metadata=input_data.metadata
         )
@@ -436,8 +501,17 @@ class TradingCycleOrchestrator:
         start_counter = time.perf_counter()
         cycle_id = str(uuid.uuid4())
         started_at = datetime.now(timezone.utc).isoformat()
+        
+        stage_timings: Dict[str, float] = {}
+
+        exit_proposal: Optional[ExitProposal] = None
+        exec_auth_result: Optional[ExecutionAuthorizationResult] = None
+        intent: Optional[OrderIntent] = None
+        execution_result: Optional[ExecutionResult] = None
+        portfolio_state: Optional[PortfolioState] = None
 
         # Step 1: Position Lifecycle Evaluation
+        lifecycle_start = time.perf_counter()
         try:
             m_price_dec = Decimal(str(market_price))
             exit_proposal = self.position_lifecycle_engine.evaluate(
@@ -446,7 +520,9 @@ class TradingCycleOrchestrator:
                 market_timestamp=market_timestamp,
                 system_timestamp=system_timestamp
             )
+            stage_timings["lifecycle_evaluation"] = (time.perf_counter() - lifecycle_start) * 1000.0
         except Exception as e:
+            stage_timings["lifecycle_evaluation"] = (time.perf_counter() - lifecycle_start) * 1000.0
             completed_at = datetime.now(timezone.utc).isoformat()
             latency_ms = (time.perf_counter() - start_counter) * 1000.0
             return TradingCycleResult(
@@ -457,7 +533,10 @@ class TradingCycleOrchestrator:
                 started_at=started_at,
                 completed_at=completed_at,
                 latency_ms=latency_ms,
+                total_latency_ms=latency_ms,
+                stage_timings=stage_timings,
                 rejection_stage="LIFECYCLE",
+                failed_stage="LIFECYCLE",
                 rejection_reason=str(e),
                 policy_version=self.policy.policy_version
             )
@@ -466,6 +545,7 @@ class TradingCycleOrchestrator:
             return None
 
         # Step 2: Exit Authorization via bridge ExitAuthorizationEngine
+        exit_auth_start = time.perf_counter()
         try:
             exec_auth_result = self.exit_authorization_engine.authorize_exit(
                 proposal=exit_proposal,
@@ -474,6 +554,7 @@ class TradingCycleOrchestrator:
                 sizing_policy_version="exit_engine",
                 idempotency_key=idempotency_key
             )
+            stage_timings["exit_authorization"] = (time.perf_counter() - exit_auth_start) * 1000.0
             
             if exec_auth_result.status != ExecutionAuthorizationStatus.AUTHORIZED:
                 # Set underlying lifecycle position from CLOSING back to OPEN to retry exit next tick
@@ -496,11 +577,16 @@ class TradingCycleOrchestrator:
                     started_at=started_at,
                     completed_at=completed_at,
                     latency_ms=latency_ms,
+                    total_latency_ms=latency_ms,
+                    stage_timings=stage_timings,
                     rejection_stage="EXECUTION_AUTHORIZATION",
+                    failed_stage="EXECUTION_AUTHORIZATION",
                     rejection_reason=exec_auth_result.rejection_reason,
                     policy_version=self.policy.policy_version
                 )
         except Exception as e:
+            if "exit_authorization" not in stage_timings:
+                stage_timings["exit_authorization"] = (time.perf_counter() - exit_auth_start) * 1000.0
             completed_at = datetime.now(timezone.utc).isoformat()
             latency_ms = (time.perf_counter() - start_counter) * 1000.0
             return TradingCycleResult(
@@ -512,19 +598,26 @@ class TradingCycleOrchestrator:
                 started_at=started_at,
                 completed_at=completed_at,
                 latency_ms=latency_ms,
+                total_latency_ms=latency_ms,
+                stage_timings=stage_timings,
                 rejection_stage="EXECUTION_AUTHORIZATION",
+                failed_stage="EXECUTION_AUTHORIZATION",
                 rejection_reason=str(e),
                 policy_version=self.policy.policy_version
             )
 
         intent = exec_auth_result.intent
+        assert intent is not None
         
         # Step 3: Paper Execution Adapter
+        exec_start = time.perf_counter()
         try:
             execution_result = self.paper_execution_adapter.execute(
                 intent=intent,
                 context=paper_execution_context
             )
+            stage_timings["execution"] = (time.perf_counter() - exec_start) * 1000.0
+            
             if execution_result.status not in (ExecutionStatus.FILLED, ExecutionStatus.PARTIALLY_FILLED):
                 # Set position state back to OPEN on execution failure
                 pos_state = self.position_lifecycle_engine.store.get(position_id)
@@ -546,11 +639,16 @@ class TradingCycleOrchestrator:
                     started_at=started_at,
                     completed_at=completed_at,
                     latency_ms=latency_ms,
+                    total_latency_ms=latency_ms,
+                    stage_timings=stage_timings,
                     rejection_stage="EXECUTION",
+                    failed_stage="EXECUTION",
                     rejection_reason=f"Execution result status: {execution_result.status.value}",
                     policy_version=self.policy.policy_version
                 )
         except Exception as e:
+            if "execution" not in stage_timings:
+                stage_timings["execution"] = (time.perf_counter() - exec_start) * 1000.0
             # Set position state back to OPEN on execution adapter crash
             pos_state = self.position_lifecycle_engine.store.get(position_id)
             if pos_state and pos_state.status == PositionLifecycleStatus.CLOSING:
@@ -571,15 +669,22 @@ class TradingCycleOrchestrator:
                 started_at=started_at,
                 completed_at=completed_at,
                 latency_ms=latency_ms,
+                total_latency_ms=latency_ms,
+                stage_timings=stage_timings,
                 rejection_stage="EXECUTION",
+                failed_stage="EXECUTION",
                 rejection_reason=str(e),
                 policy_version=self.policy.policy_version
             )
 
         # Step 4: Portfolio Accounting Update
+        portfolio_start = time.perf_counter()
         try:
             portfolio_state = self.portfolio_engine.apply_execution_result(execution_result)
+            stage_timings["portfolio"] = (time.perf_counter() - portfolio_start) * 1000.0
         except Exception as e:
+            if "portfolio" not in stage_timings:
+                stage_timings["portfolio"] = (time.perf_counter() - portfolio_start) * 1000.0
             completed_at = datetime.now(timezone.utc).isoformat()
             latency_ms = (time.perf_counter() - start_counter) * 1000.0
             return TradingCycleResult(
@@ -594,12 +699,16 @@ class TradingCycleOrchestrator:
                 started_at=started_at,
                 completed_at=completed_at,
                 latency_ms=latency_ms,
+                total_latency_ms=latency_ms,
+                stage_timings=stage_timings,
                 rejection_stage="PORTFOLIO",
+                failed_stage="PORTFOLIO",
                 rejection_reason=str(e),
                 policy_version=self.policy.policy_version
             )
 
         # Step 5: Synchronize Protective State (Close out or adjust quantity)
+        lifecycle_sync_start = time.perf_counter()
         try:
             pos = portfolio_state.positions.get(exit_proposal.symbol)
             qty = pos.quantity if pos else Decimal("0")
@@ -608,7 +717,10 @@ class TradingCycleOrchestrator:
                 current_quantity=qty,
                 timestamp=system_timestamp
             )
+            stage_timings["lifecycle_synchronization"] = (time.perf_counter() - lifecycle_sync_start) * 1000.0
         except Exception as e:
+            if "lifecycle_synchronization" not in stage_timings:
+                stage_timings["lifecycle_synchronization"] = (time.perf_counter() - lifecycle_sync_start) * 1000.0
             completed_at = datetime.now(timezone.utc).isoformat()
             latency_ms = (time.perf_counter() - start_counter) * 1000.0
             return TradingCycleResult(
@@ -623,7 +735,10 @@ class TradingCycleOrchestrator:
                 started_at=started_at,
                 completed_at=completed_at,
                 latency_ms=latency_ms,
+                total_latency_ms=latency_ms,
+                stage_timings=stage_timings,
                 rejection_stage="LIFECYCLE",
+                failed_stage="LIFECYCLE",
                 rejection_reason=str(e),
                 policy_version=self.policy.policy_version
             )
@@ -649,6 +764,8 @@ class TradingCycleOrchestrator:
             started_at=started_at,
             completed_at=completed_at,
             latency_ms=latency_ms,
+            total_latency_ms=latency_ms,
+            stage_timings=stage_timings,
             policy_version=self.policy.policy_version
         )
 
