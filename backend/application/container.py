@@ -1,6 +1,7 @@
 import logging
-from typing import Optional, Any
+from typing import Optional, Any, Callable, List
 from decimal import Decimal
+from backend.replay.clock import Clock, SystemClock
 from backend.application.exceptions import (
     ComponentInitializationError, ComponentDependencyError, ApplicationConfigurationError
 )
@@ -107,7 +108,9 @@ class QuantForgeContainer:
         cycle_policy: TradingCyclePolicy,
         persistence_policy: PersistencePolicy,
         market_data_provider: BaseMarketDataProvider,
-        session_id: Optional[str] = None
+        session_id: Optional[str] = None,
+        clock: Optional[Clock] = None,
+        uuid_generator: Optional[Callable[[], str]] = None
     ) -> None:
         self.runtime_policy = runtime_policy
         self.market_data_policy = market_data_policy
@@ -125,6 +128,8 @@ class QuantForgeContainer:
         self.persistence_policy = persistence_policy
         self.market_data_provider = market_data_provider
         self.session_id = session_id
+        self.clock = clock or SystemClock()
+        self.uuid_generator = uuid_generator
 
         # Logger
         self.logger = logging.getLogger("QuantForge.Container")
@@ -165,7 +170,8 @@ class QuantForgeContainer:
                 sequence_tracker=self.sequence_tracker,
                 store=self.market_store,
                 telemetry=self.market_telemetry,
-                policy=self.market_data_policy
+                policy=self.market_data_policy,
+                clock=self.clock
             )
             self.market_snapshot_builder = MarketDataSnapshotBuilder(
                 store=self.market_store,
@@ -240,7 +246,9 @@ class QuantForgeContainer:
             self.sizing_telemetry = ConsolePositionSizingTelemetrySink()
             self.position_sizing_engine = PositionSizingEngine(
                 policy=self.sizing_policy,
-                telemetry_sink=self.sizing_telemetry
+                telemetry_sink=self.sizing_telemetry,
+                clock=self.clock,
+                uuid_generator=self.uuid_generator
             )
 
             self.exec_idempotency = IdempotencyStore()
@@ -248,14 +256,22 @@ class QuantForgeContainer:
             self.execution_authorization_engine = ExecutionAuthorizationEngine(
                 policy=self.execution_policy,
                 idempotency_store=self.exec_idempotency,
-                telemetry_sink=self.execution_auth_telemetry
+                telemetry_sink=self.execution_auth_telemetry,
+                clock=self.clock,
+                uuid_generator=self.uuid_generator
             )
-            self.exit_authorization_engine = ExitAuthorizationEngine(self.execution_policy)
+            self.exit_authorization_engine = ExitAuthorizationEngine(
+                self.execution_policy,
+                clock=self.clock,
+                uuid_generator=self.uuid_generator
+            )
 
             self.execution_telemetry = ConsoleExecutionTelemetrySink()
             self.paper_execution_adapter = PaperExecutionAdapter(
                 policy=self.paper_exec_policy,
-                telemetry_sink=self.execution_telemetry
+                telemetry_sink=self.execution_telemetry,
+                clock=self.clock,
+                uuid_generator=self.uuid_generator
             )
 
             self.portfolio_idempotency = FillIdempotencyStore()
@@ -265,7 +281,8 @@ class QuantForgeContainer:
                 initial_balance=Decimal("100000.0"),
                 policy=self.portfolio_policy,
                 idempotency_store=self.portfolio_idempotency,
-                telemetry_sink=self.portfolio_telemetry
+                telemetry_sink=self.portfolio_telemetry,
+                clock=self.clock
             )
 
             self.lifecycle_store = PositionLifecycleStore()
@@ -288,7 +305,9 @@ class QuantForgeContainer:
                 paper_execution_adapter=self.paper_execution_adapter,
                 portfolio_engine=self.portfolio_engine,
                 position_lifecycle_engine=self.position_lifecycle_engine,
-                telemetry_sink=self.cycle_telemetry
+                telemetry_sink=self.cycle_telemetry,
+                clock=self.clock,
+                uuid_generator=self.uuid_generator
             )
 
             # 8. Trading Runtime (polling scheduler wrapper if used)

@@ -41,7 +41,7 @@ class CSVHistoricalCandleLoader(HistoricalDatasetLoader):
                 
                 # Determine timestamp column name
                 time_col = None
-                for col in ["timestamp", "open_time", "time", "date"]:
+                for col in ["timestamp", "open_time", "open time", "time", "date"]:
                     if col in headers:
                         # Find the actual case-sensitive header
                         time_col = reader.fieldnames[headers.index(col)]

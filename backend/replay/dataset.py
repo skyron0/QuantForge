@@ -48,7 +48,9 @@ def validate_ohlc_record(r: Dict[str, Any]) -> None:
     - Prices must be positive and finite.
     """
     symbol = r.get("symbol", "UNKNOWN")
-    ts = r.get("timestamp") or r.get("open_time") or "UNKNOWN"
+    ts = r.get("timestamp") or r.get("open_time")
+    if not ts:
+        raise ReplayValidationError(f"Timestamp or open_time must be present for {symbol}")
 
     try:
         o = Decimal(str(r["open"]))

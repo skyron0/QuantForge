@@ -48,4 +48,5 @@ class ReplaySessionResult:
     fees: float
     determinism_hash: str
     error_message: Optional[str] = None
+    portfolio_history: List[Any] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)

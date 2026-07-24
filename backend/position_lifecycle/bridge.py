@@ -2,7 +2,9 @@ import time
 import uuid
 from datetime import datetime, timezone
 from decimal import Decimal
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Any, Callable
+
+from backend.replay.clock import Clock, SystemClock
 
 # Sprint 3.3 execution authorization imports
 from backend.execution_authorization.models import (
@@ -48,18 +50,21 @@ class ExitExecutionRequestBuilder:
         execution_policy: ExecutionPolicy,
         risk_policy_version: str,
         sizing_policy_version: str,
-        idempotency_key: str
+        idempotency_key: str,
+        uuid_generator: Optional[Callable[[], str]] = None
     ) -> OrderIntent:
         # Strict validation
         if not proposal or not execution_policy:
             raise ValueError("Proposal and execution policy are required")
             
+        _uuid_gen = uuid_generator or (lambda: str(uuid.uuid4()))
+            
         return OrderIntent(
-            intent_id=str(uuid.uuid4()),
+            intent_id=_uuid_gen(),
             idempotency_key=idempotency_key,
             proposal_id=proposal.exit_proposal_id,
-            risk_authorization_id="RISK_EXIT_AUTH_" + str(uuid.uuid4())[:8],
-            sizing_id="SIZE_EXIT_" + str(uuid.uuid4())[:8],
+            risk_authorization_id="RISK_EXIT_AUTH_" + _uuid_gen()[:8],
+            sizing_id="SIZE_EXIT_" + _uuid_gen()[:8],
             symbol=proposal.symbol,
             direction=proposal.exit_direction,
             quantity=float(proposal.requested_quantity),
@@ -94,8 +99,15 @@ class ExitAuthorizationEngine:
     Validation and authorization boundary verifying that ExitProposals
     comply with Sprint 3.3 safety guards before converting to OrderIntents.
     """
-    def __init__(self, execution_policy: ExecutionPolicy):
+    def __init__(
+        self,
+        execution_policy: ExecutionPolicy,
+        clock: Optional[Clock] = None,
+        uuid_generator: Optional[Callable[[], str]] = None
+    ):
         self.execution_policy = execution_policy
+        self.clock = clock or SystemClock()
+        self._uuid_generator = uuid_generator or (lambda: str(uuid.uuid4()))
 
     def authorize_exit(
         self,
@@ -152,12 +164,13 @@ class ExitAuthorizationEngine:
                 execution_policy=self.execution_policy,
                 risk_policy_version=risk_policy_version,
                 sizing_policy_version=sizing_policy_version,
-                idempotency_key=idempotency_key
+                idempotency_key=idempotency_key,
+                uuid_generator=self._uuid_generator
             )
 
             latency_ms = (time.perf_counter() - start_counter) * 1000.0
             return EngineResult(
-                authorization_id="EXIT_AUTH_" + str(uuid.uuid4()),
+                authorization_id="EXIT_AUTH_" + self._uuid_generator(),
                 status=ExecutionAuthorizationStatus.AUTHORIZED,
                 intent=intent,
                 rejection_reason="",
@@ -174,7 +187,7 @@ class ExitAuthorizationEngine:
         except Exception as e:
             latency_ms = (time.perf_counter() - start_counter) * 1000.0
             return EngineResult(
-                authorization_id="EXIT_REJ_" + str(uuid.uuid4()),
+                authorization_id="EXIT_REJ_" + self._uuid_generator(),
                 status=ExecutionAuthorizationStatus.REJECTED,
                 intent=None,
                 rejection_reason=str(e),
@@ -184,5 +197,5 @@ class ExitAuthorizationEngine:
                 risk_authorization_id="N/A",
                 sizing_id="N/A",
                 latency_ms=latency_ms,
-                timestamp=context.current_timestamp if context else datetime.now(timezone.utc).isoformat()
+                timestamp=context.current_timestamp if context else self.clock.now().isoformat()
             )

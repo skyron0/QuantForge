@@ -27,6 +27,9 @@ from backend.market_data.store import MarketDataStore
 from backend.market_data.telemetry import MarketDataTelemetrySink
 
 
+from backend.replay.clock import Clock, SystemClock
+
+
 class MarketDataService:
     """
     Coordinator governing the ingestion boundary. Receives raw inputs, runs them
@@ -40,7 +43,8 @@ class MarketDataService:
         sequence_tracker: SequenceTracker,
         store: MarketDataStore,
         telemetry: MarketDataTelemetrySink,
-        policy: MarketDataPolicy
+        policy: MarketDataPolicy,
+        clock: Optional[Clock] = None
     ) -> None:
         self.normalizer = normalizer
         self.validator = validator
@@ -48,6 +52,7 @@ class MarketDataService:
         self.store = store
         self.telemetry = telemetry
         self.policy = policy
+        self.clock = clock or SystemClock()
 
     def ingest_raw_message(
         self,
@@ -60,7 +65,7 @@ class MarketDataService:
         Returns the canonical MarketDataEnvelope.
         """
         self.telemetry.record_received()
-        start_time = datetime.now(timezone.utc)
+        start_time = self.clock.now()
 
         # 1. Normalization
         try:
@@ -98,7 +103,7 @@ class MarketDataService:
         self._store_payload(envelope)
 
         self.telemetry.record_accepted()
-        duration = (datetime.now(timezone.utc) - start_time).total_seconds()
+        duration = (self.clock.now() - start_time).total_seconds()
         self.telemetry.record_latency(duration)
 
         return envelope
@@ -114,9 +119,9 @@ class MarketDataService:
 
         timestamp = raw.get("timestamp")
         if not timestamp:
-            timestamp = datetime.now(timezone.utc).isoformat()
+            timestamp = self.clock.now().replace(tzinfo=timezone.utc).isoformat()
 
-        received_at = datetime.now(timezone.utc).isoformat()
+        received_at = self.clock.now().replace(tzinfo=timezone.utc).isoformat()
         sequence = int(raw.get("sequence", 0))
         event_id = str(uuid.uuid4())
 

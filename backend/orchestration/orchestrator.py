@@ -2,7 +2,9 @@ import uuid
 import time
 from datetime import datetime, timezone
 from decimal import Decimal
-from typing import Optional, Tuple, Dict, Any, List
+from typing import Optional, Tuple, Dict, Any, List, Callable
+
+from backend.replay.clock import Clock, SystemClock
 
 from backend.orchestration.models import (
     TradingCycleInput,
@@ -70,7 +72,9 @@ class TradingCycleOrchestrator:
         portfolio_engine: PortfolioEngine,
         position_lifecycle_engine: PositionLifecycleEngine,
         exit_authorization_engine: Optional[ExitAuthorizationEngine] = None,
-        telemetry_sink: Optional[TradingCycleTelemetrySink] = None
+        telemetry_sink: Optional[TradingCycleTelemetrySink] = None,
+        clock: Optional[Clock] = None,
+        uuid_generator: Optional[Callable[[], str]] = None
     ) -> None:
         self.policy = policy
         self.decision_fusion_engine = decision_fusion_engine
@@ -80,10 +84,14 @@ class TradingCycleOrchestrator:
         self.paper_execution_adapter = paper_execution_adapter
         self.portfolio_engine = portfolio_engine
         self.position_lifecycle_engine = position_lifecycle_engine
+        self.clock = clock or SystemClock()
+        self._uuid_generator = uuid_generator or (lambda: str(uuid.uuid4()))
         
         if exit_authorization_engine is None:
             self.exit_authorization_engine = ExitAuthorizationEngine(
-                execution_authorization_engine.policy
+                execution_authorization_engine.policy,
+                clock=self.clock,
+                uuid_generator=self._uuid_generator
             )
         else:
             self.exit_authorization_engine = exit_authorization_engine
@@ -95,8 +103,8 @@ class TradingCycleOrchestrator:
         Executes a complete entry cycle from MLSignal down to Position Lifecycle registration.
         """
         start_counter = time.perf_counter()
-        cycle_id = str(uuid.uuid4())
-        started_at = datetime.now(timezone.utc).isoformat()
+        cycle_id = self._uuid_generator()
+        started_at = self.clock.now().isoformat()
         
         stage_timings: Dict[str, float] = {}
 
@@ -107,7 +115,7 @@ class TradingCycleOrchestrator:
             stage_timings["validation"] = (time.perf_counter() - validation_start) * 1000.0
         except OrchestrationValidationError as e:
             stage_timings["validation"] = (time.perf_counter() - validation_start) * 1000.0
-            completed_at = datetime.now(timezone.utc).isoformat()
+            completed_at = self.clock.now().isoformat()
             latency_ms = (time.perf_counter() - start_counter) * 1000.0
             return TradingCycleResult(
                 cycle_id=cycle_id,
@@ -344,7 +352,7 @@ class TradingCycleOrchestrator:
                 rejection_stage = "PORTFOLIO"
                 rejection_reason = str(e)
                 # Keep lineage details of completed executions (crucial for audit validity)
-                completed_at = datetime.now(timezone.utc).isoformat()
+                completed_at = self.clock.now().isoformat()
                 latency_ms = (time.perf_counter() - start_counter) * 1000.0
                 res = TradingCycleResult(
                     cycle_id=cycle_id,
@@ -445,7 +453,7 @@ class TradingCycleOrchestrator:
                 rejection_stage = "LIFECYCLE"
                 rejection_reason = str(e)
 
-        completed_at = datetime.now(timezone.utc).isoformat()
+        completed_at = self.clock.now().isoformat()
         latency_ms = (time.perf_counter() - start_counter) * 1000.0
 
         res = TradingCycleResult(
@@ -499,8 +507,8 @@ class TradingCycleOrchestrator:
         Coordinates the protective position exit flow when stop triggered by lifecycleengine.
         """
         start_counter = time.perf_counter()
-        cycle_id = str(uuid.uuid4())
-        started_at = datetime.now(timezone.utc).isoformat()
+        cycle_id = self._uuid_generator()
+        started_at = self.clock.now().isoformat()
         
         stage_timings: Dict[str, float] = {}
 
@@ -523,7 +531,7 @@ class TradingCycleOrchestrator:
             stage_timings["lifecycle_evaluation"] = (time.perf_counter() - lifecycle_start) * 1000.0
         except Exception as e:
             stage_timings["lifecycle_evaluation"] = (time.perf_counter() - lifecycle_start) * 1000.0
-            completed_at = datetime.now(timezone.utc).isoformat()
+            completed_at = self.clock.now().isoformat()
             latency_ms = (time.perf_counter() - start_counter) * 1000.0
             return TradingCycleResult(
                 cycle_id=cycle_id,
@@ -566,7 +574,7 @@ class TradingCycleOrchestrator:
                         replace(pos_state, status=PositionLifecycleStatus.OPEN)
                     )
                 
-                completed_at = datetime.now(timezone.utc).isoformat()
+                completed_at = self.clock.now().isoformat()
                 latency_ms = (time.perf_counter() - start_counter) * 1000.0
                 return TradingCycleResult(
                     cycle_id=cycle_id,
@@ -587,7 +595,7 @@ class TradingCycleOrchestrator:
         except Exception as e:
             if "exit_authorization" not in stage_timings:
                 stage_timings["exit_authorization"] = (time.perf_counter() - exit_auth_start) * 1000.0
-            completed_at = datetime.now(timezone.utc).isoformat()
+            completed_at = self.clock.now().isoformat()
             latency_ms = (time.perf_counter() - start_counter) * 1000.0
             return TradingCycleResult(
                 cycle_id=cycle_id,
@@ -627,7 +635,7 @@ class TradingCycleOrchestrator:
                         replace(pos_state, status=PositionLifecycleStatus.OPEN)
                     )
                 
-                completed_at = datetime.now(timezone.utc).isoformat()
+                completed_at = self.clock.now().isoformat()
                 latency_ms = (time.perf_counter() - start_counter) * 1000.0
                 return TradingCycleResult(
                     cycle_id=cycle_id,
@@ -657,7 +665,7 @@ class TradingCycleOrchestrator:
                     replace(pos_state, status=PositionLifecycleStatus.OPEN)
                 )
 
-            completed_at = datetime.now(timezone.utc).isoformat()
+            completed_at = self.clock.now().isoformat()
             latency_ms = (time.perf_counter() - start_counter) * 1000.0
             return TradingCycleResult(
                 cycle_id=cycle_id,
@@ -685,7 +693,7 @@ class TradingCycleOrchestrator:
         except Exception as e:
             if "portfolio" not in stage_timings:
                 stage_timings["portfolio"] = (time.perf_counter() - portfolio_start) * 1000.0
-            completed_at = datetime.now(timezone.utc).isoformat()
+            completed_at = self.clock.now().isoformat()
             latency_ms = (time.perf_counter() - start_counter) * 1000.0
             return TradingCycleResult(
                 cycle_id=cycle_id,
@@ -721,7 +729,7 @@ class TradingCycleOrchestrator:
         except Exception as e:
             if "lifecycle_synchronization" not in stage_timings:
                 stage_timings["lifecycle_synchronization"] = (time.perf_counter() - lifecycle_sync_start) * 1000.0
-            completed_at = datetime.now(timezone.utc).isoformat()
+            completed_at = self.clock.now().isoformat()
             latency_ms = (time.perf_counter() - start_counter) * 1000.0
             return TradingCycleResult(
                 cycle_id=cycle_id,
@@ -743,7 +751,7 @@ class TradingCycleOrchestrator:
                 policy_version=self.policy.policy_version
             )
 
-        completed_at = datetime.now(timezone.utc).isoformat()
+        completed_at = self.clock.now().isoformat()
         latency_ms = (time.perf_counter() - start_counter) * 1000.0
         return TradingCycleResult(
             cycle_id=cycle_id,
@@ -790,7 +798,7 @@ class TradingCycleOrchestrator:
         except Exception as e:
             raise OrchestrationValidationError(f"Invalid cycle timestamp: {str(e)}")
 
-        now_utc = datetime.now(timezone.utc)
+        now_utc = self.clock.now()
         
         # Clock skew against system clock
         skew = (curr_dt - now_utc).total_seconds()

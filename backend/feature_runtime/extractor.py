@@ -52,6 +52,7 @@ class _CandleAdapter:
         self.low = bc.low
         self.close = bc.close
         self.volume = bc.volume
+        self.timestamp = bc.timestamp
 
 
 class FeatureExtractor:

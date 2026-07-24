@@ -9,7 +9,7 @@ class ReplayMarketDataProvider(BaseMarketDataProvider):
     Historical replay driver supporting manual stepped ingestion of pre-loaded raw lists.
     """
 
-    def __init__(self, service: MarketDataService) -> None:
+    def __init__(self, service: Optional[MarketDataService] = None) -> None:
         self.service = service
         self._running = False
         self._subscribed: Set[str] = set()
@@ -55,6 +55,8 @@ class ReplayMarketDataProvider(BaseMarketDataProvider):
             return None
         if self._cursor >= len(self._queue):
             return None
+        if self.service is None:
+            raise RuntimeError("ReplayMarketDataProvider service must be initialized before stepping")
 
         msg = self._queue[self._cursor]
         raw_sym = msg.get("symbol", "")

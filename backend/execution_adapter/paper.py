@@ -1,8 +1,10 @@
 import math
 import uuid
 import time
-from typing import List, Optional
+from typing import List, Optional, Callable
 from datetime import datetime, timezone
+
+from backend.replay.clock import Clock, SystemClock
 
 from backend.execution_authorization.models import OrderIntent, ExecutionEnvironment, OrderDirection, OrderType
 from backend.execution_adapter.exceptions import (
@@ -41,7 +43,9 @@ class PaperExecutionAdapter(BaseExecutionAdapter):
         policy: PaperExecutionPolicy,
         idempotency_store: Optional[ExecutionIdempotencyStore] = None,
         telemetry_sink: Optional[ExecutionTelemetrySink] = None,
-        adapter_name: str = "PaperExecutionAdapter"
+        adapter_name: str = "PaperExecutionAdapter",
+        clock: Optional[Clock] = None,
+        uuid_generator: Optional[Callable[[], str]] = None
     ):
         self.policy = policy
         self.idempotency_store = idempotency_store or ExecutionIdempotencyStore(
@@ -49,6 +53,8 @@ class PaperExecutionAdapter(BaseExecutionAdapter):
         )
         self.telemetry_sink = telemetry_sink or ConsoleExecutionTelemetrySink()
         self.adapter_name = adapter_name
+        self.clock = clock or SystemClock()
+        self._uuid_generator = uuid_generator or (lambda: str(uuid.uuid4()))
 
     def execute(self, intent: OrderIntent, context: PaperExecutionContext) -> ExecutionResult:
         start_counter = time.perf_counter()
@@ -84,7 +90,7 @@ class PaperExecutionAdapter(BaseExecutionAdapter):
                 raise ExecutionAdapterValidationError(f"Invalid quantity in intent: {intent.quantity}")
 
             # System time comparison for freshness and expiry
-            sys_dt = datetime.now(timezone.utc)
+            sys_dt = self.clock.now()
             mkt_dt = parse_iso(context.timestamp)
             intent_expiry_dt = parse_iso(intent.expires_at)
 
@@ -213,7 +219,7 @@ class PaperExecutionAdapter(BaseExecutionAdapter):
             # Build result
             latency_ms = (time.perf_counter() - start_counter) * 1000.0
             
-            fill_id = str(uuid.uuid4())
+            fill_id = self._uuid_generator()
             fill_timestamp = mkt_dt.isoformat().replace("+00:00", "Z")
             
             fill = Fill(
@@ -233,7 +239,7 @@ class PaperExecutionAdapter(BaseExecutionAdapter):
             status = ExecutionStatus.FILLED if math.isclose(filled_qty, requested_qty, rel_tol=1e-9) else ExecutionStatus.PARTIALLY_FILLED
 
             result = ExecutionResult(
-                execution_id=str(uuid.uuid4()),
+                execution_id=self._uuid_generator(),
                 intent_id=intent.intent_id,
                 proposal_id=intent.proposal_id,
                 risk_authorization_id=intent.risk_authorization_id,
@@ -274,7 +280,7 @@ class PaperExecutionAdapter(BaseExecutionAdapter):
         latency_ms = (time.perf_counter() - start_counter) * 1000.0
         ts = current_dt.isoformat().replace("+00:00", "Z")
         result = ExecutionResult(
-            execution_id=str(uuid.uuid4()),
+            execution_id=self._uuid_generator(),
             intent_id=intent.intent_id,
             proposal_id=intent.proposal_id,
             risk_authorization_id=intent.risk_authorization_id,
@@ -307,7 +313,7 @@ class PaperExecutionAdapter(BaseExecutionAdapter):
         latency_ms = (time.perf_counter() - start_counter) * 1000.0
         ts = current_dt.isoformat().replace("+00:00", "Z")
         result = ExecutionResult(
-            execution_id=str(uuid.uuid4()),
+            execution_id=self._uuid_generator(),
             intent_id=intent.intent_id,
             proposal_id=intent.proposal_id,
             risk_authorization_id=intent.risk_authorization_id,
