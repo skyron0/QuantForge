@@ -1,6 +1,6 @@
 # QuantForge - Project State
 
-Last Updated: 2026-07-20
+Last Updated: 2026-07-25
 
 ---
 
@@ -9,12 +9,10 @@ Last Updated: 2026-07-20
 Status: Active Development
 
 Current Phase:
-
-Backtesting Core Infrastructure Complete
+Sprint 3.14 — Advanced Performance Metrics & Analytics (In Progress / Finalization)
 
 Next Phase:
-
-Backtesting Metrics, Strategy Optimization, and Analytics
+Sprint 3.15 — Dataset Generation & Feature Schemas (Planned)
 
 ---
 
@@ -22,163 +20,103 @@ Backtesting Metrics, Strategy Optimization, and Analytics
 
 ## Infrastructure
 
-- Python Environment
-- Docker
-- PostgreSQL
-- Redis
-- Configuration System
-- Logging
-- Clock Abstraction (DI-ready)
+- Python Environment & DI Container System
+- Docker, PostgreSQL, Redis Configurations
+- Logging & clock telemetry interfaces
+- ReplayClock (Causal time injection)
 
 ## Market
 
-- WebSocket Collector
-- Tick Queue
-- Candle Aggregator
-- Market Consumer
+- WebSocket Collector & Queue
+- Candle Aggregator & Market Consumer
+- Bounded Market Data Store Coordinator
 
 ## Analytics
 
 - Indicator Engine
-- Feature Engine
+- Feature Runtime (Historical Feature Buffer & Causality Validator)
+- Inference Compatibility Validator
 
-## Trading
+## Trading & Risk
 
-- Decision Engine
+- Decision Engine (Rules + AI Fusion)
 - Signal Validator
-- Risk Manager
-- Paper Executor
-- Portfolio
-- Backtest Engine & Simulator
-- CLI Backtest Runner
+- Risk Manager (drawdown limits, exposure gates)
+- Position Sizing Engine (risk fractional scaling)
+- Execution Authorization (Idempotency and lineage safety controls)
+- Paper Execution Adapter (fees, slippage simulation)
+- Portfolio Engine (Decimal-based cash & asset accounting)
+- Position Lifecycle Manager (SL/TP triggers and Active state store)
 
 ## Database
 
+- Migrations schema
 - Tick Repository
 - Candle Repository
 - Trade Repository
 
 ## Monitoring
 
-- Dashboard
-- Logging
+- Basic console metrics logging
+- Database telemetry event hooks
 
 ---
 
 # Current Architecture
 
+```
 Market Data
-
-↓
-
+    ↓
 Collector
-
-↓
-
+    ↓
 Aggregator
-
-↓
-
+    ↓
 Consumer
-
-↓
-
+    ↓
 Indicators
+    ↓
+Feature Runtime
+    ↓
+Decision Fusion
+    ↓
+Risk Guard
+    ↓
+Position Sizing
+    ↓
+Execution Authorization
+    ↓
+Paper Execution Adapter
+    ↓
+Portfolio Engine
+    ↓
+Database Snapshots
+```
 
-↓
+---
 
-Features
+# Current Objective
 
-↓
+Complete Sprint 3.14 by standardizing portfolio-level time-sampled Sharpe and Sortino ratios, integrating the Profit Factor, and building structured drawdown analytics series.
 
-Decision
+---
 
-↓
+# Future Milestones
 
-Signal Validation
+1. Dataset Generation & Feature Schemas (Sprint 3.15)
+2. Model Training & Experiment Registry (Sprint 3.16)
+3. Simulation Realism & Risk Safeguards (Sprint 3.17)
+4. CCXT / Exchange Adapter Foundation (Sprint 3.18)
+5. Operations Center, Alerts & Resilience (Sprint 3.19)
+6. Shadow Trading & Controlled Live Rollout (Sprint 3.20)
 
-↓
+---
 
-Risk Management
-
-↓
-
-Paper Trading
-
-↓
-
-Database
-
-\---
-
-\# Stable Components
-
-The following modules are considered stable and should only be modified when required.
-
-\- Collector
-
-\- Aggregator
-
-\- Consumer
-
-\- Indicator Engine
-
-\- Feature Engine
-
-\- Decision Engine
-
-\- Signal Validator
-
-\- Paper Executor
-
-\- Portfolio
-
-\- Dashboard
-
-\---
-
-\# Current Objective
-
-Implement performance metrics analytics (Sharpe ratio, Sortino ratio, Profit factor) and drawdown charts.
-
-\---
-
-\# Future Milestones
-
-1\. Backtesting Engine
-
-2\. Performance Metrics
-
-3\. Strategy Optimization
-
-4\. ML Dataset Generation
-
-5\. Ollama Model Training
-
-6\. AI Decision Engine
-
-7\. Live Trading
-
-8\. Web Dashboard
-
-\---
-
-\# Development Rules
+# Development Rules
 
 Every implementation must:
 
-\- preserve architecture
-
-\- remain testable
-
-\- remain modular
-
-\- compile successfully
-
-\- avoid duplicated logic
-
-\---
-
-\# Repository Status
-
-Ready for AI-assisted development.
+- Preserve architecture layer decoupling.
+- Maintain strict determinism and causality.
+- Provide comprehensive tests.
+- Compile and run successfully without regression.
+- Not bypass the risk guard gates.
